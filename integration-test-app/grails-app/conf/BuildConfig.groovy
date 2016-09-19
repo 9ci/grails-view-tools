@@ -1,3 +1,5 @@
+grails.useGrails3FolderLayout = true
+
 grails.servlet.version = "3.0" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
@@ -22,7 +24,6 @@ grails.project.fork = [
 ]
 
 grails.plugin.location.'view-tools' = "../"
-//grails.plugin.location.'test-view-plugin' = "../test-view-plugin"
 
 grails.project.dependency.resolver = "maven" // or ivy
 grails.project.dependency.resolution = {
@@ -62,6 +63,8 @@ grails.project.dependency.resolution = {
 
         // plugins for the compile step
         compile ":scaffolding:2.1.2"
+
+        //compile ":view-tools:0.1"
 
         // Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.9.0"

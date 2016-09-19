@@ -5,7 +5,10 @@ class ViewToolsGrailsPlugin {
     def grailsVersion = "2.3 > *"
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-        "grails-app/views"
+        "grails-app/views/",
+        "grails-app/conf/pluginViewToolsGrailsAppConf/*",
+        "src/groovy/pluginViewToolsSrcGroovy/*",
+        "src/main/resources/pluginViewToolsSrcMainResources/"
     ]
 
     // TODO Fill in these fields
@@ -37,6 +40,11 @@ Used in freemarker and new jasper-spring.
 
     // Online location of the plugin's browseable source code.
     def scm = [ url: "https://github.com/9ci/grails-view-tools" ]
+
+    def watchedResources = [
+            "file:./src/main/groovy/**/*.groovy",
+            "file:./plugins/*/src/main/groovy/**/*.groovy"
+    ]
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before

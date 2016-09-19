@@ -23,6 +23,7 @@ test/
 
 # plugin release files
 /*.zip
+/*.zip.sha1
 /plugin.xml
 
 # older plugin install locations
@@ -32,3 +33,4 @@ test/
 # "temporary" build files
 **/target
 /out
+test/

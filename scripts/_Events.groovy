@@ -1,11 +1,11 @@
 import grails.util.Environment
-import org.codehaus.groovy.grails.test.spock.GrailsSpecTestType
+//import org.codehaus.groovy.grails.test.spock.GrailsSpecTestType
 
 /**
  * Created by basejump on 9/16/16.
  */
 String validForAppName = "freemarker"
-grails3SrcDirs = ["$basedir/src/main/groovy"]
+grails3SrcDirs = ["$basedir/src/main/groovy","$basedir/src/main/resources"]
 
 eventTestPhaseStart = { phase ->
     if (!buildConfig.grails.useGrails3FolderLayout) return
@@ -52,42 +52,53 @@ eventTestPhaseEnd = { phase ->
 }
 
 eventCompileStart = { x ->
-    println "grails3 eventCompileStart "
-     //for inline plugins add the source as its not moved from package
+    println "grails3 structure: eventCompileStart "
+
+     //special for inline plugins add the source as its not moved from package
     for (pluginDir in projectCompiler.pluginSettings.getInlinePluginDirectories()) {
-        println "getInlinePluginDirectories ${pluginDir}"
-        def g3resource = new org.springframework.core.io.FileSystemResource("${pluginDir}/src/main/groovy")
-        if (g3resource.exists()){
-            projectCompiler.pluginSettings.compileScopePluginInfo.sourceDirectories  << g3resource
+        println "grails3 structure: InlinePluginDirectories ${pluginDir}"
+
+        ["${pluginDir}/src/main/groovy","${pluginDir}/src/main/resources"].each{
+
+            def g3resource = new org.springframework.core.io.FileSystemResource(it)
+            if (g3resource.exists()){
+                projectCompiler.pluginSettings.compileScopePluginInfo.sourceDirectories  << g3resource
+                copyResources(it, buildSettings.resourcesDir)
+            }
+
         }
+
     }
 
     //copy other resource files now too
     for (String path in grails3SrcDirs) {
         if (new File(path).exists()){
             projectCompiler.srcDirectories << path
-            ant.copy(todir: buildSettings.resourcesDir, failonerror: false, preservelastmodified: true) {
-                fileset(dir: path) {
-                    exclude(name: '*.groovy')
-                    exclude(name: '*.java')
-                }
-            }
+            copyResources(path, buildSettings.resourcesDir)
         }
     }
 }
 
+
 eventCreatePluginArchiveStart = { stagingDir ->
-    if (grailsAppName != "freemarker") return
+    if (!buildConfig.grails.useGrails3FolderLayout) return
 
     println "stagingDir $stagingDir"
     ant.copy(todir:"$stagingDir/src/groovy") {
         fileset(dir:"$stagingDir/src/main/groovy")
+        fileset(dir:"$stagingDir/src/main/resources")
     }
     ant.delete(dir:"$stagingDir/src/main/groovy",failonerror:false)
+    ant.delete(dir:"$stagingDir/src/main/resources",failonerror:false)
     ant.delete(dir:"$stagingDir/src/test",failonerror:false)
     ant.delete(dir:"$stagingDir/src/integration-test",failonerror:false)
     //throw new RuntimeException("FUBAR")
    // update staging directory contents here
+}
+
+eventRunAppStart = {
+    println "eventRunAppStart"
+
 }
 
 // eventCreateWarStart = { warName, stagingDir ->
@@ -107,6 +118,7 @@ private copyIntTests(){
     println "copyIntTests begin"
     fromDir = "$basedir/src/integration-test/groovy"
     toDir = "$basedir/test/integration"
+    ant.mkdir(dir:fromDir)
     ant.delete(dir:toDir,failonerror:false) //make sure its cleared out
     ant.mkdir(dir:toDir)
     ant.copy(todir:toDir) {
@@ -127,12 +139,23 @@ private copyFunctionalTests(){
 }
 
 private copyDirClean(String fromDir, String toDir){
+    ant.mkdir(dir:fromDir)
     ant.delete(dir:toDir,failonerror:false)
     ant.mkdir(dir:toDir)
     ant.copy(todir:toDir) {
         fileset(dir:fromDir)
     }
 }
+ private copyResources(fromDir, toDir){
+    println("copyResources($fromDir, $toDir)")
+    ant.copy(todir: toDir, failonerror: false, preservelastmodified: true) {
+        fileset(dir: fromDir) {
+            exclude(name: '*.groovy')
+            exclude(name: '*.java')
+        }
+    }
+ }
+
 
 //eventTestCompileStart = { type ->
 //    println "Type :$type"
