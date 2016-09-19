@@ -15,7 +15,6 @@
 
 # logs
 /stacktrace.log
-test/
 /logs
 
 # project release file
@@ -33,4 +32,7 @@ test/
 # "temporary" build files
 **/target
 /out
-test/
+**/test/unit/
+**/test/integration/
+**/test/functional/
+!src/test
