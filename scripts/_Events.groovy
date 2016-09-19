@@ -52,7 +52,7 @@ eventTestPhaseEnd = { phase ->
 }
 
 eventCompileStart = { x ->
-
+    println "grails3 eventCompileStart "
      //for inline plugins add the source as its not moved from package
     for (pluginDir in projectCompiler.pluginSettings.getInlinePluginDirectories()) {
         println "getInlinePluginDirectories ${pluginDir}"

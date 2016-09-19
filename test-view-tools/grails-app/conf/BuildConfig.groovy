@@ -21,7 +21,7 @@ grails.project.fork = [
     console: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256]
 ]
 
-grails.plugin.location.'view-tools' = "../.."
+grails.plugin.location.'view-tools' = "../"
 //grails.plugin.location.'test-view-plugin' = "../test-view-plugin"
 
 grails.project.dependency.resolver = "maven" // or ivy
