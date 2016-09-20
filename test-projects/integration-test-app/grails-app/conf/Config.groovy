@@ -115,4 +115,6 @@ log4j.main = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
     debug 'grails.plugin.viewtools'
+           // ANY DEBUG WITH THE FOLLOWING BLOWs WEIRD NULL POINTER!!!!!!
+          //'org.codehaus.groovy.grails.web.pages'
 }

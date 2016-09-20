@@ -5,14 +5,7 @@ grails3SrcDirs = ["$basedir/src/main/groovy","$basedir/src/main/resources"]
 eventTestPhaseStart = { phase ->
     if (!buildConfig.grails.useGrails3FolderLayout) return
     //binding.variables.each { println it.key} 
-    //binding.grailsSettings.testSourceDir = new File("/Users/basejump/source/grails/freemarker/testxxx")
-    //println binding.grailsSettings.testSourceDir
-    // println "grailsAppName : $grailsAppName"
-    // buildConfig.each{
-    //     println it
-    // }
-
-    println "eventTestPhaseStart : $phase in $grailsAppName"
+    //println "eventTestPhaseStart : $phase in $grailsAppName"
     String srcTestPath
 
     if("unit" == phase){
@@ -23,7 +16,7 @@ eventTestPhaseStart = { phase ->
     }
     else if("functional" == phase){
         copyDirClean("$basedir/src/integration-test/groovy/functional", "$basedir/test/functional/functional")
-        ant.copy(file:"$basedir/src/integration-test/groovy/GebConfig.groovy" ,todir:g2TestDir,failonerror:false)
+        ant.copy(file:"$basedir/src/integration-test/groovy/GebConfig.groovy" ,todir:"$basedir/test/functional",failonerror:false)
     }
 }
 
@@ -45,6 +38,7 @@ eventTestPhaseEnd = { phase ->
 }
 
 eventCompileStart = { x ->
+    if (!buildConfig.grails.useGrails3FolderLayout) return
     //println "grails3 structure: eventCompileStart "
 
      //special for inline plugins add the source as its not moved from package
@@ -62,27 +56,27 @@ eventCompileStart = { x ->
     }
 
     //copy other resource files now too
-    if (buildConfig.grails.useGrails3FolderLayout){
-        println "eventCompileStart: useGrails3FolderLayout = true, adding grails3SrcDirs"
-        for (String path in grails3SrcDirs) {
-            if (new File(path).exists()){
-                println "adding $path"
-                projectCompiler.srcDirectories << path
-                //copyResources(path, buildSettings.resourcesDir)
-            }
+
+    println "eventCompileStart: useGrails3FolderLayout = true, adding grails3SrcDirs"
+    for (String path in grails3SrcDirs) {
+        if (new File(path).exists()){
+            println "adding $path"
+            projectCompiler.srcDirectories << path
+            //copyResources(path, buildSettings.resourcesDir)
         }
     }
+    
 }
 
-eventCompileEnd = { 
+eventCompileEnd = {
+    if (!buildConfig.grails.useGrails3FolderLayout) return 
     copyResources(buildSettings.resourcesDir)
 }
-
 
 eventCreatePluginArchiveStart = { stagingDir ->
     if (!buildConfig.grails.useGrails3FolderLayout) return
 
-    println "stagingDir $stagingDir"
+    //println "stagingDir $stagingDir"
     ant.copy(todir:"$stagingDir/src/groovy",failonerror:false) {
         fileset(dir:"$stagingDir/src/main/groovy")
         fileset(dir:"$stagingDir/src/main/resources")
@@ -95,12 +89,13 @@ eventCreatePluginArchiveStart = { stagingDir ->
    // update staging directory contents here
 }
 
-eventRunAppStart = {
-    println "eventRunAppStart"
+// eventRunAppStart = {
+//     println "eventRunAppStart"
 
-}
+// }
 
 eventCreateWarStart = { warName, stagingDir ->
+    if (!buildConfig.grails.useGrails3FolderLayout) return
     copyResources("$stagingDir/WEB-INF/classes")
 }
 
@@ -139,62 +134,3 @@ private copyResources(fromDir, toDir){
         }
     }
  }
-
-
-//eventTestCompileStart = { type ->
-//    println "Type :$type"
-//    println projectTestCompiler.srcDirectories
-//    //throw new RuntimeException("FUBAR")
-//    for (String path in extraTestSrcDirs) {
-//        projectTestCompiler.srcDirectories << path
-//    }
-//    println projectTestCompiler.srcDirectories
-//    //copyResources buildSettings.resourcesDir
-//}
-//
-//eventAllTestsStart = {
-//    //throw new RuntimeException("FUBAR")
-//    classLoader.addURL(new File("$basedir/src/test/groovy").toURL())
-//}
-//
-////eventCreateWarStart = { warName, stagingDir ->
-////    copyResources "$stagingDir/WEB-INF/classes"
-////}
-//
-//private copyTestResources(destination) {
-//    ant.copy(todir: destination,
-//            failonerror: false,
-//            preservelastmodified: true) {
-//        for (String path in extraSrcDirs) {
-//            fileset(dir: path) {
-//                exclude(name: '*.groovy')
-//                exclude(name: '*.java')
-//            }
-//        }
-//    }
-//}
-
-// eventTestPhaseStart = { phase ->
-//     println "eventTestPhaseStart : $phase"
-//     String srcTestPath
-
-//     if("unit" == phase){
-//         //make sure directory exists
-//         ant.mkdir(dir:"$basedir/test/unit")
-//         def dest = new File("$basedir/test/unit")
-//         copyUnitTests()
-//         srcTestPath = "$basedir/src/test/groovy"
-//     }
-//     if("integration" == phase){
-//         //make sure directory exists
-//         ant.mkdir(dir:"$basedir/test/integration")
-//         srcTestPath = "$basedir/src/integration-test/groovy"
-//     }//copyIntTests()
-
-//     File dest = new File(buildSettings.testClassesDir, phase)
-//     File source = new File(srcTestPath)
-//     if(source.exists()){
-//         def type = new GrailsSpecTestType(phase,phase)
-//         projectTestRunner.projectTestCompiler.compileTests(type, source, dest)
-//     }
-// }

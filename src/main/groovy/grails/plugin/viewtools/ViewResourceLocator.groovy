@@ -2,7 +2,7 @@ package grails.plugin.viewtools
 
 import grails.util.GrailsNameUtils
 import groovy.transform.CompileStatic
-import groovy.util.logging.Log4j
+import groovy.util.logging.Commons
 import org.codehaus.groovy.grails.commons.ControllerArtefactHandler
 import org.codehaus.groovy.grails.core.io.DefaultResourceLocator
 import org.codehaus.groovy.grails.core.io.ResourceLocator
@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * GroovyPagesGrailsPlugin is where the original beans are setup, take a look at the source to see how they are setup
  * @see org.codehaus.groovy.grails.plugins.web.GroovyPagesGrailsPlugin
  */
-@Log4j
+@Commons
 @CompileStatic
 class ViewResourceLocator extends DefaultGroovyPageLocator {
 
@@ -168,16 +168,6 @@ class ViewResourceLocator extends DefaultGroovyPageLocator {
         for (ResourceLoader loader : super.resourceLoaders) {
             log.debug("Using ResourceLoader [${loader.class}]")
 
-//            for (String path : searchPaths) {
-//                log.debug("trying path [$path]")
-//
-//                resource = loader.getResource(path);
-//                if (resource?.exists()) {
-//                    log.debug("**** found resource [$resource] with path [$path]")
-//                    foundResource = new ViewContextResource(resource.URI,path)
-//                    break;
-//                }
-//            }
             resource = findResource( loader, searchPaths)
             if (resource?.exists()) break;
         }
@@ -190,18 +180,19 @@ class ViewResourceLocator extends DefaultGroovyPageLocator {
      * @param searchPaths
      * @return a resource of ViewResource
      */
-    Resource findResource(ResourceLoader loader, List<String> searchPaths) {
+    Resource findResource(ResourceLoader rloader, List<String> searchPaths) {
         Resource resource
         Resource foundResource
-        log.debug("trying with ResourceLoader [$loader]")
+        log.debug("trying with ResourceLoader [$rloader]")
 
         for (String path : searchPaths) {
             log.debug("trying path [$path]")
+            log.debug("trying with ResourceLoader [$rloader]")
+            def r = rloader.getResource(path)
 
-            resource = loader.getResource(path);
-            if (resource?.exists()) {
-                log.debug("**** found resource [$resource] with path [$path]")
-                foundResource = new ViewContextResource(resource.URI,path)
+            if (r?.exists()) {
+                log.debug("**** found resource [$r] with path [$path]")
+                foundResource = new ViewContextResource(r.URI,path)
                 break;
             }
         }
