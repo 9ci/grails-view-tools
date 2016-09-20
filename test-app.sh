@@ -1,2 +1,2 @@
 #!/bin/bash          
-(cd test-view-tools && grails test-app)
+(cd test-projects/integration-test-app && grails test-app)

@@ -1,6 +1,6 @@
 class ViewToolsGrailsPlugin {
     // the plugin version
-    def version = "0.1"
+    def version = "0.1-grails2-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.3 > *"
     // resources that are excluded from plugin packaging
@@ -12,7 +12,7 @@ class ViewToolsGrailsPlugin {
     ]
 
     // TODO Fill in these fields
-    def title = "View Utils Plugin" // Headline display name of the plugin
+    def title = "View Tools Plugin" // Headline display name of the plugin
     def author = "Joshua Burnett"
     def authorEmail = "joshdev@9ci.com"
     def description = '''\
