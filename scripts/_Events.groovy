@@ -2,6 +2,8 @@ import grails.util.Environment
 
 grails3SrcDirs = ["$basedir/src/main/groovy","$basedir/src/main/resources"]
 
+//no good way to add source paths to test in eventTestCompileStart and get them to run
+//so just copy them into test/unit, etc.. so that grails can pick them up and run normally
 eventTestPhaseStart = { phase ->
     if (!buildConfig.grails.useGrails3FolderLayout) return
     //binding.variables.each { println it.key} 
@@ -12,6 +14,7 @@ eventTestPhaseStart = { phase ->
         copyDirClean("$basedir/src/test/groovy", "$basedir/test/unit")
     }
     else if("integration" == phase){
+        //exclude anything in the functional classpath
         copyDirClean("$basedir/src/integration-test/groovy", "$basedir/test/integration", ["functional/"])
     }
     else if("functional" == phase){
@@ -22,18 +25,10 @@ eventTestPhaseStart = { phase ->
 
 eventTestPhaseEnd = { phase ->
     if (!buildConfig.grails.useGrails3FolderLayout) return
-    
-    if("unit" == phase){
-        println "Clean up: DELETING $basedir/test/unit"
-        ant.delete(dir:"$basedir/test/unit",failonerror:false)
-    }
-    else if("integration" == phase){
-        println "Clean up: DELETING $basedir/test/integration"
-        ant.delete(dir:"$basedir/test/integration",failonerror:false)
-    }
-    else if("functional" == phase){
-        println "Clean up: DELETING $basedir/test/functional"
-        ant.delete(dir:"$basedir/test/functional",failonerror:false)
+    //remove the test dir that had the files copied into them
+    if(phase in ["unit","integration","functional"]){
+        println "Clean up: DELETING $basedir/test/$phase"
+        ant.delete(dir:"$basedir/test/$phase",failonerror:false)
     }
 }
 
@@ -55,7 +50,7 @@ eventCompileStart = { x ->
         }
     }
 
-    //copy other resource files now too
+    //copy other resource files now too from the src directories
 
     println "eventCompileStart: useGrails3FolderLayout = true, adding grails3SrcDirs"
     for (String path in grails3SrcDirs) {
@@ -89,14 +84,41 @@ eventCreatePluginArchiveStart = { stagingDir ->
    // update staging directory contents here
 }
 
-// eventRunAppStart = {
-//     println "eventRunAppStart"
+eventCreatePluginArchiveEnd = { stagingDir ->
+    if (!buildConfig.grails.useGrails3FolderLayout) return
+    cleanUpEmptyDirs()
+}
 
-// }
+eventRunAppEnd = {
+    cleanUpEmptyDirs()
+}
 
 eventCreateWarStart = { warName, stagingDir ->
     if (!buildConfig.grails.useGrails3FolderLayout) return
     copyResources("$stagingDir/WEB-INF/classes")
+}
+
+//after run-app or package plugin all the default dirs are created, clean up the noise
+private cleanUpEmptyDirs(){
+    println "deleting empty directories"
+    deleteEmptyDirs("$basedir/grails-app/")
+    deleteEmptyDirs("$basedir/src/java/")
+    deleteEmptyDirs("$basedir/src/groovy/")
+    deleteEmptyDirs("$basedir/lib/")
+    deleteEmptyDirs("$basedir/test/")
+    deleteEmptyDirs("$basedir/xxxx/")
+}
+
+//deletes all empty dirs for path including the path itself
+private deleteEmptyDirs(path){
+    ant.delete(includeemptydirs:true,quiet:true){
+        fileset(dir:path){
+            "and"{
+                size(value:0)
+                type(type:"dir")
+            }
+        }
+    }
 }
 
 private copyDirClean(String fromDir, String toDir, excludes = []){
@@ -126,7 +148,7 @@ private copyResources(toDir){
 }
 
 private copyResources(fromDir, toDir){
-    println("copyResources($fromDir, $toDir)")
+    //println("copyResources($fromDir, $toDir)")
     ant.copy(todir: toDir, failonerror: false, preservelastmodified: true) {
         fileset(dir: fromDir) {
             exclude(name: '**/*.groovy')
