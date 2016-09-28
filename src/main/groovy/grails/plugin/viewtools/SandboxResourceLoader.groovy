@@ -17,6 +17,7 @@ package grails.plugin.viewtools
 
 import org.codehaus.groovy.grails.core.io.DefaultResourceLocator
 import org.codehaus.groovy.grails.core.io.ResourceLocator
+import groovy.transform.CompileStatic
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.ContextResource;
 import org.springframework.core.io.FileSystemResource;
@@ -30,7 +31,9 @@ import java.util.Collection;
 
 /**
  * FileSystemResourceLoader capable of understanding a base paths to search in for security
+ * see grails PluginPathAwareFileSystemResourceLoader
  */
+@CompileStatic
 public class SandboxResourceLoader extends FileSystemResourceLoader{
 
     public static final String WEB_APP_DIRECTORY = "web-app";

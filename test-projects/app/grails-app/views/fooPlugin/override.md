@@ -1,0 +1,1 @@
+fooBar/index.md override success

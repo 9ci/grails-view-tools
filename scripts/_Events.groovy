@@ -66,6 +66,7 @@ eventCompileStart = { x ->
 eventCompileEnd = {
     if (!buildConfig.grails.useGrails3FolderLayout) return 
     copyResources(buildSettings.resourcesDir)
+
 }
 
 eventCreatePluginArchiveStart = { stagingDir ->
@@ -89,7 +90,23 @@ eventCreatePluginArchiveEnd = { stagingDir ->
     cleanUpEmptyDirs()
 }
 
+eventRunAppStart= {
+    System.setProperty("grails.reload.enabled", "true")
+    println "eventRunAppStart: useGrails3FolderLayout = true, adding grails3SrcDirs"
+//    for (String path in grails3SrcDirs) {
+//        if (new File(path).exists()){
+//            println "adding $path"
+//            projectCompiler.srcDirectories << path
+//            //copyResources(path, buildSettings.resourcesDir)
+//        }
+//    }
+}
+
 eventRunAppEnd = {
+    //cleanUpEmptyDirs()
+}
+
+eventCleanStart = { kind ->
     cleanUpEmptyDirs()
 }
 

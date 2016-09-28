@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/test-projects/app/app.iml" filepath="$PROJECT_DIR$/test-projects/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test-projects/app/app-grailsPlugins.iml" filepath="$PROJECT_DIR$/test-projects/app/app-grailsPlugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test-projects/foobar-plugin/foobar-plugin.iml" filepath="$PROJECT_DIR$/test-projects/foobar-plugin/foobar-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/grails2-view-tools.iml" filepath="$PROJECT_DIR$/grails2-view-tools.iml" />
+    </modules>
+  </component>
+</project>
