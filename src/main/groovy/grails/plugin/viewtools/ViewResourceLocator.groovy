@@ -75,7 +75,7 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
      * Will be classpaths and external directories usually
      */
     Collection<String> searchLocations = new ConcurrentLinkedQueue<String>();
-    
+
     /**
      * This is the nuclear approach
      */
@@ -356,7 +356,7 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
     Resource findResourceInPlugin(GrailsPlugin plugin, String uri){
         log.debug("xx findResourceInPlugin: ['${uri}']")
         //if its binary, probably a grails 3 plugins
-        if (plugin instanceof BinaryGrailsPlugin && searchBinary) {
+        if (plugin instanceof BinaryGrailsPlugin && searchBinaryPlugins) {
             Resource resource = findResourceInBinaryPlugin(plugin as BinaryGrailsPlugin, uri)
             if (resource) {
                 log.debug("found in binary plugin: pluginPath ${resource}")
