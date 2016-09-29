@@ -10,7 +10,7 @@ beans = {
         	"classpath:testAppViewToolsSrcMainResources"
         ]
 
-        searchBinary = false
+        searchBinaryPlugins = false
 
         //in dev mode there will be a groovyPageResourceLoader that helps find the views
         //this will use the project dir as the base path to search

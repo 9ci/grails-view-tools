@@ -17,8 +17,7 @@ class ViewToolsGrailsPlugin {
     def authorEmail = "joshdev@9ci.com"
     def description = '''\
 ViewResourceLocator for locating views in grails-app/views, plugins, and custom external paths.
-Also RenderEnvironment for binding a mock request is one doesn't exist so that services can operate without a controller
-Used in freemarker and new jasper-spring.
+Also GrailsWebEnvironment for binding a mock request is one doesn't exist so that services can operate without a controller.
 '''
 
     // URL to the plugin's documentation

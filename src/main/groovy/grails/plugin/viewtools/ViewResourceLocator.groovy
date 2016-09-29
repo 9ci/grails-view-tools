@@ -58,7 +58,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLoaderAware,
         ApplicationContextAware, PluginManagerAware{
 
-    boolean searchBinary = true //keep at false for grails2, true for grails3
+    boolean searchBinaryPlugins = true //keep at false for grails2, true for grails3
 
     //static final String PATH_TO_WEB_INF_VIEWS = "/WEB-INF/grails-app/views";
     static final String GRAILS_APP_VIEWS_PATH = "/grails-app/views";
@@ -70,25 +70,12 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
     GrailsPluginManager pluginManager;
     ApplicationContext ctx
 
-
     /**
      * the search locations to try first.
      * Will be classpaths and external directories usually
      */
     Collection<String> searchLocations = new ConcurrentLinkedQueue<String>();
-
-    /**
-     * normal grails paths.
-     * Production:
-     *   Grails 2: "WEB-INF/grails-app/views"
-     *   Grails 3: "classpath:/" <- its the root of the classpath
-     * Dev/Test:
-     *   Grails 2: "grails-app/views"
-     *   Grails 3: "grails-app/views"
-     */
-    Collection<String> grailsViewPaths = new ConcurrentLinkedQueue<String>();
-
-
+    
     /**
      * This is the nuclear approach
      */
