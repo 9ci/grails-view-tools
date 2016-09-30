@@ -124,6 +124,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
     @CompileDynamic
     void init(){
         devResourceLoader = ctx.groovyPageResourceLoader
+        if(devResourceLoader) grailsResourceLoaders.add(devResourceLoader)
         //setup defaults if not done during bean setup time
 //        if(devmode){
 //            grailsViewPaths = ["/grails-app/views"]

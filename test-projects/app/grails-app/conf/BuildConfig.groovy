@@ -40,9 +40,29 @@ grails.project.dependency.resolution = {
         grailsCentral()
         mavenCentral()
     }
+    def gebVersion = "0.13.1"
+    def webdriverVersion = "2.53.1"
 
     dependencies {
         test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"
+
+        //***** TESTING GEB
+        //test "net.sourceforge.htmlunit:htmlunit:2.23"
+        //"org.seleniumhq.selenium:selenium-htmlunit-driver:${webdriverVersion}"
+        test "org.gebish:geb-spock:${gebVersion}"
+
+        test("org.seleniumhq.selenium:selenium-support:${webdriverVersion}",
+                "org.seleniumhq.selenium:selenium-chrome-driver:${webdriverVersion}",
+                "org.seleniumhq.selenium:selenium-ie-driver:${webdriverVersion}"){//,
+                //"org.seleniumhq.selenium:selenium-htmlunit-driver:${webdriverVersion}") {
+            export = false
+        }
+        test("com.codeborne:phantomjsdriver:1.3.0") {
+            // phantomjs driver pulls in a different selenium version amongs other stuff it seemed
+            transitive = false
+            export = false
+        }
+        test("io.github.bonigarcia:webdrivermanager:1.4.8"){ export = false }
     }
 
     plugins {
@@ -59,6 +79,8 @@ grails.project.dependency.resolution = {
         runtime ":hibernate4:4.3.10" // or ":hibernate:3.6.10.18"
         runtime ":database-migration:1.4.0"
         runtime ":jquery:1.11.1"
+
+        test (":geb:$gebVersion"){ export = false }
 
         //compile ":view-tools:0.1"
     }
