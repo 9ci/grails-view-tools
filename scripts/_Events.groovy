@@ -8,7 +8,8 @@ eventTestPhaseStart = { phase ->
     if (!buildConfig.grails.useGrails3FolderLayout) return
     //binding.variables.each { println it.key} 
     //println "eventTestPhaseStart : $phase in $grailsAppName"
-    String srcTestPath
+    //String srcTestPath
+    println "RUNNING TESTS $phase"
 
     if("unit" == phase){
         copyDirClean("$basedir/src/test/groovy", "$basedir/test/unit")
