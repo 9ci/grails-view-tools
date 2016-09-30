@@ -1,1 +1,1 @@
-fooplugin itsInFoobarPlugin.ftl its here
+fooplugin itsInFoobarPlugin.ftl success
