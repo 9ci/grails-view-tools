@@ -244,6 +244,7 @@
           <root url="jar://$USER_HOME$/.sdkman/candidates/grails/2.5.5/dist/grails-plugin-testing-2.5.5-sources.jar!/" />
           <root url="jar://$USER_HOME$/.sdkman/candidates/grails/2.5.5/dist/grails-docs-2.5.5-sources.jar!/" />
           <root url="jar://$USER_HOME$/.sdkman/candidates/grails/2.5.5/dist/grails-scripts-2.5.5-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ideaLibSources/spring-core-4.1.8.RELEASE-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

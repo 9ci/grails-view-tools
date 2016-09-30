@@ -229,7 +229,9 @@
           <root url="jar://$USER_HOME$/.sdkman/candidates/grails/2.5.5/lib/org.apache.ant/ant-junit/jars/ant-junit-1.9.4.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.ideaLibSources/spring-core-4.1.8.RELEASE-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>
