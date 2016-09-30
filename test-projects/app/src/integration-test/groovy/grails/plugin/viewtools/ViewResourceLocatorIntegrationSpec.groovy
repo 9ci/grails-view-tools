@@ -1,5 +1,6 @@
 package grails.plugin.viewtools
 
+import foobar.TenantViewResourceLoader
 import grails.test.mixin.integration.Integration
 import grails.transaction.*
 import grails.util.Environment
@@ -65,13 +66,13 @@ class ViewResourceLocatorIntegrationSpec extends Specification  {
 
      }
 
-    void "view in plugin from classpath"() {
+    void "view in plugin from classpath or full scan"() {
         when:
         Resource res = viewResourceLocator.locate('/fooPlugin/index.md')
 
         then:
         //its a full scan in grails 2
-        assert res.exists()
+        assert res?.exists()
         //works in grails3
         //res.getURI().toString().endsWith( "classpath:/fooPlugin/index.md")
         assert viewResourceLocator.locate('spock/lang/Specification.class')
@@ -107,6 +108,20 @@ class ViewResourceLocatorIntegrationSpec extends Specification  {
         String toCompare = "foobar-plugin/grails-app/views/fooPlugin/index.md"
         String toCompare2 = "foobar-plugin-0.1.jar!/fooPlugin/index.md"
         uri.endsWith( toCompare) || uri.endsWith( toCompare2)
+    }
+
+    void "tenantA"() {
+        when:
+        TenantViewResourceLoader.currentTenant.set('tenantA')
+        //controller.viewResourceLocator = viewResourceLocator
+        Resource res = viewResourceLocator.locate('/foo/tenantA.ftl')
+
+        then:
+        res.getFile().text.contains('tenantA got it')
+        TenantViewResourceLoader.currentTenant.set('tenantB')
+        assert viewResourceLocator.locate('tenantB.hbs').exists()
+
+
     }
 
 

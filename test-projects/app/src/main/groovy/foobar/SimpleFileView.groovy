@@ -33,7 +33,7 @@ class SimpleFileView extends AbstractUrlBasedView {
         Resource res = viewResourceLocator.getResource(url)
 
         StringBuffer contents = new StringBuffer()
-        //contents << res.inputStream.text << "<br/>"
+        contents << res.inputStream.text << "<br/>"
         contents << "url: $url <br/>"
         contents << "view: $beanName <br/>"
         contents << "Resource: $res <br/>"

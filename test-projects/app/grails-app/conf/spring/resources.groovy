@@ -1,27 +1,36 @@
 import grails.util.Environment
+import org.springframework.core.io.ResourceLoader
 
 beans = {
-	viewResourceLocator(grails.plugin.viewtools.ViewResourceLocator) { bean ->
-        //customviews sits in src/main/resources
-        searchLocations = ["file:./view-templates",
-        	"classpath:testAppViewToolsGrailsAppConf",
-        	"classpath:pluginViewToolsSrcMainResources",
-        	"classpath:pluginViewToolsGrailsAppConf",
-        	"classpath:testAppViewToolsSrcMainResources"
+    viewResourceLocator(grails.plugin.viewtools.ViewResourceLocator) { bean ->
+        //initial searchLocations
+        searchPaths = [
+                //external file path that may be used for production overrides
+                "file:./view-templates",
+                "classpath:templates/", // consistent with spring-boot defaults
+                "file:./some-non-existant-location-for-testing",
+                "classpath:testAppViewToolsGrailsAppConf" //other classpath locations
         ]
+        //resourceLoaders to use right after searchLocations above are scanned
+        searchLoaders = [ref('tenantViewResourceLoader')]
 
-        searchBinaryPlugins = false
+        searchBinaryPlugins = false //whether to look in binary plugins, does not work in grails2
 
-        //in dev mode there will be a groovyPageResourceLoader that helps find the views
-        //this will use the project dir as the base path to search
-        //if(Environment.isDevelopmentEnvironmentAvailable()){
-        if(!application.warDeployed){
-            developmentResourceLoader = ref('groovyPageResourceLoader')
+        // in dev mode there will be a groovyPageResourceLoader
+        // with base dir set to the running project
+        //if(Environment.isDevelopmentEnvironmentAvailable()) <- better for Grails 3
+        //setup for development mode
+        if(!application.warDeployed){ // <- grails2
+            grailsViewPaths = ["/grails-app/views"]
+            webInfPrefix = ""
         }
 
     }
 
+    tenantViewResourceLoader(foobar.TenantViewResourceLoader)
+
     simpleViewResolver(foobar.SimpleViewResolver) { bean ->
         viewResourceLocator = ref("viewResourceLocator")
     }
+
 }

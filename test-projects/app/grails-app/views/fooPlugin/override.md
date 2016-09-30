@@ -1,1 +1,1 @@
-fooBar/index.md override success
+fooBar/override.md success

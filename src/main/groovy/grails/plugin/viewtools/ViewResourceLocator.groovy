@@ -15,11 +15,11 @@ import groovy.util.logging.Slf4j
 //import org.grails.plugins.BinaryGrailsPlugin
 //import org.grails.web.servlet.mvc.GrailsWebRequest
 //import org.apache.commons.io.FilenameUtils
-import org.codehaus.groovy.grails.core.io.ResourceLocator
 import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
 import org.codehaus.groovy.grails.plugins.BinaryGrailsPlugin
 import org.codehaus.groovy.grails.plugins.GrailsPlugin
 import org.codehaus.groovy.grails.plugins.GrailsPluginManager
+import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
 import org.codehaus.groovy.grails.plugins.PluginManagerAware
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 import org.springframework.beans.BeansException
@@ -28,7 +28,6 @@ import org.springframework.context.ApplicationContextAware
 import org.springframework.context.ResourceLoaderAware
 import org.springframework.core.io.*
 import org.springframework.util.ResourceUtils
-import org.springframework.util.StringUtils
 
 import javax.annotation.PostConstruct
 import javax.servlet.http.HttpServletRequest
@@ -50,23 +49,23 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * Used @see org.grails.gsp.io.DefaultGroovyPageLocator heavily as a starting point
  *
  * @author Joshua Burnett
- * @author Graeme Rocher
  */
 
 @Slf4j
 @CompileStatic
-class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLoaderAware,
+class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
         ApplicationContextAware, PluginManagerAware{
 
-    boolean searchBinaryPlugins = true //keep at false for grails2, true for grails3
+    Boolean searchBinaryPlugins = true //keep at false for grails2, true for grails3
 
     //static final String PATH_TO_WEB_INF_VIEWS = "/WEB-INF/grails-app/views";
     static final String GRAILS_APP_VIEWS_PATH = "/grails-app/views";
     static final String PLUGINS_PATH = "/plugins/";
-    Boolean developmentMode
-    String pathToViews = "/WEB-INF/grails-app/views"
+    String webInfPrefix = "/WEB-INF/"
 
-    Collection<ResourceLoader> resourceLoaders = new ConcurrentLinkedQueue<ResourceLoader>();
+    List<String> grailsViewPaths = ["/WEB-INF/grails-app/views"]
+
+    Collection<ResourceLoader> grailsResourceLoaders = new ConcurrentLinkedQueue<ResourceLoader>();
     GrailsPluginManager pluginManager;
     ApplicationContext ctx
 
@@ -74,38 +73,46 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
      * the search locations to try first.
      * Will be classpaths and external directories usually
      */
-    Collection<String> searchLocations = new ConcurrentLinkedQueue<String>();
+    List<String> searchPaths = ["classpath:templates/"]
+
+    /**
+     * collection of resourceLoaders to use right after searchPaths is scanned
+     */
+    List<ResourceLoader> searchLoaders
+
+    //Collection<String> initialResourceLoaders = new ConcurrentLinkedQueue<String>();
 
     /**
      * This is the nuclear approach
      */
-    boolean scanAllPluginsWhenNotFound = true
+    Boolean scanAllPluginsWhenNotFound = true
 
+    ResourceLoader devResourceLoader
+
+    public void setAppendSearchLocation(String path) {
+        searchPaths.add(path)
+    }
+
+    /**
+     * adds a resourceLoader to the GrailResourceLoader
+     * @param resourceLoader
+     */
     @Override //ResourceLoaderAware
     public void setResourceLoader(ResourceLoader resourceLoader) {
         addResourceLoader(resourceLoader);
     }
 
     public void addResourceLoader(ResourceLoader resourceLoader) {
-        if (resourceLoader != null && !resourceLoaders.contains(resourceLoader)) {
-            resourceLoaders.add(resourceLoader);
+        if (resourceLoader != null && !grailsResourceLoaders.contains(resourceLoader)) {
+            grailsResourceLoaders.add(resourceLoader);
         }
     }
-
-//    public void setPreResourceLoaders(List<ResourceLoader> preLoaders) {
-//        Collection<ResourceLoader> newRl = new ConcurrentLinkedQueue<ResourceLoader>()
-//        newRl.addAll(preLoaders)
-//        newRl.addAll(resourceLoaders)
-//        resourceLoaders = newRl
-//    }
 
     @Override //ApplicationContextAware
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         addResourceLoader(applicationContext);
         ctx = applicationContext
-//        log.debug("developmentMode:$Environment.developmentMode")
-//        log.debug("GRAILS_APP_DIR_PRESENT:$BuildSettings.GRAILS_APP_DIR_PRESENT")
-//        log.debug("BASE_DIR:$BuildSettings.BASE_DIR")
+
     }
 
     @Override //PluginManagerAware
@@ -113,31 +120,14 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
         this.pluginManager = pluginManager;
     }
 
-    /**
-     * adds a dev loader to the list, will be GroovyPageResourceLoader
-     */
-    public void setDevelopmentResourceLoader(ResourceLoader resourceLoader) {
-        addResourceLoader(resourceLoader)
-        //resourceLoader
-//        Resource bres = (Resource) resourceLoader.@localBaseResource
-//        log.debug("resourceLoader :${bres.class.name}")
-//        log.debug("exists :${bres.exists()}")
-//        def cres = resourceLoader.getResource("classpath:/fooPlugin/index.md")
-//        log.debug("bres.exists :${bres.exists()}")
-//        log.debug("bres.exists :${bres.exists()}")
-    }
-
     @PostConstruct
+    @CompileDynamic
     void init(){
+        devResourceLoader = ctx.groovyPageResourceLoader
         //setup defaults if not done during bean setup time
-        if(developmentMode == null) developmentMode = Environment.developmentMode || Environment.TEST
-        if(developmentMode){
-            pathToViews = "/grails-app/views"
-        }
-        if(!searchLocations){
-            searchLocations.add("classpath:templates/")
-        }
-
+//        if(devmode){
+//            grailsViewPaths = ["/grails-app/views"]
+//        }
     }
 
 
@@ -156,8 +146,11 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
         res = findInSearchLocations(uri)
         if(res?.exists()) return res
 
+        res = findInSearchLoaders(uri)
+        if(res?.exists()) return res
+
         //try normal grails-app/views dir, for example with "/demo/foo.ftl"
-        res = findInPathToViews(uri)
+        res = findInGrailsViewPaths(uri)
         if(res?.exists()) return res
 
         //if path starts with "/plugins/"
@@ -215,7 +208,7 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
     }
 
     Resource findInSearchLocations(String uri){
-        List fullSearchPaths = searchLocations.collect{ String path ->
+        List fullSearchPaths = searchPaths.collect{ String path ->
             concatPaths(path, uri)
         }
         log.debug("looking in fullSearchPaths : ['${fullSearchPaths}]'")
@@ -226,16 +219,27 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
         }
     }
 
+    Resource findInSearchLoaders(String uri){
+        if(!searchLoaders) return
+        log.debug("findInSearchLoaders")
+        for (ResourceLoader loader : searchLoaders) {
+            Resource resource = loader.getResource(uri)
+            if (resource?.exists()) return resource
+        }
+        return null
+    }
+
     /**
      * Looks in grails-app/views with WEB-INF for production and without it for prod
      */
-    Resource findInPathToViews(String uri){
-        String fullPathToView = concatPaths(pathToViews, uri)
-        log.debug("findInPathToViews added ${pathToViews} looking for : ['${fullPathToView}]'")
+    Resource findInGrailsViewPaths(String uri){
+        List fullPathsToViews = grailsViewPaths.collect{ String path -> concatPaths(path, uri) }
+        //String fullPathToView = concatPaths(grailsViewsPath, uri)
+        log.debug("fullPathsToViews : ${fullPathsToViews} ")
 
-        Resource res = findResource([fullPathToView])//findResource(searchPaths)
+        Resource res = findResource(fullPathsToViews)//findResource(searchPaths)
         if(res?.exists()){
-            log.debug("FOUND in findInPathToViews")
+            log.debug("FOUND in findInGrailsViewPaths")
             return res
         }
     }
@@ -256,7 +260,7 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
     }
 
 
-    protected Resource findResource(String uri) {
+    Resource findResource(String uri) {
         //return findResource(resolveSearchPaths(uri));
         return findResource([uri]);
     }
@@ -270,9 +274,9 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
     Resource findResource(List<String> paths) {
         //ContextResource foundResource = null;
         Resource resource;
-        log.debug("spinning through [${resourceLoaders.size()}] resourceLoaders with searchPaths: ['${paths}]")
+        log.debug("spinning through [${grailsResourceLoaders.size()}] resourceLoaders with searchPaths: ['${paths}]")
 
-        for (ResourceLoader loader : resourceLoaders) {
+        for (ResourceLoader loader : grailsResourceLoaders) {
             log.debug("trying ResourceLoader [${loader.class}]")
             resource = findResource( loader, paths)
             if (resource?.exists()) break;
@@ -308,16 +312,16 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
     /**
      * The nuclear approach that scans every plugin to find the view
      */
-    protected Resource scanPluginsForResource(String uri) {
+    Resource scanPluginsForResource(String uri) {
         GrailsPluginManager pluginManager = pluginManager
         if (!pluginManager) return null
-
+        log.debug("*** scanning all plugins *****")
+        String pluginBuildSettings = GrailsPluginUtils.getPluginBaseDirectories()
         for (GrailsPlugin plugin : pluginManager.getAllPlugins()) {
-            log.debug("SEARCHING PLUGIN: ${plugin.name}")
-            String pluginPath = pluginManager.getPluginPath(plugin.getName());
-            String pluginUri = GrailsResourceUtils.appendPiecesForUri(pluginPath, uri);
-            log.debug("pluginPath:[$pluginPath], pluginUri: ${pluginUri}")
-            //if its binary, probably new grails 3 plugins
+            log.debug("SEARCHING PLUGIN: [${plugin.name}] for [$uri]")
+//            String pluginPath = pluginManager.getPluginPath(plugin.getName());
+//            String pluginUri = GrailsResourceUtils.appendPiecesForUri(pluginPath, uri);
+//            log.debug("pluginPath:[$pluginPath], pluginUri: ${pluginUri}")
             Resource resource = findResourceInPlugin( plugin, uri)
             if (resource) {
                 log.debug("found in binary plugin: pluginPath ${resource}")
@@ -340,8 +344,7 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
         PluginViewPathInfo pathInfo = getPluginViewPathInfo(uri);
 
         for (GrailsPlugin plugin : pluginManager.getAllPlugins()) {
-            log.debug("xx findResourceWithPluginPath: ${plugin.name}")
-            log.debug("xx pathInfo.pluginName:[$pathInfo.pluginName], plugin.fileSystemName: ${plugin.fileSystemName}")
+            log.debug("pathInfo.pluginName:[$pathInfo.pluginName], plugin.fileSystemName: ${plugin.fileSystemName}")
             if(pathInfo.pluginName == plugin.fileSystemName){
                 res = findResourceInPlugin(plugin,pathInfo.path)
                 if (res) return res
@@ -354,9 +357,10 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
      * find the uri in the plugin
      */
     Resource findResourceInPlugin(GrailsPlugin plugin, String uri){
-        log.debug("xx findResourceInPlugin: ['${uri}']")
+        //log.debug("xx findResourceInPlugin: ['${uri}']")
         //if its binary, probably a grails 3 plugins
-        if (plugin instanceof BinaryGrailsPlugin && searchBinaryPlugins) {
+        if (plugin instanceof BinaryGrailsPlugin ) {
+            if(!searchBinaryPlugins) return
             Resource resource = findResourceInBinaryPlugin(plugin as BinaryGrailsPlugin, uri)
             if (resource) {
                 log.debug("found in binary plugin: pluginPath ${resource}")
@@ -364,9 +368,26 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
             }
         }
         else{
+//            def res = plugin.@pluginDescriptor
+//            log.debug("PLUGIN findResource: [${plugin.name}] for getDescriptor exists  [${res?.exists()}]")
+//            if(!(res?.exists())) return
+//            uri = concatPaths(res.URI.toString(), GRAILS_APP_VIEWS_PATH,uri)
+//            log.debug("PLUGIN findResource: [${plugin.name}] for [$uri]")
             uri = concatPaths(plugin.getPluginPath(), GRAILS_APP_VIEWS_PATH,uri)
-            Resource resource = findResource(uri)
-            if (resource) return resource
+            //if(warDeployed) uri = concatPaths("/WEB-INF/",uri)
+            log.debug("PLUGIN findResource: [${plugin.name}] for [$uri]")
+            Resource resource
+            if(devResourceLoader){
+                resource = devResourceLoader.getResource(uri)
+            }else{
+                uri = concatPaths('/WEB-INF/',uri)
+                resource = findResource(uri)
+            }
+            //Resource resource = findResource(uri)
+            if (resource?.exists()){
+                log.debug("FOUND IN PLUGIN : [${plugin.name}] for [$uri]")
+                return resource
+            }
         }
         return null
     }
@@ -376,16 +397,13 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
      * checks the
      */
     @CompileDynamic
-    protected Resource findResourceInBinaryPlugin(BinaryGrailsPlugin plugin, String uri) {
+    Resource findResourceInBinaryPlugin(BinaryGrailsPlugin plugin, String uri) {
         File projectDirectory = plugin.projectDirectory
         //if it has a projectDirectory then its inplace exploded multi project builds in grails 3
         log.debug("findResourceInBinaryPlugin: for plugin ['${plugin.name}'], projectDirectory: ['$projectDirectory']")
         if(projectDirectory) {
             log.debug("Binary plugin is exploded")
-            String fullUri = GrailsResourceUtils.appendPiecesForUri(
-                projectDirectory.toURI().toString(), 
-                GrailsResourceUtils.VIEWS_DIR_PATH, 
-                uri)
+            String fullUri = concatPaths(projectDirectory.toURI().toString(), GRAILS_APP_VIEWS_PATH, uri)
             log.debug("findResourceInBinaryPlugin - plugin:['${plugin.name}'], URI:['$fullUri']")
             //no just try it again with the full path
             return findResource([fullUri])
@@ -394,7 +412,7 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
             Resource descriptorResource = plugin.binaryDescriptor.getResource()
             assert descriptorResource.exists()
             //the descriptor is in the META-INF so we need to go up 1 level to get to the root
-            Resource r = descriptorResource.createRelative(StringUtils.applyRelativePath("../", uri));
+            Resource r = descriptorResource.createRelative(concatPaths("../", uri));
             if (r.exists()) {
                 log.debug ("BinaryGrailsPlugin JAR resource found:['${r}']")
                 return new ViewContextResource(r.URI,uri)
@@ -425,21 +443,6 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
 
     @Override //ResourceLoader
     ClassLoader getClassLoader() {
-        return null
-    }
-
-    @Override //Grails ResourceLocator
-    void setSearchLocation(String searchLocation) {
-        searchLocations.add(searchLocation)
-    }
-
-    @Override //Grails ResourceLocator
-    Resource findResourceForURI(String uri) {
-        return locate(uri)
-    }
-
-    @Override //Grails ResourceLocator
-    Resource findResourceForClassName(String className) {
         return null
     }
 
@@ -483,7 +486,7 @@ class ViewResourceLocator implements ResourceLocator, ResourceLoader, ResourceLo
      * FileSystemResource that explicitly expresses a context-relative path
      * through implementing the ContextResource interface.
      */
-    private static class FileSystemContextResource extends FileSystemResource implements ContextResource {
+    static class FileSystemContextResource extends FileSystemResource implements ContextResource {
 
         public FileSystemContextResource(String path) {
             super(path);
