@@ -33,10 +33,9 @@ grails.project.dependency.resolution = {
 
     repositories {
         inherits true // Whether to inherit repository definitions from plugins
-
+        mavenLocal()
         grailsPlugins()
         grailsHome()
-        mavenLocal()
         grailsCentral()
         mavenCentral()
     }
@@ -82,7 +81,7 @@ grails.project.dependency.resolution = {
 
         test (":geb:$gebVersion"){ export = false }
 
-        //compile ":view-tools:0.1"
+        //compile ":view-tools:0.2-grails2"
     }
 }
 

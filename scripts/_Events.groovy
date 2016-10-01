@@ -5,7 +5,7 @@ grails3SrcDirs = ["$basedir/src/main/groovy","$basedir/src/main/resources"]
 //no good way to add source paths to test in eventTestCompileStart and get them to run
 //so just copy them into test/unit, etc.. so that grails can pick them up and run normally
 eventTestPhaseStart = { phase ->
-    if (!buildConfig.grails.useGrails3FolderLayout) return
+    if (!(buildConfig.grails?.useGrails3FolderLayout)) return
     //binding.variables.each { println it.key} 
     //println "eventTestPhaseStart : $phase in $grailsAppName"
     //String srcTestPath
@@ -25,7 +25,7 @@ eventTestPhaseStart = { phase ->
 }
 
 eventTestPhaseEnd = { phase ->
-    if (!buildConfig.grails.useGrails3FolderLayout) return
+    if (!(buildConfig.grails?.useGrails3FolderLayout)) return
     //remove the test dir that had the files copied into them
     if(phase in ["unit","integration","functional"]){
         println "Clean up: DELETING $basedir/test/$phase"
@@ -34,7 +34,7 @@ eventTestPhaseEnd = { phase ->
 }
 
 eventCompileStart = { x ->
-    if (!buildConfig.grails.useGrails3FolderLayout) return
+    if (!(buildConfig.grails?.useGrails3FolderLayout)) return
     //println "grails3 structure: eventCompileStart "
 
      //special for inline plugins add the source as its not moved from package
@@ -65,13 +65,13 @@ eventCompileStart = { x ->
 }
 
 eventCompileEnd = {
-    if (!buildConfig.grails.useGrails3FolderLayout) return 
+    if (!(buildConfig.grails?.useGrails3FolderLayout)) return
     copyResources(buildSettings.resourcesDir)
 
 }
 
 eventCreatePluginArchiveStart = { stagingDir ->
-    if (!buildConfig.grails.useGrails3FolderLayout) return
+    if (!(buildConfig.grails?.useGrails3FolderLayout)) return
 
     //println "stagingDir $stagingDir"
     ant.copy(todir:"$stagingDir/src/groovy",failonerror:false) {
@@ -87,13 +87,13 @@ eventCreatePluginArchiveStart = { stagingDir ->
 }
 
 eventCreatePluginArchiveEnd = { stagingDir ->
-    if (!buildConfig.grails.useGrails3FolderLayout) return
+    if (!(buildConfig.grails?.useGrails3FolderLayout)) return
     cleanUpEmptyDirs()
 }
 
 eventRunAppStart= {
-    System.setProperty("grails.reload.enabled", "true")
-    println "eventRunAppStart: useGrails3FolderLayout = true, adding grails3SrcDirs"
+    //System.setProperty("grails.reload.enabled", "true")
+    //println "eventRunAppStart: useGrails3FolderLayout = true, adding grails3SrcDirs"
 //    for (String path in grails3SrcDirs) {
 //        if (new File(path).exists()){
 //            println "adding $path"
@@ -104,15 +104,17 @@ eventRunAppStart= {
 }
 
 eventRunAppEnd = {
-    //cleanUpEmptyDirs()
+    if (!(buildConfig.grails?.useGrails3FolderLayout)) return
+    cleanUpEmptyDirs()
 }
 
 eventCleanStart = { kind ->
+    if (!(buildConfig.grails?.useGrails3FolderLayout)) return
     cleanUpEmptyDirs()
 }
 
 eventCreateWarStart = { warName, stagingDir ->
-    if (!buildConfig.grails.useGrails3FolderLayout) return
+    if (!(buildConfig.grails?.useGrails3FolderLayout)) return
     copyResources("$stagingDir/WEB-INF/classes")
 }
 

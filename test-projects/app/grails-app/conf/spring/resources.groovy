@@ -1,5 +1,6 @@
 import grails.util.Environment
 import org.springframework.core.io.ResourceLoader
+import foobar.*
 
 beans = {
     viewResourceLocator(grails.plugin.viewtools.ViewResourceLocator) { bean ->
@@ -27,9 +28,10 @@ beans = {
 
     }
 
-    tenantViewResourceLoader(foobar.TenantViewResourceLoader)
+    tenantViewResourceLoader(TenantViewResourceLoader){
+    }
 
-    simpleViewResolver(foobar.SimpleViewResolver) { bean ->
+    simpleViewResolver(SimpleViewResolver) { bean ->
         viewResourceLocator = ref("viewResourceLocator")
     }
 
