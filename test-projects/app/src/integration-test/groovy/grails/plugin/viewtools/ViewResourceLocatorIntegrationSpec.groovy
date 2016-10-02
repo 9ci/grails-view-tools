@@ -4,18 +4,18 @@ import foobar.TenantViewResourceLoader
 import grails.test.mixin.integration.Integration
 import grails.transaction.*
 import grails.util.Environment
-//import org.grails.web.servlet.mvc.GrailsWebRequest
-//import org.grails.web.util.GrailsApplicationAttributes
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import org.grails.web.servlet.mvc.GrailsWebRequest
+import org.grails.web.util.GrailsApplicationAttributes
+//import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
+//import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 import org.springframework.util.StringUtils
 import spock.lang.*
 
 import org.springframework.core.io.Resource
 import foobar.DemoController
 
-//@Integration
-@Rollback
+@Integration
+//@Rollback
 class ViewResourceLocatorIntegrationSpec extends Specification  {
 
 	ViewResourceLocator viewResourceLocator

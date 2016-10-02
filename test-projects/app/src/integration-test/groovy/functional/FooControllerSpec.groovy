@@ -1,13 +1,17 @@
 package functional
 
-import geb.spock.GebReportingSpec
-import geb.spock.GebSpec
+import grails.test.mixin.integration.Integration
+import grails.transaction.*
 
+import spock.lang.*
+import geb.spock.*
+
+@Integration
 class FooControllerSpec extends GebReportingSpec {
 
 	def "sanity check"() {
 		when:
-		go ""
+		go "/"
 
 		then:
 		title == "Welcome to Grails"
@@ -18,7 +22,7 @@ class FooControllerSpec extends GebReportingSpec {
 
 	def "foo index"() {
 		when:
-		go "foo"
+		go "/foo"
 
 		then:
 		//assert contains("success")
@@ -28,7 +32,7 @@ class FooControllerSpec extends GebReportingSpec {
 
 	def "overridenExternalTemplatesPath"() {
 		when:
-		go "foo/overridenExternalTemplatesPath"
+		go "/foo/overridenExternalTemplatesPath"
 
 		then:
 		def html = driver.pageSource
@@ -37,7 +41,7 @@ class FooControllerSpec extends GebReportingSpec {
 
 	def "itsInFoobarPlugin"() {
 		when:
-		go "foo/itsInFoobarPlugin"
+		go "/foo/itsInFoobarPlugin"
 
 		then:
 		def html = driver.pageSource
@@ -46,7 +50,7 @@ class FooControllerSpec extends GebReportingSpec {
 
 	def "fooPluginWithArgument"() {
 		when:
-		go "foo/fooPluginWithArgument"
+		go "/foo/fooPluginWithArgument"
 
 		then:
 		def html = driver.pageSource
@@ -55,7 +59,7 @@ class FooControllerSpec extends GebReportingSpec {
 
 	def "tags"() {
 		when:
-		go "foo/tags"
+		go "/foo/tags"
 
 		then:
 		assert $("#index").text().contains("foo/index.hbr success")

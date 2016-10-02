@@ -4,19 +4,19 @@ import grails.test.mixin.integration.Integration
 import grails.transaction.*
 import spock.lang.*
 
-//import grails.core.GrailsApplication
-import org.codehaus.groovy.grails.commons.GrailsApplication
+import grails.core.GrailsApplication
+//import org.codehaus.groovy.grails.commons.GrailsApplication
 
-//import org.grails.web.servlet.WrappedResponseHolder
-import org.codehaus.groovy.grails.web.servlet.WrappedResponseHolder
+import org.grails.web.servlet.WrappedResponseHolder
+//import org.codehaus.groovy.grails.web.servlet.WrappedResponseHolder
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
-import grails.test.spock.IntegrationSpec
+//import grails.test.spock.IntegrationSpec
 
-//@IntegrationSpec
+@Integration
 //@Rollback
-class GrailsWebEnvironmentIntegrationSpec extends IntegrationSpec  {
+class GrailsWebEnvironmentIntegrationSpec extends Specification  {
 
     //@Autowired
     GrailsApplication grailsApplication

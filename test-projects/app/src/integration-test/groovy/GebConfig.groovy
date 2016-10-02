@@ -28,7 +28,7 @@ baseNavigatorWaiting = true
 atCheckWaiting = true
 
 //When extending GebReportingSpec it will snap shot the html and a sreenshot. This is where they go
-reportsDir = "target/geb-reports"
+reportsDir = "build/geb-reports"
 
 //****HtmlUnitDriver as the default driver *****//
 driver = { new HtmlUnitDriver(true) }

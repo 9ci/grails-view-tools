@@ -11,7 +11,7 @@ buildscript {
 }
 
 version "0.1"
-group "capp32"
+group "app"
 
 apply plugin:"eclipse"
 apply plugin:"idea"
@@ -74,6 +74,11 @@ dependencies {
     testCompile "io.github.bonigarcia:webdrivermanager:1.4.9"
     /** GEB end */
 
+    runtime 'org.grails.plugins:grails-console:2.0.8'
+
+    //compile 'org.grails.plugins:view-tools:0.2-grails3'
+    //compile project(':') //view tools in parent
+
 }
 /****** GEB *******
 Pass system properties through to the integrationTest task so we can pass in the 'geb.env' property to run tests
@@ -88,3 +93,42 @@ assets {
     minifyJs = true
     minifyCss = true
 }
+
+grails {
+    exploded = true
+    plugins {
+        compile project(':foobar-plugin')
+        if(rootProject.name == "app"){
+            println "rootProject.name $rootProject.name"
+            compile project(':view-tools')
+        }else{ //this is a sub-project of the root view-tools build so add the root
+            compile project(':')
+        }
+    }
+}
+
+// println "Source dirs" + sourceSets.main.resources.srcDirs
+
+// def resDirs = sourceSets.main.resources.srcDirs
+// resDirs.each{
+//     //if(it.name.endsWith('grails-app/views')) it
+//     println it.class
+// }
+
+//println "Source dirs" + sourceSets.main.resources.srcDirs
+// sourceSets.main.resources.srcDirs = ['src/main/resources','grails-app/conf','grails-app/i18n']
+// sourceSets {
+//     main {
+//         resources {
+//             srcDirs = ['src/main/resources','grails-app/conf','grails-app/i18n']
+//             //include '**/*.md'
+//         }
+//     }
+// }
+
+// task copyViews (type: Copy) {
+//     from "grails-app"
+//     into sourceSets.main.output.resourcesDir
+//     include "views/**/*"
+// }
+// processResources.dependsOn "copyViews"

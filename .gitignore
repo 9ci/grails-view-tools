@@ -56,7 +56,7 @@ logs
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
 *.iml
 ## Directory-based project format:
-# .idea/
+.idea/
 # if you remove the above rule, at least ignore the following:
 
 # JetBrains User-specific stuff:
