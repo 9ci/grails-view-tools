@@ -15,9 +15,9 @@
  */
 package grails.plugin.viewtools
 
-import org.codehaus.groovy.grails.core.io.DefaultResourceLocator
-import org.codehaus.groovy.grails.core.io.ResourceLocator
 import groovy.transform.CompileStatic
+import org.grails.core.io.DefaultResourceLocator
+import org.grails.core.io.ResourceLocator
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.ContextResource;
 import org.springframework.core.io.FileSystemResource;
@@ -27,7 +27,6 @@ import org.springframework.core.io.UrlResource
 import org.springframework.util.Assert
 import org.springframework.util.StringUtils;
 
-import java.util.Collection;
 
 /**
  * FileSystemResourceLoader capable of understanding a base paths to search in for security

@@ -16,15 +16,14 @@
 
 package grails.plugin.viewtools
 
-
-import grails.util.GrailsWebUtil
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import grails.util.GrailsWebMockUtil
 import groovy.transform.CompileStatic
 import grails.util.Holders
 import groovy.util.logging.Log4j
-import org.codehaus.groovy.grails.web.servlet.WrappedResponseHolder
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
-import org.codehaus.groovy.grails.web.context.ServletEnvironmentGrailsApplicationDiscoveryStrategy
+import org.grails.web.context.ServletEnvironmentGrailsApplicationDiscoveryStrategy
+import org.grails.web.servlet.WrappedResponseHolder
+import org.grails.web.servlet.mvc.GrailsWebRequest
+import org.grails.web.util.GrailsApplicationAttributes
 import org.springframework.context.ApplicationContext
 import org.springframework.context.i18n.LocaleContext
 import org.springframework.context.i18n.LocaleContextHolder
@@ -132,7 +131,7 @@ class GrailsWebEnvironment {
 		//def request = new GrailsMockHttpServletRequest()
         //def response = new GrailsMockHttpServletResponse()
 
-		GrailsWebRequest grailsWebRequest = GrailsWebUtil.bindMockWebRequest(appCtx as WebApplicationContext)
+		GrailsWebRequest grailsWebRequest = GrailsWebMockUtil.bindMockWebRequest(appCtx as WebApplicationContext)
 		//setup locale on request and in LocaleContextHolder
 		LocaleContextHolder.setLocaleContext(new LocaleContext() {
 			Locale getLocale() {
