@@ -9,6 +9,7 @@ see the [scripts/Grails3Prep.groovy.](https://github.com/9ci/grails-view-tools/b
 ## Grails3 upgrades
 
 see http://docs.grails.org/latest/guide/upgrading.html#upgrading2x
+and this excellent write up http://philip.yurchuk.com/software/upgrading-to-grails-3/
 Don't pay attention to what they say in steps 2. we are upgrading the project/plugin in the same dir so we don't loose git history. These addendum steps also assume that 
 
 1. create a stock project/plugin to be used to copy files into
