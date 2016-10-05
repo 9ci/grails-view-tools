@@ -1,6 +1,6 @@
 class ViewToolsGrailsPlugin {
     // the plugin version
-    def version = "0.3-grails2"
+    def version = "0.4-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.3 > *"
     // resources that are excluded from plugin packaging
