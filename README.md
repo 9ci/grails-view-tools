@@ -1,12 +1,23 @@
 ## Description
 utility helpers to locate views in the spring mvc context
 - **ViewResourceLocator** for locating views in grails-app/views, plugins, and custom external paths.
-- **GrailsWebEnvironment** for binding a mock request is one doesn't exist so that services can operate without a controller.
+- **GrailsWebEnvironment** for binding a mock request if one doesn't exist so that services can operate without a controller.
 
 Used to locate View resources whether in development or WAR deployed mode from static
 resources, custom resource loaders and binary plugins.
 Loads from a local grails-app folder for dev and from WEB-INF in
 development mode.
+
+## Install
+**Grails 3**
+```
+compile org.grails.plugins:view-tools:0.3
+```
+
+**Grails 2**
+```
+compile :view-tools:0.3-grails2
+```
 
 ### ViewResourceLocator 
 **Example Bean**
