@@ -8,7 +8,7 @@ resources, custom resource loaders and binary plugins.
 Loads from a local grails-app folder for dev and from WEB-INF in
 development mode.
 
-###ViewResourceLocator 
+### ViewResourceLocator 
 **Example Bean**
 ```groovy
 viewResourceLocator(grails.plugin.viewtools.ViewResourceLocator) { bean ->
@@ -34,10 +34,13 @@ viewResourceLocator(grails.plugin.viewtools.ViewResourceLocator) { bean ->
 - **Resource getResource(String uri)** : also implements Springs [ResourceLoader](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/io/ResourceLoader.html) interface. This method works like a normal ResoruceLoader and **uri** can start with the standard _file:, classpath:, etc_
 
 
-###GrailsWebEnvironment
+### GrailsWebEnvironment
+
 GrailsWebEnvironment.bindRequestIfNull() methods are the ones of interest.
 based on the RenderEnvironment in grails-rendering and private class in grails-mail
 All this does is bind a mock request and mock response is one doesn't exist
 deals with setting the WrappedResponseHolder.wrappedResponse as well
 
+### _Events.groovy and putting a project in grails 3 structure
 
+see Grails3-README.md
