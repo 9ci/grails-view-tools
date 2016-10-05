@@ -41,6 +41,11 @@ based on the RenderEnvironment in grails-rendering and private class in grails-m
 All this does is bind a mock request and mock response is one doesn't exist
 deals with setting the WrappedResponseHolder.wrappedResponse as well
 
+### Example App
+
+see https://github.com/9ci/grails-view-tools/tree/master/test-projects/app
+It contains a number of examples as well as a simple spring based viewResolver that uses ViewResourceLocator to find the template files it needs.
+
 ### _Events.groovy and putting a project in grails 3 structure
 
 see Grails3-README.md
