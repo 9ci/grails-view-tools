@@ -1,3 +1,5 @@
+Note: Grails 2 sources are master and Grails 3 is in grails3 branch
+
 ## Description
 utility helpers to locate views in the spring mvc context
 - **ViewResourceLocator** for locating views in grails-app/views, plugins, and custom external paths.
