@@ -2,6 +2,7 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://repo.grails.org/grails/core" }
+        //jcenter()
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
@@ -9,7 +10,7 @@ buildscript {
     }
 }
 
-version "0.2-grails3"
+version "0.3"
 group "org.grails.plugins"
 
 apply plugin:"eclipse"
@@ -22,6 +23,7 @@ apply plugin:"asset-pipeline"
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
+    //jcenter()
 }
 
 dependencyManagement {
@@ -32,45 +34,50 @@ dependencyManagement {
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-logging"
-    compile "org.springframework.boot:spring-boot-autoconfigure"
-    compile "org.grails:grails-core"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
-    compile "org.grails:grails-dependencies"
-    compile "org.grails:grails-web-boot"
-    compile "org.grails.plugins:cache"
-    compile "org.grails.plugins:scaffolding"
+    provided "org.springframework.boot:spring-boot-starter-logging"
+    provided "org.springframework.boot:spring-boot-autoconfigure"
+    provided "org.grails:grails-core"
+    provided "org.springframework.boot:spring-boot-starter-actuator"
+    provided "org.springframework.boot:spring-boot-starter-tomcat"
+    provided "org.grails:grails-dependencies"
+    //provided "org.grails:grails-web-boot"
+    //compile "org.grails.plugins:cache"
+    // compile "org.grails.plugins:scaffolding"
     compile "org.springframework:spring-test"
 
-    console "org.grails:grails-console"
-    profile "org.grails.profiles:web-plugin"
-    provided "org.grails:grails-plugin-services"
-    provided "org.grails:grails-plugin-domain-class"
-    provided "org.codehaus.groovy:groovy-ant"
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.8.2"
+    //console "org.grails:grails-console"
+    //profile "org.grails.profiles:web-plugin"
+    //provided "org.grails:grails-plugin-services"
+    //provided "org.grails:grails-plugin-domain-class"
+    //provided "org.codehaus.groovy:groovy-ant"
+    //runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.8.2"
     
     testCompile "org.grails:grails-plugin-testing"
-    testCompile "org.grails.plugins:geb"
-    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
-    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+    // compile 'com.lowagie:itext:2.1.7'
+    // compile 'org.olap4j:olap4j:1.2.0'
+    // compile 'net.sf.jasperreports:jasperreports:6.3.1'
+
+    //testCompile "org.grails.plugins:geb"
+    //testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
+    //testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
 
 }
+
 grailsPublish {
-    // TODO: Provide values here
-    user = 'user'
-    key = 'key'
-    githubSlug = 'foo/bar'
+    desc = 'ViewResourceLocator for locating views in grails-app/views'
+    developers = [joshuaB: 'Joshua B']
+    githubSlug = '9ci/grails-view-tools'
+    issueTrackerUrl = 'https://github.com/9ci/grails-view-tools/issues'
+    vcsUrl = 'https://github.com/9ci/grails-view-tools'
     license {
         name = 'Apache-2.0'
     }
-    title = "My Plugin"
-    desc = "Full plugin description"
-    developers = [johndoe:"John Doe"]
-    portalUser = ""
-    portalPassword = ""    
+    title = 'View Tools'
+    userOrg = '9ci' //the Org to publish this under in 
+    repo = 'grails-plugins' //the repository you setup in bintray
+    //user = 'user' <- pulled from either BINTRAY_USER sys prop or project.bintrayUser which can be in ~/.gradle/gradle.properties
+    //key = 'key' <- pulled from either BINTRAY_KEY sys prop or project.bintrayKey which can be in ~/.gradle/gradle.properties
 }
-
 
 assets {
     packagePlugin = true
