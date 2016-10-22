@@ -23,7 +23,7 @@ beans = {
         //if(Environment.isDevelopmentEnvironmentAvailable()) <- better for Grails 3
         //setup for development mode
         if(!application.warDeployed){ // <- grails2
-            grailsViewPaths = ["/grails-app/views"]
+            grailsViewPaths = ["/grails-app/views"] //override the default that starts with WEB-INF
             webInfPrefix = ""
         }
 

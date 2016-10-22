@@ -1,14 +1,27 @@
+Note: Grails 2 sources are master and Grails 3 is in grails3 branch
+
 ## Description
 utility helpers to locate views in the spring mvc context
 - **ViewResourceLocator** for locating views in grails-app/views, plugins, and custom external paths.
-- **GrailsWebEnvironment** for binding a mock request is one doesn't exist so that services can operate without a controller.
+- **GrailsWebEnvironment** for binding a mock request if one doesn't exist so that services can operate without a controller.
 
 Used to locate View resources whether in development or WAR deployed mode from static
 resources, custom resource loaders and binary plugins.
 Loads from a local grails-app folder for dev and from WEB-INF in
 development mode.
 
-###ViewResourceLocator 
+## Install
+**Grails 3**
+```
+compile org.grails.plugins:view-tools:0.3
+```
+
+**Grails 2**
+```
+compile :view-tools:0.3-grails2
+```
+
+### ViewResourceLocator 
 **Example Bean**
 ```groovy
 viewResourceLocator(grails.plugin.viewtools.ViewResourceLocator) { bean ->
@@ -34,10 +47,20 @@ viewResourceLocator(grails.plugin.viewtools.ViewResourceLocator) { bean ->
 - **Resource getResource(String uri)** : also implements Springs [ResourceLoader](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/io/ResourceLoader.html) interface. This method works like a normal ResoruceLoader and **uri** can start with the standard _file:, classpath:, etc_
 
 
-###GrailsWebEnvironment
+### GrailsWebEnvironment
+
 GrailsWebEnvironment.bindRequestIfNull() methods are the ones of interest.
 based on the RenderEnvironment in grails-rendering and private class in grails-mail
 All this does is bind a mock request and mock response is one doesn't exist
 deals with setting the WrappedResponseHolder.wrappedResponse as well
+You will need the spring test lib on your main compile
+```compile "org.springframework:spring-test"```
 
+### Example App
 
+see https://github.com/9ci/grails-view-tools/tree/master/test-projects/app
+It contains a number of examples as well as a simple spring based viewResolver that uses ViewResourceLocator to find the template files it needs.
+
+### _Events.groovy and putting a project in grails 3 structure
+
+see Grails3-README.md

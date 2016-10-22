@@ -10,6 +10,7 @@ import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 //import org.grails.core.artefact.ControllerArtefactHandler
+
 import org.grails.gsp.GroovyPageResourceLoader
 import org.grails.io.support.GrailsResourceUtils
 import org.grails.plugins.BinaryGrailsPlugin
@@ -189,7 +190,8 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
         HttpServletRequest request = GrailsWebRequest.lookup()?.getCurrentRequest()
 
         GroovyObject controller = request ? GrailsWebUtil.getControllerFromRequest(request) : null
-        log.debug("findWithPluginController:['${controller?.getClass()?.name}']")
+        //log.debug("findWithPluginController:['${controller?.getClass()?.name}']")
+        if(!controller) return null
 
         GrailsPlugin plugin = pluginManager.getPluginForInstance(controller)
 
@@ -202,6 +204,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
     }
 
     Resource findInSearchLocations(String uri){
+        if(!searchPaths) return
         List fullSearchPaths = searchPaths.collect{ String path ->
             concatPaths(path, uri)
         }
@@ -491,5 +494,18 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
         public String getPathWithinContext() {
             return getPath();
         }
+    }
+
+    static ViewResourceLocator testInstance(){
+        def instance = new ViewResourceLocator()
+        GroovyPageResourceLoader srl = new GroovyPageResourceLoader()
+        srl.setBaseResource(new FileSystemResource("."))
+        instance.with{
+            resourceLoader = srl
+            searchBinaryPlugins = false //whether to look in binary plugins, does not work in grails2
+            grailsViewPaths = ["/grails-app/views"]
+            webInfPrefix = ""
+        }
+        return instance
     }
 }
