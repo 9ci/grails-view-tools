@@ -13,14 +13,22 @@ eventTestPhaseStart = { phase ->
 
     if("unit" == phase){
         copyDirClean("$basedir/src/test/groovy", "$basedir/test/unit")
+        ant.copy(todir:"$basedir/test/unit",failonerror:false) {
+            fileset(dir: "$basedir/src/test/resources")
+        }
     }
     else if("integration" == phase){
         //exclude anything in the functional classpath
         copyDirClean("$basedir/src/integration-test/groovy", "$basedir/test/integration", ["functional/"])
+        ant.copy(todir:"$basedir/test/integration",failonerror:false) {
+            fileset(dir: "$basedir/src/test/resources")
+        }
     }
     else if("functional" == phase){
-        copyDirClean("$basedir/src/integration-test/groovy/functional", "$basedir/test/functional/functional")
-        ant.copy(file:"$basedir/src/integration-test/groovy/GebConfig.groovy" ,todir:"$basedir/test/functional",failonerror:false)
+        copyDirClean("$basedir/src/integration-test/groovy/geb", "$basedir/test/functional/geb")
+        ant.copy(todir:"$basedir/test/functional",failonerror:false) { fileset(dir: "$basedir/src/test/resources") }
+        ant.copy(todir:"$basedir/test/functional/functional",failonerror:false) { fileset(dir: "$basedir/src/integration-test/groovy/functional") }
+        ant.copy(file:"$basedir/src/integration-test/groovy/GebConfig.groovy" ,todir:"$basedir/test/geb",failonerror:false)
     }
 }
 

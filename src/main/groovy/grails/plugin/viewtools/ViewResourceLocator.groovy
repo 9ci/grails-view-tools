@@ -21,6 +21,8 @@ import org.codehaus.groovy.grails.plugins.GrailsPlugin
 import org.codehaus.groovy.grails.plugins.GrailsPluginManager
 import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
 import org.codehaus.groovy.grails.plugins.PluginManagerAware
+import org.codehaus.groovy.grails.support.StaticResourceLoader
+import org.codehaus.groovy.grails.web.pages.GroovyPageResourceLoader
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
@@ -196,7 +198,8 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
         HttpServletRequest request = GrailsWebRequest.lookup()?.getCurrentRequest()
 
         GroovyObject controller = request ? GrailsWebUtil.getControllerFromRequest(request) : null
-        log.debug("findWithPluginController:['${controller?.getClass()?.name}']")
+        //log.debug("findWithPluginController:['${controller?.getClass()?.name}']")
+        if(!controller) return null
 
         GrailsPlugin plugin = pluginManager.getPluginForInstance(controller)
 
@@ -209,6 +212,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
     }
 
     Resource findInSearchLocations(String uri){
+        if(!searchPaths) return
         List fullSearchPaths = searchPaths.collect{ String path ->
             concatPaths(path, uri)
         }
@@ -496,5 +500,18 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
         public String getPathWithinContext() {
             return getPath();
         }
+    }
+
+    static ViewResourceLocator testInstance(){
+        def instance = new ViewResourceLocator()
+        GroovyPageResourceLoader srl = new GroovyPageResourceLoader()
+        srl.setBaseResource(new FileSystemResource("."))
+        instance.with{
+            resourceLoader = srl
+            searchBinaryPlugins = false //whether to look in binary plugins, does not work in grails2
+            grailsViewPaths = ["/grails-app/views"]
+            webInfPrefix = ""
+        }
+        return instance
     }
 }
