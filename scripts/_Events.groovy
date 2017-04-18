@@ -1,6 +1,7 @@
 import grails.util.Environment
 
 grails3SrcDirs = ["$basedir/src/main/groovy","$basedir/src/main/resources"]
+compileInProgress = false
 
 //no good way to add source paths to test in eventTestCompileStart and get them to run
 //so just copy them into test/unit, etc.. so that grails can pick them up and run normally
@@ -42,6 +43,8 @@ eventTestPhaseEnd = { phase ->
 }
 
 eventCompileStart = { x ->
+    compileInProgress = true
+    println "[view-tools] compile start"
     if (!(buildConfig.grails?.useGrails3FolderLayout)) return
     //println "grails3 structure: eventCompileStart "
 
@@ -73,6 +76,7 @@ eventCompileStart = { x ->
 }
 
 eventCompileEnd = {
+    compileInProgress = false
     if (!(buildConfig.grails?.useGrails3FolderLayout)) return
     copyResources(buildSettings.resourcesDir)
 
@@ -128,6 +132,10 @@ eventCreateWarStart = { warName, stagingDir ->
 
 //after run-app or package plugin all the default dirs are created, clean up the noise
 private cleanUpEmptyDirs(){
+    if(compileInProgress){
+        println "[view-tools] Compile in progress... not cleaning directories"
+        return
+    }
     println "deleting empty directories"
     deleteEmptyDirs("$basedir/grails-app/")
     deleteEmptyDirs("$basedir/src/java/")
