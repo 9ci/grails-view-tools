@@ -83,7 +83,8 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
 
     ResourceLoader devResourceLoader
 
-    public void setAppendSearchLocation(String path) {
+    public void addSearchPath(String path) {
+        if(searchPaths == null) searchPaths = []
         searchPaths.add(path)
     }
 
