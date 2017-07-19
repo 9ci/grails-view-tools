@@ -20,7 +20,7 @@ eventTestPhaseStart = { phase ->
     }
     else if("integration" == phase){
         //exclude anything in the functional classpath
-        copyDirClean("$basedir/src/integration-test/groovy", "$basedir/test/integration", ["functional/"])
+        copyDirClean("$basedir/src/integration-test/groovy", "$basedir/test/integration", ["functional/", "geb/"])
         ant.copy(todir:"$basedir/test/integration",failonerror:false) {
             fileset(dir: "$basedir/src/test/resources")
         }
