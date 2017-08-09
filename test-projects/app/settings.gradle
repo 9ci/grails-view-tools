@@ -1,0 +1,5 @@
+rootProject.name = 'app'
+
+include ':view-tools',':foobar-plugin'//,':integration-test-app'
+project(':view-tools').projectDir = new File('../../')
+project(':foobar-plugin').projectDir = new File('../foobar-plugin')

@@ -1,8 +1,8 @@
 package grails.plugin.viewtools
 
-//import grails.plugins.GrailsPlugin
-//import grails.plugins.GrailsPluginManager
-//import grails.plugins.PluginManagerAware
+import grails.plugins.GrailsPlugin
+import grails.plugins.GrailsPluginManager
+import grails.plugins.PluginManagerAware
 import grails.util.Environment
 import grails.util.GrailsWebUtil
 import groovy.transform.CompileDynamic
@@ -10,20 +10,12 @@ import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 //import org.grails.core.artefact.ControllerArtefactHandler
-//import org.grails.gsp.GroovyPageResourceLoader
-//import org.grails.io.support.GrailsResourceUtils
-//import org.grails.plugins.BinaryGrailsPlugin
-//import org.grails.web.servlet.mvc.GrailsWebRequest
-//import org.apache.commons.io.FilenameUtils
-import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
-import org.codehaus.groovy.grails.plugins.BinaryGrailsPlugin
-import org.codehaus.groovy.grails.plugins.GrailsPlugin
-import org.codehaus.groovy.grails.plugins.GrailsPluginManager
-import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
-import org.codehaus.groovy.grails.plugins.PluginManagerAware
-import org.codehaus.groovy.grails.support.StaticResourceLoader
-import org.codehaus.groovy.grails.web.pages.GroovyPageResourceLoader
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
+
+import org.grails.gsp.GroovyPageResourceLoader
+import org.grails.io.support.GrailsResourceUtils
+import org.grails.plugins.BinaryGrailsPlugin
+import org.grails.web.servlet.mvc.GrailsWebRequest
+
 import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -318,6 +310,8 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
     /**
      * The nuclear approach that scans every plugin to find the view
      */
+    //Grails 2 only
+    @CompileDynamic
     Resource scanPluginsForResource(String uri) {
         GrailsPluginManager pluginManager = pluginManager
         if (!pluginManager) return null
