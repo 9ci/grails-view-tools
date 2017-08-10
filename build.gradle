@@ -64,6 +64,9 @@ dependencies {
 }
 
 grailsPublish {
+    user = System.getenv("BINTRAY_USER") ?: project.bintrayUser
+    key = System.getenv("BINTRAY_KEY") ?: project.bintrayKey
+
     desc = 'ViewResourceLocator for locating views in grails-app/views'
     developers = [joshuaB: 'Joshua B']
     githubSlug = '9ci/grails-view-tools'
