@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "0.7-grails3"
+version "0.8-grails3"
 group "org.grails.plugins"
 
 apply plugin:"eclipse"
@@ -44,6 +44,8 @@ dependencies {
     //compile "org.grails.plugins:cache"
     // compile "org.grails.plugins:scaffolding"
     compile "org.springframework:spring-test"
+
+    compile "commons-io:commons-io:2.5"
 
     //console "org.grails:grails-console"
     //profile "org.grails.profiles:web-plugin"
