@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package grails.plugin.viewtools
 
 import grails.util.GrailsWebMockUtil
@@ -41,6 +40,7 @@ import org.springframework.web.servlet.support.RequestContextUtils
  */
 @Log4j //log
 //@CompileStatic
+@SuppressWarnings(['NoDef', 'CloseWithoutCloseable'])
 class GrailsWebEnvironment {
 
 	final Writer out
@@ -113,7 +113,7 @@ class GrailsWebEnvironment {
 
 	static GrailsWebRequest bindRequestIfNull(ApplicationContext appCtx, Writer out, Locale preferredLocale = null) {
 		GrailsWebRequest grailsWebRequest = (GrailsWebRequest)RequestContextHolder.getRequestAttributes()
-		if (grailsWebRequest){
+		if (grailsWebRequest) {
 			//TODO unbindRequest = false
 			log.debug("grailsWebRequest exists")
 			return grailsWebRequest
@@ -121,7 +121,6 @@ class GrailsWebEnvironment {
 
 		return bindMockWebRequest( appCtx,  out,  preferredLocale )
 	}
-
 
 	static GrailsWebRequest bindMockWebRequest(ApplicationContext appCtx, Writer wout, Locale preferredLocale = null) {
 		//TODO unbindRequest = true
@@ -148,7 +147,7 @@ class GrailsWebEnvironment {
 		grailsWebRequest.setOut(wout)
 		//holders
 		if (!Holders.servletContext) Holders.servletContext = grailsWebRequest.servletContext
-		Holders.addApplicationDiscoveryStrategy(new ServletEnvironmentGrailsApplicationDiscoveryStrategy(grailsWebRequest.servletContext));
+		Holders.addApplicationDiscoveryStrategy(new ServletEnvironmentGrailsApplicationDiscoveryStrategy(grailsWebRequest.servletContext))
 		grailsWebRequest.servletContext.setAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT, appCtx)
 		//WrappedResponseHolder
 		WrappedResponseHolder.wrappedResponse = grailsWebRequest.currentResponse
