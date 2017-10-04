@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils
 /**
  * FileSystemResourceLoader capable of understanding a base paths to search in for security
  * see grails PluginPathAwareFileSystemResourceLoader
+ * CURRENTLY NOT USED
  */
 @CompileStatic
 public class SandboxResourceLoader extends FileSystemResourceLoader {
@@ -54,23 +55,23 @@ public class SandboxResourceLoader extends FileSystemResourceLoader {
         else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
             return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader())
         }
-        else {
-            try {
-                // Try to parse the location as a URL...
-                URL url = new URL(location)
-                return new UrlResource(url)
-            }
-            catch (MalformedURLException ex) {
-                // No URL -> resolve as resource path.
-                return getResourceByPath(location)
-            }
+
+        try {
+            // Try to parse the location as a URL...
+            URL url = new URL(location)
+            return new UrlResource(url)
         }
+        catch (MalformedURLException ex) {
+            // No URL -> resolve as resource path.
+            return getResourceByPath(location)
+        }
+
     }
 
     @Override
     protected Resource getResourceByPath(String path) {
         Resource resource = super.getResourceByPath(path)
-        if (resource != null && resource.exists()) {
+        if (resource?.exists()) {
             return resource
         }
 

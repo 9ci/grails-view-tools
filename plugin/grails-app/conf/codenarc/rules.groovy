@@ -219,7 +219,7 @@ ruleset {
     ExplicitTreeSetInstantiation
     GStringAsMapKey
     GStringExpressionWithinString
-    GetterMethodCouldBeProperty
+    //GetterMethodCouldBeProperty
     GroovyLangImmutable
     UseCollectMany
     UseCollectNested
@@ -280,7 +280,7 @@ ruleset {
     ClassName
     ClassNameSameAsFilename
     //ConfusingMethodName
-    'FactoryMethodName' doNotApplyToFilesMatching: '.*Spec.groovy'
+    //'FactoryMethodName' doNotApplyToFilesMatching: '.*Spec.groovy'
     FieldName
     InterfaceName
     'MethodName' doNotApplyToFilesMatching: '.*Spec.groovy'
@@ -362,7 +362,7 @@ ruleset {
     UnnecessarySelfAssignment
     UnnecessarySemicolon
     UnnecessaryStringInstantiation
-    UnnecessarySubstring
+    //UnnecessarySubstring
     UnnecessaryTernaryExpression
     //UnnecessaryToString
     UnnecessaryTransientModifier

@@ -310,7 +310,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
     //Grails 2 only
     @CompileDynamic
     Resource scanPluginsForResource(String uri) {
-        GrailsPluginManager pluginManager = pluginManager
+        //GrailsPluginManager pluginManager = pluginManager
         if (!pluginManager) return null
         log.debug("*** scanning all plugins *****")
         String pluginBuildSettings = GrailsPluginUtils.getPluginBaseDirectories()
@@ -391,7 +391,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
      * this will not work in Grails2.
      * checks the
      */
-    @CompileDynamic
+    //@CompileDynamic
     Resource findResourceInBinaryPlugin(BinaryGrailsPlugin plugin, String uri) {
         File projectDirectory = plugin.projectDirectory
         //if it has a projectDirectory then its inplace exploded multi project builds in grails 3
@@ -403,17 +403,17 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
             //no just try it again with the full path
             return findResource([fullUri])
         }
-        else {
-            Resource descriptorResource = plugin.binaryDescriptor.getResource()
-            assert descriptorResource.exists()
-            //the descriptor is in the META-INF so we need to go up 1 level to get to the root
-            Resource r = descriptorResource.createRelative(concatPaths("../", uri))
-            if (r.exists()) {
-                log.debug ("BinaryGrailsPlugin JAR resource found:['${r}']")
-                return new ViewContextResource(r.URI, uri)
-            }
-            //return findResource(["classpath:$uri".toString()])
+
+        Resource descriptorResource = plugin.binaryDescriptor.getResource()
+        assert descriptorResource.exists()
+        //the descriptor is in the META-INF so we need to go up 1 level to get to the root
+        Resource r = descriptorResource.createRelative(concatPaths("../", uri))
+        if (r.exists()) {
+            log.debug ("BinaryGrailsPlugin JAR resource found:['${r}']")
+            return new ViewContextResource(r.URI, uri)
         }
+        //return findResource(["classpath:$uri".toString()])
+
         return null
     }
 
@@ -491,16 +491,16 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
         }
     }
 
-    static ViewResourceLocator testInstance(){
-        ViewResourceLocator instance = new ViewResourceLocator()
-        GroovyPageResourceLoader srl = new GroovyPageResourceLoader()
-        srl.setBaseResource(new FileSystemResource("."))
-        instance.with{
-            resourceLoader = srl
-            searchBinaryPlugins = false //whether to look in binary plugins, does not work in grails2
-            grailsViewPaths = ["/grails-app/views"]
-            webInfPrefix = ""
-        }
-        return instance
-    }
+    // static ViewResourceLocator testInstance(){
+    //     ViewResourceLocator instance = new ViewResourceLocator()
+    //     GroovyPageResourceLoader srl = new GroovyPageResourceLoader()
+    //     srl.setBaseResource(new FileSystemResource("."))
+    //     instance.with{
+    //         resourceLoader = srl
+    //         searchBinaryPlugins = false //whether to look in binary plugins, does not work in grails2
+    //         grailsViewPaths = ["/grails-app/views"]
+    //         webInfPrefix = ""
+    //     }
+    //     return instance
+    // }
 }
