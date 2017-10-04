@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="foobar-plugin_ast" target="1.8" />
+      <module name="foobar-plugin_main" target="1.8" />
+      <module name="foobar-plugin_test" target="1.8" />
+      <module name="test-app_integrationTest" target="1.8" />
+      <module name="test-app_main" target="1.8" />
+      <module name="test-app_test" target="1.8" />
+      <module name="view-tools_ast" target="1.8" />
+      <module name="view-tools_integrationTest" target="1.8" />
+      <module name="view-tools_main" target="1.8" />
+      <module name="view-tools_test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
