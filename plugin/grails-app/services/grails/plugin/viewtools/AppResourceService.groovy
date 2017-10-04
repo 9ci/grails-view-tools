@@ -111,7 +111,8 @@ class AppResourceService implements ResourceLoader{
      *        location:(string of the location relative to rootLocation),
      *        file: the File instace that we put in that directory
      */
-    Map createAttachmentFile(Long attachmentId, String name, String extension, data) {
+    Map createAttachmentFile(Long attachmentId, String name, String extension, data, String attachmentLocationKey = null) {
+        if(!attachmentLocationKey) attachmentLocationKey = "attachments.location"
         if(!data) return null
         String prefix = ""
         if(name){
@@ -123,13 +124,15 @@ class AppResourceService implements ResourceLoader{
         String destFileName = extension ? "${prefix}${attachmentId}.${extension}" : "${prefix}${attachmentId}"
 
         //setup the monthly dir for attachments
-        File monthDir = getMonthDirectory(location)
+        File monthDir = getMonthDirectory(attachmentLocationKey)
         File file = new File(monthDir, destFileName)
         if(data) {
             if(data instanceof File) FileUtils.moveFile(data, file)
             if(data instanceof byte[]) FileUtils.writeByteArrayToFile(file, data)
             if(data instanceof String) FileUtils.writeStringToFile(file, data)
         }
+
+        //XXX Fix the relative path to return relative file path based on location key passed when location is explicitely passed to function.
         return [location:getRelativePath("attachments.location", file), file:file]
     }
 
