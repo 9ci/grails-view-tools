@@ -45,6 +45,7 @@ import javax.sql.DataSource
  *
  * @author Joshua Burnett
  */
+@SuppressWarnings(['CatchException', 'ReturnNullFromCatchBlock'])
 @Slf4j
 @CompileStatic
 public class LoaderUrlBasedViewResolver extends UrlBasedViewResolver {
@@ -64,11 +65,11 @@ public class LoaderUrlBasedViewResolver extends UrlBasedViewResolver {
      */
     @Override
     protected View loadView(String viewName, Locale locale) {
-        log.debug("jasper loadview running for ${viewName}, locale  $locale");
+        log.debug("jasper loadview running for ${viewName}, locale  $locale")
 
         //at this point it matches the pattern provided so it should work, try and find it but don't throw exception if
         //not found just log it
-        View view = null;
+        View view = null
         Resource resource
         try {
             resource = viewResourceLoader.getResource(viewName)
@@ -80,21 +81,21 @@ public class LoaderUrlBasedViewResolver extends UrlBasedViewResolver {
         }
 
         if (resource?.exists()) {
-            AbstractUrlBasedView gview = buildView(viewName);
+            AbstractUrlBasedView gview = buildView(viewName)
             //set the full URL and the cache can the found resource next time
             gview.setUrl(resource.getURL().toString())
-            View wrapView = (AbstractUrlBasedView) applicationContext.autowireCapableBeanFactory.initializeBean(gview, viewName);
-            view =  (gview.checkResource(locale) ? wrapView : null);
+            View wrapView = (AbstractUrlBasedView) applicationContext.autowireCapableBeanFactory.initializeBean(gview, viewName)
+            view =  (gview.checkResource(locale) ? wrapView : null)
         }
 
-        return view;
+        return view
     }
 
     @Override
     protected AbstractUrlBasedView buildView(String viewName) throws Exception {
-        AbstractUrlBasedView view = (AbstractUrlBasedView) super.buildView(viewName);
+        AbstractUrlBasedView view = (AbstractUrlBasedView) super.buildView(viewName)
         if(buildViewClosure) buildViewClosure.call(view)
-        return view;
+        return view
     }
 
 }
