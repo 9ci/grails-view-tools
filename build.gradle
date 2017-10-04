@@ -2,92 +2,94 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://repo.grails.org/grails/core" }
-        //jcenter()
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.8.2"
+        classpath "org.grails:grails-docs:$grailsVersion"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+        classpath 'io.github.groovylang.groovydoc:groovydoc-gradle-plugin:1.0.1'
     }
 }
-
-version "0.8-grails3"
-group "org.grails.plugins"
-
-apply plugin:"eclipse"
-apply plugin:"idea"
-apply plugin:"org.grails.grails-plugin"
-apply plugin:"org.grails.grails-plugin-publish"
-apply plugin:"org.grails.grails-gsp"
-apply plugin:"asset-pipeline"
-
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
-    //jcenter()
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "org.grails:grails-bom:$grailsVersion"
+version project.projectVersion
+
+// ext {
+//     commonBuild = "https://raw.githubusercontent.com/grails/grails-common-build/cfd3bca16661cbb6fead6006715ea5ee26fb737a/"
+// }
+
+
+// grailsPublish {
+//     user = System.getenv("BINTRAY_USER") ?: project.bintrayUser
+//     key = System.getenv("BINTRAY_KEY") ?: project.bintrayKey
+
+//     desc = 'ViewResourceLocator for locating views in grails-app/views'
+//     developers = [joshuaB: 'Joshua B']
+//     githubSlug = 'yakworks/view-tools'
+//     issueTrackerUrl = 'https://github.com/yakworks/view-tools/issues'
+//     vcsUrl = 'https://github.com/yakworks/view-tools'
+//     license {
+//         name = 'Apache-2.0'
+//     }
+//     title = 'View Tools'
+//     userOrg = '9ci' //the Org to publish this under in
+//     repo = 'grails-plugins' //the repository you setup in bintray
+//     //user = 'user' <- pulled from either BINTRAY_USER sys prop or project.bintrayUser which can be in ~/.gradle/gradle.properties
+//     //key = 'key' <- pulled from either BINTRAY_KEY sys prop or project.bintrayKey which can be in ~/.gradle/gradle.properties
+// }
+
+
+subprojects {
+
+    version project.projectVersion
+
+    ext {
+        userOrg = "grails"
+        isGrailsPlugin = name.startsWith('view-tools')
+        isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
+
+        set "tomcat.version", "8.5.5"
+
     }
-    applyMavenExclusions false
-}
 
-dependencies {
-    provided "org.springframework.boot:spring-boot-starter-logging"
-    provided "org.springframework.boot:spring-boot-autoconfigure"
-    provided "org.grails:grails-core"
-    provided "org.springframework.boot:spring-boot-starter-actuator"
-    provided "org.springframework.boot:spring-boot-starter-tomcat"
-    provided "org.grails:grails-dependencies"
-    //provided "org.grails:grails-web-boot"
-    //compile "org.grails.plugins:cache"
-    // compile "org.grails.plugins:scaffolding"
-    compile "org.springframework:spring-test"
-
-    compile "commons-io:commons-io:2.5"
-
-    //console "org.grails:grails-console"
-    //profile "org.grails.profiles:web-plugin"
-    //provided "org.grails:grails-plugin-services"
-    //provided "org.grails:grails-plugin-domain-class"
-    //provided "org.codehaus.groovy:groovy-ant"
-    //runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.8.2"
-
-    testCompile "org.grails:grails-plugin-testing"
-    // compile 'com.lowagie:itext:2.1.7'
-    // compile 'org.olap4j:olap4j:1.2.0'
-    // compile 'net.sf.jasperreports:jasperreports:6.3.1'
-
-    //testCompile "org.grails.plugins:geb"
-    //testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
-    //testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
-
-}
-
-grailsPublish {
-    user = System.getenv("BINTRAY_USER") ?: project.bintrayUser
-    key = System.getenv("BINTRAY_KEY") ?: project.bintrayKey
-
-    desc = 'ViewResourceLocator for locating views in grails-app/views'
-    developers = [joshuaB: 'Joshua B']
-    githubSlug = '9ci/grails-view-tools'
-    issueTrackerUrl = 'https://github.com/9ci/grails-view-tools/issues'
-    vcsUrl = 'https://github.com/9ci/grails-view-tools'
-    license {
-        name = 'Apache-2.0'
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.grails.org/grails/core" }
     }
-    title = 'View Tools'
-    userOrg = '9ci' //the Org to publish this under in
-    repo = 'grails-plugins' //the repository you setup in bintray
-    //user = 'user' <- pulled from either BINTRAY_USER sys prop or project.bintrayUser which can be in ~/.gradle/gradle.properties
-    //key = 'key' <- pulled from either BINTRAY_KEY sys prop or project.bintrayKey which can be in ~/.gradle/gradle.properties
-}
 
-assets {
-    packagePlugin = true
-}
+    if(project.name.startsWith("test-projects/")) {
+        if(project.name.startsWith("test-projects/app")) {
+            apply plugin:"org.grails.grails-web"
+        }
+        return
+    }
 
-ext {
-    set "tomcat.version", "8.5.5"
+    if(isGrailsPlugin) {
+        group "org.grails.plugins"
+    }
+    else {
+        group "org.grails"
+    }
+
+    // if(project.name.endsWith('docs')) {
+    //     apply from:"${commonBuild}/common-docs.gradle"
+    //     return
+    // }
+
+    if (isGrailsPlugin) {
+        apply plugin:"org.grails.grails-plugin"
+    }
+    else {
+        //apply from:"${commonBuild}/common-project.gradle"
+    }
+
+    //apply from:"${commonBuild}/common-publishing.gradle"
+
+    // dependencies {
+    //     testCompile "org.codehaus.groovy:groovy-test:$groovyVersion"
+    // }
 }

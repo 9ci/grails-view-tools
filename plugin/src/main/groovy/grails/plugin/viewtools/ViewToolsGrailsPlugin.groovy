@@ -1,6 +1,8 @@
 package grails.plugin.viewtools
+
 import grails.plugins.*
 
+@SuppressWarnings(['NoDef'])
 class ViewToolsGrailsPlugin extends Plugin {
 
     // the version or versions of Grails the plugin is designed for
@@ -31,9 +33,7 @@ Used in freemarker and new jasper-spring.
     // Any additional developers beyond the author specified above.
 //    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
 
-
     def issueManagement = [ system: "github", url: "https://github.com/9ci/grails-view-tools/issues" ]
     def scm = [ url: "https://github.com/9ci/grails-view-tools" ]
-
 
 }

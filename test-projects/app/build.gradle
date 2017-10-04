@@ -13,7 +13,8 @@ buildscript {
 version "0.1"
 group "app"
 
-apply plugin:"eclipse"
+
+
 apply plugin:"idea"
 apply plugin:"war"
 apply plugin:"org.grails.grails-web"
@@ -59,6 +60,8 @@ dependencies {
     /****** GEB *******/
     def webdriverVersion = "2.53.1"
 
+    testCompile "org.grails.plugins:geb"
+
     testCompile("org.grails.plugins:geb",
         "org.seleniumhq.selenium:selenium-support:${webdriverVersion}",
         "org.seleniumhq.selenium:selenium-chrome-driver:${webdriverVersion}",
@@ -77,43 +80,57 @@ dependencies {
     runtime 'org.grails.plugins:grails-console:2.0.8'
 
     //compile 'org.grails.plugins:view-tools:0.2-grails3'
-    compile project(':') //view tools in parent
+    //compile project(':') //view tools in parent
 
     //compile project(':view-tools')
-    compile project(':foobar-plugin')
+    //compile project(':foobar-plugin')
 
 
+}
+ext {
+    //buildDir = projectDir
+    //workingDirectory = projectDir
 }
 /****** GEB *******
 Pass system properties through to the integrationTest task so we can pass in the 'geb.env' property to run tests
 in different browsers. Adapted from http://mrhaki.blogspot.com/2015/09/grails-goodness-passing-system.html
 */
 integrationTest {
+    systemProperties['geb.build.reportsDir'] = reportsDir
+    //# this is a hack to get the gradle subproject to run functional tests
+    systemProperties['server.tomcat.basedir'] = 'src/main/webapp'
+
     systemProperties System.properties
+    //workingDir = projectDir
+    //webAppDirName = "foo"
+    //basedir = new File('test-projects/fooey')
 }
 //[bootRun] can be setup above too if needed
+
+bootRun {
+    jvmArgs('-Dspring.output.ansi.enabled=always')
+    addResources = true
+}
 
 assets {
     minifyJs = true
     minifyCss = true
 }
 
-//grails {
-//    exploded = true
-//    plugins {
-//        compile project(':foobar-plugin')
-//        if(rootProject.name == "app"){
-//            println "rootProject.name $rootProject.name"
-//            compile project(':view-tools')
-//        }else{ //this is a sub-project of the root view-tools build so add the root
-//            compile project(':')
-//        }
-//    }
-//}
-
-ext {
-    set "tomcat.version", "8.5.5"
+grails {
+   exploded = true
+   plugins {
+       compile project(':foobar-plugin')
+       if(rootProject.name == "app"){
+           println "rootProject.name $rootProject.name"
+           compile project(':view-tools')
+       }else{ //this is a sub-project of the root view-tools build so add the root
+           compile project(':view-tools')
+           //compile project(':')
+       }
+   }
 }
+
 
 // println "Source dirs" + sourceSets.main.resources.srcDirs
 

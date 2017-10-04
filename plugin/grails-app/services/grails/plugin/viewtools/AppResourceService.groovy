@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct
  * would go here, especially if they require GString-like parsing.
  * @author Ken Roberts 2010-11-09
  */
+@SuppressWarnings(['NoDef', 'FactoryMethodName', 'ReturnsNullInsteadOfEmptyCollection'])
 class AppResourceService {
 	static transactional = false
 	//injected beans
@@ -69,7 +70,6 @@ class AppResourceService {
 	 *        location:(string of the location relative to rootLocation),
 	 *        file: the File instace that we put in that directory
 	 */
-
 	Map createAttachmentFile(Long attachmentId, String name, String extension, data, String location = null) {
 		if(!location) location = "attachments.location"
 		if(!data) return null
@@ -79,7 +79,7 @@ class AppResourceService {
 		}else if(data instanceof File){
 			//TODO we should have an option pass in a name so we can name it logically like we are doing with file
 			prefix = "${data.name}_"
-		}else{
+		} else {
 			prefix = ""
 		}
 		String destFileName = extension ? "${prefix}${attachmentId}.${extension}" : "${prefix}${attachmentId}"
@@ -177,7 +177,6 @@ class AppResourceService {
      		co."${k}"
    		}
 	}
-
 
 // ====================== LocationService stuff.
 	/** Gets the rootLocation which is the base for all the app-related directories.

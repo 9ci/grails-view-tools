@@ -129,3 +129,9 @@ endpoints:
         unique-names: true
 
 grails.plugin.console.enabled: true
+
+server:
+    # port: 8443
+    # this is a hack to get the gradle subproject to run functional tests
+    # tomcat:
+    #     basedir: src/main/webapp

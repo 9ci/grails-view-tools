@@ -1,4 +1,4 @@
-rootProject.name = 'view-tools'
+rootProject.name = 'view-tools-root'
 
 //sorted this out from here https://discuss.gradle.org/t/multi-module-project-with-relative-paths-to-sub-projects/4581
 //include ':foobar-plugin',':test-projects:app'
@@ -6,8 +6,14 @@ rootProject.name = 'view-tools'
 
 //project(':integration-test-app').projectDir = new File('test-projects/integration-test-app')
 //project(':xx').projectDir = new File('.')
+include 'plugin'
+findProject(':plugin').name = 'view-tools'
+
 include 'test-projects/app'
-findProject(':test-projects/app').name = 'app'
+findProject(':test-projects/app').name = 'test-app'
+findProject(':test-app').projectDir = new File('test-projects/app')
+
+//project(':integration-test-app').projectDir = new File('test-projects/integration-test-app')
 
 include 'test-projects/foobar-plugin'
 findProject(':test-projects/foobar-plugin').name = 'foobar-plugin'
