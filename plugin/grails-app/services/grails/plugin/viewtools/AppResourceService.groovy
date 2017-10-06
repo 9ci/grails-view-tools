@@ -1,13 +1,15 @@
 package grails.plugin.viewtools
 
+import grails.config.Config
 import grails.converters.JSON
 import grails.core.GrailsApplication
+import grails.core.support.GrailsConfigurationAware
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.Validate
+import org.grails.config.NavigableMap
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
-import org.grails.config.NavigableMap
 
 import javax.annotation.PostConstruct
 
@@ -19,21 +21,20 @@ import javax.annotation.PostConstruct
  * See Attachments and RallyDefaultConfig for more description of how this works
  *
  */
-class AppResourceService implements ResourceLoader{
+class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
 
     GrailsApplication grailsApplication
 
     ResourceLoader resourceLoader
 
+    private NavigableMap resourcesConfig
+    private Closure rootLocationClosure
+    private Closure currentTenantClosure
+
     @PostConstruct
     public void init() {
         resourceLoader = grailsApplication.mainContext
     }
-
-    /**
-     * returns the merged configObject using RallyDefaultConfig as a base
-     */
-    NavigableMap getResourcesConfig()  { return grailsApplication.config.nine.resources }
 
     /**
      * if location starts with a / then it realtive to the war (web-app).
@@ -111,8 +112,7 @@ class AppResourceService implements ResourceLoader{
      *        location:(string of the location relative to rootLocation),
      *        file: the File instace that we put in that directory
      */
-    Map createAttachmentFile(Long attachmentId, String name, String extension, data, String attachmentLocationKey = null) {
-        if(!attachmentLocationKey) attachmentLocationKey = "attachments.location"
+    Map createAttachmentFile(Long attachmentId, String name, String extension, data, String attachmentLocationKey = "attachments.location") {
         if(!data) return null
         String prefix = ""
         if(name){
@@ -199,13 +199,13 @@ class AppResourceService implements ResourceLoader{
     }
 
     Map getCurrentTenant() {
-        Closure currentTenant = grailsApplication.config.nine.resources.currentTenant
-        Validate.notNull(currentTenant)
-        return currentTenant.call()
+        Validate.notNull(currentTenantClosure)
+        return currentTenantClosure.call()
     }
 
     public String getTenantUniqueKey() {
-        return "${client.num}-${currentTenant.id}"
+        def client = currentTenant
+        return "${client.num}-${client.id}"
     }
 
     void forceMkdir(String path){
@@ -213,8 +213,8 @@ class AppResourceService implements ResourceLoader{
     }
 
     Object getConfigVal(String configProperty) {
-        configProperty.split(/\./).inject(resourcesConfig) { co, k ->
-            co."${k}"
+        return configProperty.split(/\./).inject(resourcesConfig) {Map co, String k ->
+            return co.get(k)
         }
     }
 
@@ -229,7 +229,7 @@ class AppResourceService implements ResourceLoader{
      * @throws FileNotFoundException, IllegalArgumentException
      */
     File getRootLocation() {
-        String rootName = getResourcesConfig().rootLocation(mergeClientValues()) // rootLocation exists by default
+        String rootName = rootLocationClosure(mergeClientValues()) // rootLocation exists by default
         File rootLocation = new File(rootName)
         return verifyOrCreateLocation(rootLocation, 'rootLocation', false) // Ensure that it exists on the filesystem.
     }
@@ -243,7 +243,7 @@ class AppResourceService implements ResourceLoader{
      *     a List of File, each entry of which is a directory which exists.
      */
     File getLocation(String key, Map args = [:], boolean create=true) {
-        Object value = getResourcesConfig().toFlatConfig().get(key) // closure, string or null
+        Object value = getConfigVal(key) // closure, string or null
         if(!value) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
         String fileName
         if(value instanceof Closure) {
@@ -257,7 +257,7 @@ class AppResourceService implements ResourceLoader{
     /** Get a list of script locations as absolute files. */
     List getScripts(Map args = [:]) {
         String key = 'scripts.locations'
-        Closure closure = getResourcesConfig().toFlatConfig().get(key)
+        Closure closure = getConfigVal(key)
         log.debug "getScripts:  closure is ${closure}"
         if(!closure) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
         List files = []
@@ -357,4 +357,10 @@ class AppResourceService implements ResourceLoader{
      */
     String getRelativeTempPath(File file) { return getRelativePath('tempDir', file) }
 
+    @Override
+    void setConfiguration(Config co) {
+        resourcesConfig = co.getProperty('nine.resources', NavigableMap)
+        rootLocationClosure = co.getProperty('nine.resources.rootLocation', Closure)
+        currentTenantClosure = co.getProperty('nine.resources.currentTenant', Closure)
+    }
 }
