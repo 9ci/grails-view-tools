@@ -21,7 +21,8 @@ import javax.annotation.PostConstruct
  * See Attachments and RallyDefaultConfig for more description of how this works
  *
  */
-class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
+class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
+    public static final String ATTACHMENT_LOCATION_KEY = "attachments.location"
 
     GrailsApplication grailsApplication
 
@@ -116,7 +117,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
      *        location:(string of the location relative to rootLocation),
      *        file: the File instace that we put in that directory
      */
-    Map createAttachmentFile(Long attachmentId, String name, String extension, data, String attachmentLocationKey = "attachments.location") {
+    Map createAttachmentFile(Long attachmentId, String name, String extension, data) {
         if(!data) return null
         String prefix = ""
         if(name){
@@ -128,7 +129,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
         String destFileName = extension ? "${prefix}${attachmentId}.${extension}" : "${prefix}${attachmentId}"
 
         //setup the monthly dir for attachments
-        File monthDir = getMonthDirectory(attachmentLocationKey)
+        File monthDir = getMonthDirectory(ATTACHMENT_LOCATION_KEY)
         File file = new File(monthDir, destFileName)
         if(data) {
             if(data instanceof File) FileUtils.moveFile(data, file)
@@ -137,7 +138,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
         }
 
         //XXX Fix the relative path to return relative file path based on location key passed when location is explicitely passed to function.
-        return [location:getRelativePath("attachments.location", file), file:file]
+        return [location:getRelativePath(ATTACHMENT_LOCATION_KEY, file), file:file]
     }
 
     /**
@@ -191,7 +192,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
 
     /** Shorthand way to get the attachment file with nothing but the location column contents. */
     File getFile(String location) {
-        File file = new File(getLocation('attachments.location'), location)
+        File file = new File(getLocation(ATTACHMENT_LOCATION_KEY), location)
     }
 
     /**
@@ -199,7 +200,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
      */
     String getAttachmentsRelativePath(File file) {
         //String relative = new File(base).toURI().relativize(new File(path).toURI()).getPath();
-        return getRelativePath('attachments.location', file)
+        return getRelativePath(ATTACHMENT_LOCATION_KEY, file)
     }
 
     Map getCurrentTenant() {
