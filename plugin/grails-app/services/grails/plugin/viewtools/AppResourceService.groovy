@@ -136,8 +136,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
             if(data instanceof byte[]) FileUtils.writeByteArrayToFile(file, data)
             if(data instanceof String) FileUtils.writeStringToFile(file, data)
         }
-
-        //XXX Fix the relative path to return relative file path based on location key passed when location is explicitely passed to function.
+        
         return [location:getRelativePath(ATTACHMENT_LOCATION_KEY, file), file:file]
     }
 
