@@ -84,7 +84,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
             locationKey = "${locationBase}/${location}"
         }
         else {
-            locationKey = 'attachments.location'
+            locationKey = ATTACHMENT_LOCATION_KEY
         }
         return getResource(key, locationKey)
 
