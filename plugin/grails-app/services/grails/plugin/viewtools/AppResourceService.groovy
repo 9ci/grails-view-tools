@@ -4,10 +4,10 @@ import grails.config.Config
 import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.core.support.GrailsConfigurationAware
+import groovy.transform.CompileStatic
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.Validate
-import org.grails.config.NavigableMap
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
 
@@ -27,7 +27,11 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
 
     ResourceLoader resourceLoader
 
-    private NavigableMap resourcesConfig
+    /**
+     * The path to resources config root. eg "nine.resources"
+     */
+    String resourcesConfigRootKey = "nine.resources"
+
     private Closure rootLocationClosure
     private Closure currentTenantClosure
 
@@ -212,12 +216,6 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
         FileUtils.forceMkdir(new File(path))
     }
 
-    Object getConfigVal(String configProperty) {
-        return configProperty.split(/\./).inject(resourcesConfig) {Map co, String k ->
-            return co.get(k)
-        }
-    }
-
 // ====================== LocationService stuff.
     /** Gets the rootLocation which is the base for all the app-related directories.
      * This must be a Closure in the config, it must return a string which will act like a GString and which
@@ -243,7 +241,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
      *     a List of File, each entry of which is a directory which exists.
      */
     File getLocation(String key, Map args = [:], boolean create=true) {
-        Object value = getConfigVal(key) // closure, string or null
+        Object value = getResourceConfig(key) // closure, string or null
         if(!value) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
         String fileName
         if(value instanceof Closure) {
@@ -257,7 +255,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
     /** Get a list of script locations as absolute files. */
     List getScripts(Map args = [:]) {
         String key = 'scripts.locations'
-        Closure closure = getConfigVal(key)
+        Closure closure = getResourceConfig(key)
         log.debug "getScripts:  closure is ${closure}"
         if(!closure) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
         List files = []
@@ -357,10 +355,21 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware{
      */
     String getRelativeTempPath(File file) { return getRelativePath('tempDir', file) }
 
+
+    @CompileStatic
+    def getResourceConfig(String subKey) {
+        return grailsApplication.config.getProperty(buildResourceKey(subKey), Object)
+    }
+
+    @CompileStatic
+    String buildResourceKey(String subKey) {
+        Validate.notEmpty(subKey)
+        return resourcesConfigRootKey + "." + subKey
+    }
+
     @Override
     void setConfiguration(Config co) {
-        resourcesConfig = co.getProperty('nine.resources', NavigableMap)
-        rootLocationClosure = co.getProperty('nine.resources.rootLocation', Closure)
-        currentTenantClosure = co.getProperty('nine.resources.currentTenant', Closure)
+        rootLocationClosure = co.getProperty(buildResourceKey('rootLocation'), Closure)
+        currentTenantClosure = co.getProperty(buildResourceKey('currentTenant'), Closure)
     }
 }
