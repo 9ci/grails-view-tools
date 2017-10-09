@@ -9,7 +9,9 @@ nine {
 			if(!tmp.exists()) tmp.mkdirs() // appResourceService doesn't want to create directories which are not inside rootLocation.
 			return tmp.canonicalPath // In order for appResourceService to allow it to be outside of rootLocation it must be absolute.
 		}
+
 		attachments.location = 'attachments'
+		views.location = "views"
 
 		rootLocation = { args ->
 			// AppResourcesService will not create rootLocation directory or an absolute path.  This is in target, so we need something extra.

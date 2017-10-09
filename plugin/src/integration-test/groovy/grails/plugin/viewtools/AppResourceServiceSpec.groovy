@@ -2,6 +2,8 @@ package grails.plugin.viewtools
 
 import grails.test.mixin.integration.Integration
 import org.apache.commons.io.FileUtils
+import org.springframework.core.io.Resource
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -291,5 +293,37 @@ class AppResourceServiceSpec extends Specification {
 
 		then:
 		args.num == 'seventy' // Should be a the same as before.
+	}
+
+
+	def "test get resource"() {
+		setup:
+		File origFile = new File('src/integration-test/resources/grails_logo.jpg')
+		def data = FileUtils.readFileToByteArray(origFile)
+
+		File viewsDirectory = appResourceService.getLocation("views.location")
+
+		assert viewsDirectory.exists()
+
+		File viewFile = new File(viewsDirectory, "test.view")
+		FileUtils.writeByteArrayToFile(viewFile, data)
+
+		expect:
+		viewFile.exists()
+
+		when:
+		Resource resource = appResourceService.getResource("views/test.view")
+
+		then:
+		resource.exists()
+
+		when:
+		resource = appResourceService.getResourceRelative("config:views.location", "test.view")
+
+		then:
+		resource.exists()
+
+		cleanup:
+		viewFile.delete()
 	}
 }

@@ -120,8 +120,16 @@ class ViewResourceLocatorIntegrationSpec extends Specification  {
         res.getFile().text.contains('tenantA got it')
         TenantViewResourceLoader.currentTenant.set('tenantB')
         assert viewResourceLocator.locate('tenantB.hbs').exists()
+    }
 
+    void "view under ConfigKeyAppResourceLoader"() {
+        when:
+        Resource res = viewResourceLocator.locate('appResourceView.md')
 
+        then:
+        res.exists()
+        res.file.exists()
+        res.file.absolutePath.endsWith("root-location/views/appResourceView.md")
     }
 
 

@@ -1,3 +1,4 @@
+import grails.plugin.viewtools.ConfigKeyAppResourceLoader
 import grails.util.Environment
 import org.springframework.core.io.ResourceLoader
 import foobar.*
@@ -13,7 +14,7 @@ beans = {
                 "classpath:testAppViewToolsGrailsAppConf" //other classpath locations
         ]
         //resourceLoaders to use right after searchLocations above are scanned
-        searchLoaders = [ref('tenantViewResourceLoader')]
+        searchLoaders = [ref('tenantViewResourceLoader'), ref("configKeyAppResourceLoader")]
 
         searchBinaryPlugins = true //whether to look in binary plugins, does not work in grails2
         scanAllPluginsWhenNotFound = false
@@ -29,7 +30,10 @@ beans = {
 
     }
 
-    tenantViewResourceLoader(TenantViewResourceLoader){
+    tenantViewResourceLoader(TenantViewResourceLoader)
+    configKeyAppResourceLoader(ConfigKeyAppResourceLoader) {
+        baseAppResourceKey = "views.location"
+        appResourceService = ref("appResourceService")
     }
 
     simpleViewResolver(SimpleViewResolver) { bean ->

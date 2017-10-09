@@ -52,7 +52,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
     Resource getResource(String location){
         String urlToUse = location
         if((!location.startsWith('/')) && !(location.startsWith('file:'))) {
-            urlToUse = "file:${rootLocation}${location}/"
+            urlToUse = "file:${rootLocation.canonicalPath}/${location}/"
         }
         log.debug "AppResourceService.getResource with $urlToUse"
         resourceLoader.getResource(urlToUse)
@@ -78,7 +78,8 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
         String locationKey = location
 
         if(locationBase?.startsWith('config:')){
-            locationKey = locationBase.substring('config:'.length())
+            String configKey = locationBase.substring('config:'.length())
+            locationKey = "${getResourceConfig(configKey)}/$location"
         }
         else if(locationBase){
             locationKey = "${locationBase}/${location}"
@@ -86,7 +87,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
         else {
             locationKey = ATTACHMENT_LOCATION_KEY
         }
-        return getResource(key, locationKey)
+        return getResource(locationKey)
 
     }
 
