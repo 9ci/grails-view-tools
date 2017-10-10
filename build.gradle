@@ -7,7 +7,6 @@ buildscript {
 		classpath "org.grails:grails-gradle-plugin:$grailsVersion"
 		classpath "org.grails:grails-docs:$grailsVersion"
 		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-		classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
 		classpath 'io.github.groovylang.groovydoc:groovydoc-gradle-plugin:1.0.1'
 		classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.8.2"
 	}
@@ -26,15 +25,7 @@ ext {
 }
 
 
-
-
 subprojects {
-
-	//version project.projectVersion
-	//println project.projectDir.absolutePath
-
-	println project.projectDir
-	println project.name + ":" + version.toString()
 
 	boolean isGrailsApp = grailsApps.contains(project.name)
 	boolean isGrailsPlugin = grailsPlugins.contains(project.name)
@@ -50,6 +41,7 @@ subprojects {
 
 	if (isGrailsPlugin) {
 		apply from: "${commonBuild}/common-plugin.gradle"
+		apply from: "${commonBuild}/common-publishing.gradle"
 		group "org.grails.plugins"
 	}
 
