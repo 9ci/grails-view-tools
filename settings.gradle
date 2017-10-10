@@ -1,6 +1,5 @@
 rootProject.name = 'view-tools-root'
 
-//project(':xx').projectDir = new File('.')
 include 'plugin'
 findProject(':plugin').name = 'view-tools'
 

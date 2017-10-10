@@ -1,95 +1,61 @@
 buildscript {
-    repositories {
-        mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
-    }
-    dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "org.grails:grails-docs:$grailsVersion"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
-        classpath 'io.github.groovylang.groovydoc:groovydoc-gradle-plugin:1.0.1'
-    }
+	repositories {
+		mavenLocal()
+		maven { url "https://repo.grails.org/grails/core" }
+	}
+	dependencies {
+		classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+		classpath "org.grails:grails-docs:$grailsVersion"
+		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+		classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+		classpath 'io.github.groovylang.groovydoc:groovydoc-gradle-plugin:1.0.1'
+		classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.8.2"
+	}
 }
 repositories {
-    mavenLocal()
-    maven { url "https://repo.grails.org/grails/core" }
+	mavenLocal()
+	maven { url "https://repo.grails.org/grails/core" }
 }
 
 version project.projectVersion
 
-// ext {
-//     commonBuild = "https://raw.githubusercontent.com/grails/grails-common-build/cfd3bca16661cbb6fead6006715ea5ee26fb737a/"
-// }
+ext {
+	commonBuild = projectDir
+	grailsApps = ['test-app']
+	grailsPlugins = ['view-tools', 'foobar-plugin']
+}
 
 
-// grailsPublish {
-//     user = System.getenv("BINTRAY_USER") ?: project.bintrayUser
-//     key = System.getenv("BINTRAY_KEY") ?: project.bintrayKey
-
-//     desc = 'ViewResourceLocator for locating views in grails-app/views'
-//     developers = [joshuaB: 'Joshua B']
-//     githubSlug = 'yakworks/view-tools'
-//     issueTrackerUrl = 'https://github.com/yakworks/view-tools/issues'
-//     vcsUrl = 'https://github.com/yakworks/view-tools'
-//     license {
-//         name = 'Apache-2.0'
-//     }
-//     title = 'View Tools'
-//     userOrg = '9ci' //the Org to publish this under in
-//     repo = 'grails-plugins' //the repository you setup in bintray
-//     //user = 'user' <- pulled from either BINTRAY_USER sys prop or project.bintrayUser which can be in ~/.gradle/gradle.properties
-//     //key = 'key' <- pulled from either BINTRAY_KEY sys prop or project.bintrayKey which can be in ~/.gradle/gradle.properties
-// }
 
 
 subprojects {
 
-    version project.projectVersion
+	//version project.projectVersion
+	//println project.projectDir.absolutePath
 
-    ext {
-        userOrg = "grails"
-        isGrailsPlugin = name.startsWith('view-tools')
-        isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
+	println project.projectDir
+	println project.name + ":" + version.toString()
 
-        set "tomcat.version", "8.5.5"
+	boolean isGrailsApp = grailsApps.contains(project.name)
+	boolean isGrailsPlugin = grailsPlugins.contains(project.name)
+	boolean isGrailsProject = isGrailsApp || isGrailsPlugin
+	boolean isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
 
-    }
+	ext {
+		userOrg = "grails"
+		set "tomcat.version", "8.5.5"
+	}
 
-    repositories {
-        mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
-    }
+	apply from:"$commonBuild/common.gradle"
 
-    if(project.name.startsWith("test-projects/")) {
-        if(project.name.startsWith("test-projects/app")) {
-            apply plugin:"org.grails.grails-web"
-        }
-        return
-    }
+	if (isGrailsPlugin) {
+		apply from: "${commonBuild}/common-plugin.gradle"
+		group "org.grails.plugins"
+	}
 
-    if(isGrailsPlugin) {
-        group "org.grails.plugins"
-    }
-    else {
-        group "org.grails"
-    }
+	if (isGrailsApp) {
+		apply from: "${commonBuild}/common-project.gradle"
+		group "org.grails"
+	}
 
-    // if(project.name.endsWith('docs')) {
-    //     apply from:"${commonBuild}/common-docs.gradle"
-    //     return
-    // }
-
-    if (isGrailsPlugin) {
-        apply plugin:"org.grails.grails-plugin"
-    }
-    else {
-        //apply from:"${commonBuild}/common-project.gradle"
-    }
-
-    //apply from:"${commonBuild}/common-publishing.gradle"
-
-    // dependencies {
-    //     testCompile "org.codehaus.groovy:groovy-test:$groovyVersion"
-    // }
 }

@@ -104,6 +104,7 @@ class ViewResourceLocatorIntegrationSpec extends Specification  {
         Resource res = viewResourceLocator.locate('/plugins/foobar-plugin-0.1/fooPlugin/index.md')
 
         then:
+        res.exists()
         String uri = StringUtils.cleanPath(res.getURI().toString())
         String toCompare = "foobar-plugin/grails-app/views/fooPlugin/index.md"
         String toCompare2 = "foobar-plugin-0.1.jar!/fooPlugin/index.md"
@@ -117,6 +118,7 @@ class ViewResourceLocatorIntegrationSpec extends Specification  {
         Resource res = viewResourceLocator.locate('/foo/tenantA.ftl')
 
         then:
+        res.exists()
         res.getFile().text.contains('tenantA got it')
         TenantViewResourceLoader.currentTenant.set('tenantB')
         assert viewResourceLocator.locate('tenantB.hbs').exists()

@@ -1,0 +1,18 @@
+grailsPublish {
+	user = System.getenv("BINTRAY_USER") ?: project.bintrayUser
+	key = System.getenv("BINTRAY_KEY") ?: project.bintrayKey
+
+	desc = 'ViewResourceLocator for locating views in grails-app/views'
+	developers = [joshuaB: 'Joshua B']
+	githubSlug = '9ci/grails-view-tools'
+	issueTrackerUrl = 'https://github.com/9ci/grails-view-tools/issues'
+	vcsUrl = 'https://github.com/9ci/grails-view-tools'
+	license {
+		name = 'Apache-2.0'
+	}
+	title = 'View Tools'
+	userOrg = '9ci' //the Org to publish this under in
+	repo = 'grails-plugins' //the repository you setup in bintray
+	//user = 'user' <- pulled from either BINTRAY_USER sys prop or project.bintrayUser which can be in ~/.gradle/gradle.properties
+	//key = 'key' <- pulled from either BINTRAY_KEY sys prop or project.bintrayKey which can be in ~/.gradle/gradle.properties
+}

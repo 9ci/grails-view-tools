@@ -172,7 +172,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
         // in grails3, I don't see how this would ever get a hit if classpath did not
         log.debug("....going nuclear with findResourceInPlugins $uri")
         if (!res) {
-            res = scanPluginsForResource(uri)
+            //res = scanPluginsForResource(uri)
         }
         if(!res) log.debug("...FAIL Did not find $uri")
         return res
@@ -186,6 +186,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
      * @param uri The name
      * @return The Resouce of the template
      */
+    //XXX This does not work in grails3
     Resource findWithPluginController(String uri) {
         log.debug("***** Trying findWithPluginController ******")
         HttpServletRequest request = GrailsWebRequest.lookup()?.getCurrentRequest()
