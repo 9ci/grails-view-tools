@@ -1,0 +1,48 @@
+site_name: Grails View Tools
+site_description: Grails plugin to help locate views in the spring mvc context
+site_author: Sudhir Nimavat
+site_url: http://yakworks.github.io/view-tools
+
+pages:
+  - Overview: index.md
+  - App Resources: app-resources.md
+
+
+repo_name: yakworks/view-tools
+repo_url: https://github.com/yakworks/view-tools
+edit_uri: edit/master/docs/
+
+docs_dir: 'docs'
+theme: material-components
+
+extra:
+  feature:
+    tabs: false
+  palette:
+    primary: 'light green'
+    accent: indigo
+
+markdown_extensions:
+  - pymdownx.extra # replacement for markdown.extensions.extra see https://facelessuser.github.io/pymdown-extensions/extensions/extra/
+  - markdown.extensions.admonition
+  - markdown.extensions.codehilite(guess_lang=false)
+  - markdown.extensions.def_list
+  - markdown.extensions.footnotes
+  - markdown.extensions.meta
+  - markdown.extensions.toc(permalink=true)
+  - markdown_include.include:
+      base_path: 'docs'
+  - pymdownx.arithmatex
+  - pymdownx.betterem(smart_enable=all)
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.emoji:
+      #emoji_generator: !!python/name:pymdownx.emoji.to_svg
+      emoji_index: !!python/name:pymdownx.emoji.gemoji
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist(custom_checkbox=true)
+  - pymdownx.tilde

@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct
  * Things related to the attachments directory or the tempUploadsDirectory or any other directory
  * we reference from Config.groovy would go here, especially if they require GString-like parsing.
  *
- * See Attachments and RallyDefaultConfig for more description of how this works
+ * See Attachments and application.groovy for more description of how this works
  *
  */
 class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
