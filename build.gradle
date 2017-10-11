@@ -35,6 +35,7 @@ subprojects {
 	ext {
 		userOrg = "grails"
 		set "tomcat.version", "8.5.5"
+		isSnapshot = isBuildSnapshot
 	}
 
 	apply from:"$commonBuild/common.gradle"

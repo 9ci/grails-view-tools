@@ -22,13 +22,16 @@ grailsPublish {
 	repo = 'grails-plugins' 
 }
 
-publishing {
-	repositories {
-		maven {
-			url "http://repo.9ci.com/artifactory/grails-plugins"
-			credentials {
-				username "$artifactoryUsername"
-				password  "$artifactoryPassword"
+if(isSnapshot) {
+	publishing {
+		println "Publishing snapshot" + project.name + ":" + version.toString()
+		repositories {
+			maven {
+				url "http://repo.9ci.com/artifactory/grails-plugins"
+				credentials {
+					username "$artifactoryUsername"
+					password "$artifactoryPassword"
+				}
 			}
 		}
 	}
