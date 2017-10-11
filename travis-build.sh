@@ -5,7 +5,7 @@ set -e
 rm -rf ./build
 
 echo "### Running plugin tests ###"
-./gradlew clean check assemble --stacktrace
+./gradlew clean check --stacktrace
 
 if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG == "yakworks/view-tools" && $TRAVIS_PULL_REQUEST == 'false' ]]; then
 	echo "### publishing plugin Bintray"
