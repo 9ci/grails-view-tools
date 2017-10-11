@@ -4,12 +4,26 @@ set -e
 
 rm -rf ./build
 
-echo "### Running plugin tests ###"
+echo "### Running Tests ###"
 ./gradlew clean check --stacktrace
 
+function getVersion {
+   PROPERTY_FILE=gradle.properties
+   PROP_VALUE=`cat $PROPERTY_FILE | grep "projectVersion" | cut -d'=' -f2`
+   echo $PROP_VALUE
+}
+
+VERSION=$(getVersion)
+
 if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG == "yakworks/view-tools" && $TRAVIS_PULL_REQUEST == 'false' ]]; then
-	echo "### publishing plugin Bintray"
-	./gradlew view-tools:bintrayUpload
+    if [[ "$VERSION" == *-SNAPSHOT ]]
+    then
+        echo "### publishing snapshot"
+        ./gradlew view-tools:publish
+    else
+        echo "### publishing to BinTray"
+        ./gradlew view-tools:bintrayUpload
+    fi
 
 else
   echo "Not on master branch, so not publishing"
