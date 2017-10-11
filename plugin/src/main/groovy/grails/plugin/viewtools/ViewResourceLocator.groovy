@@ -171,9 +171,9 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
         //go nuclear and scan all the plugin paths,
         // in grails3, I don't see how this would ever get a hit if classpath did not
         log.debug("....going nuclear with findResourceInPlugins $uri")
-        if (!res) {
+        //if (!res) {
             //res = scanPluginsForResource(uri)
-        }
+        //}
         if(!res) log.debug("...FAIL Did not find $uri")
         return res
     }
