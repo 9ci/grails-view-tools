@@ -1,57 +1,11 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
-    }
-    dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.11.1"
-        classpath "org.grails.plugins:hibernate5:6.0.0"
-    }
-}
 
 version "0.1"
-group "app"
-
-
-
-apply plugin:"idea"
-apply plugin:"war"
-apply plugin:"org.grails.grails-web"
-apply plugin:"org.grails.grails-gsp"
-apply plugin:"asset-pipeline"
-
-repositories {
-    mavenLocal()
-    maven { url "https://repo.grails.org/grails/core" }
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.grails:grails-bom:$grailsVersion"
-    }
-    applyMavenExclusions false
-}
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-logging"
-    compile "org.springframework.boot:spring-boot-autoconfigure"
-    compile "org.grails:grails-core"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
-    compile "org.grails:grails-dependencies"
-    compile "org.grails:grails-web-boot"
-    compile "org.grails.plugins:cache"
-    compile "org.grails.plugins:scaffolding"
     compile "org.grails.plugins:hibernate5"
     compile "org.hibernate:hibernate-core:5.1.1.Final"
     compile "org.hibernate:hibernate-ehcache:5.1.1.Final"
-    console "org.grails:grails-console"
-    profile "org.grails.profiles:web"
     provided "org.codehaus.groovy:groovy-ant"
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.11.1"
-    runtime "com.h2database:h2"
-    testCompile "org.grails:grails-plugin-testing"
 
     // No longer needed. now part of selenium-support in 2.53, see https://github.com/SeleniumHQ/htmlunit-driver
     //testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
@@ -77,19 +31,6 @@ dependencies {
     testCompile "io.github.bonigarcia:webdrivermanager:1.4.9"
     /** GEB end */
 
-    runtime 'org.grails.plugins:grails-console:2.0.8'
-
-    //compile 'org.grails.plugins:view-tools:0.2-grails3'
-    //compile project(':') //view tools in parent
-
-    //compile project(':view-tools')
-    //compile project(':foobar-plugin')
-
-
-}
-ext {
-    //buildDir = projectDir
-    //workingDirectory = projectDir
 }
 /****** GEB *******
 Pass system properties through to the integrationTest task so we can pass in the 'geb.env' property to run tests
@@ -101,59 +42,25 @@ integrationTest {
     systemProperties['server.tomcat.basedir'] = 'src/main/webapp'
 
     systemProperties System.properties
+
+    //XXX - Need to set it here otherwise due to some problem it is set to /plugin which causes issues
+    systemProperties['base.dir'] = project.projectDir.absolutePath
+
     //workingDir = projectDir
     //webAppDirName = "foo"
     //basedir = new File('test-projects/fooey')
 }
-//[bootRun] can be setup above too if needed
 
 bootRun {
     jvmArgs('-Dspring.output.ansi.enabled=always')
     addResources = true
 }
 
-assets {
-    minifyJs = true
-    minifyCss = true
-}
-
 grails {
-   exploded = true
-   plugins {
-       compile project(':foobar-plugin')
-       if(rootProject.name == "app"){
-           println "rootProject.name $rootProject.name"
-           compile project(':view-tools')
-       }else{ //this is a sub-project of the root view-tools build so add the root
-           compile project(':view-tools')
-           //compile project(':')
-       }
-   }
+    exploded = true
+    plugins {
+        println "Inside grails: $rootProject.name"
+        compile project(':foobar-plugin')
+        compile project(':view-tools')
+    }
 }
-
-
-// println "Source dirs" + sourceSets.main.resources.srcDirs
-
-// def resDirs = sourceSets.main.resources.srcDirs
-// resDirs.each{
-//     //if(it.name.endsWith('grails-app/views')) it
-//     println it.class
-// }
-
-//println "Source dirs" + sourceSets.main.resources.srcDirs
-// sourceSets.main.resources.srcDirs = ['src/main/resources','grails-app/conf','grails-app/i18n']
-// sourceSets {
-//     main {
-//         resources {
-//             srcDirs = ['src/main/resources','grails-app/conf','grails-app/i18n']
-//             //include '**/*.md'
-//         }
-//     }
-// }
-
-// task copyViews (type: Copy) {
-//     from "grails-app"
-//     into sourceSets.main.output.resourcesDir
-//     include "views/**/*"
-// }
-// processResources.dependsOn "copyViews"
