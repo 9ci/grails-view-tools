@@ -29,7 +29,7 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
         git add .
 
         #If there are any changes, do commit and push
-        if [[ -z $(git status -s) ]]
+        if [[ -n $(git status -s) ]]
         then
             git commit -a -m "Update docs for Travis build: https://travis-ci.org/$TRAVIS_REPO_SLUG/builds/$TRAVIS_BUILD_ID"
             git push origin HEAD
