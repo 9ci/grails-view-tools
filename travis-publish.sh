@@ -28,7 +28,7 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
         cd gh-pages
         cp -r ../site/. . #Copy Mkdocs
 
-        mkdir api #Copy Java API
+        mkdir -p api #Copy Java API
         cp -r ../plugin/build/docs/. ./api
 
         git add .
