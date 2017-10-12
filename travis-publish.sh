@@ -29,7 +29,7 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
         cp -r ../site/. . #Copy Mkdocs
 
         mkdir -p api #Copy Java API
-        cp -r ../plugin/build/docs/. ./api
+        cp -r ../plugin/build/docs/groovydoc/. ./api
 
         git add .
 

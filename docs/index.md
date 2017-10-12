@@ -1,6 +1,9 @@
 Note: Grails 3 sources are master and Grails 2 is in 2.5.x branch
 
 ## Description
+
+API Documentation can be found here [https://yakworks.github.io/view-tools/api](https://yakworks.github.io/view-tools/api)
+
 utility helpers to locate views in the spring mvc context
 - **ViewResourceLocator** for locating views in grails-app/views, plugins, and custom external paths.
 - **GrailsWebEnvironment** for binding a mock request if one doesn't exist so that services can operate without a controller.
