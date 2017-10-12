@@ -18,6 +18,8 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
         ./gradlew view-tools:publish --no-daemon
     fi
 
+    python3 -m mkdocs build
+
 else
   echo "Not a Tag or Not on master branch, not publishing"
   echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"
