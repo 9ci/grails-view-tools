@@ -24,7 +24,7 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
     git config --global user.email "9cibot@9ci.com"
     #git config --global credential.helper "store --file=~/.git-credentials"
     #echo "https://$GH_TOKEN:@github.com" > ~/.git-credentials
-    python3 -m mkdocs gh-deploy --clean --remote-name "https://$GH_TOKEN@github.com/yakworks/view-tools.git"
+    python3 -m mkdocs gh-deploy --clean --remote-name https://${GH_TOKEN}@github.com/yakworks/view-tools.git
 
 else
   echo "Not a Tag or Not on master branch, not publishing"
