@@ -18,13 +18,25 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
         ./gradlew view-tools:publish --no-daemon
     fi
 
-    echo "### publishing building docs"
+    if [[ $TRAVIS_BRANCH == 'master' ]]
+    then
+        echo "### publishing building docs"
+        git config --global user.name "9cibot"
+        git config --global user.email "9cibot@9ci.com"
+        git config --global credential.helper "store --file=~/.git-credentials"
+        echo "https://$GH_TOKEN:@github.com" > ~/.git-credentials
+        git clone https://${GH_TOKEN}@github.com/yakworks/view-tools.git -b gh-pages gh-pages --single-branch > /dev/null
 
-    git config --global user.name "9cibot"
-    git config --global user.email "9cibot@9ci.com"
-    #git config --global credential.helper "store --file=~/.git-credentials"
-    #echo "https://$GH_TOKEN:@github.com" > ~/.git-credentials
-    python3 -m mkdocs gh-deploy --clean --remote-name https://${GITHUB_TOKEN}@github.com/yakworks/view-tools.git
+        python3 -m mkdocs build
+
+        cd gh-pages
+        cp -r ../site/. .
+        git add .
+        git commit -a -m "Update docs for Travis build: https://travis-ci.org/$TRAVIS_REPO_SLUG/builds/$TRAVIS_BUILD_ID"
+        git push origin HEAD
+        cd ..
+        rm -rf gh-pages
+    fi
 
 else
   echo "Not a Tag or Not on master branch, not publishing"
