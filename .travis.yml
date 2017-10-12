@@ -17,13 +17,6 @@ addons:
     packages:
     - python3
     - python3-pip
-deploy:
-  provider: pages
-  skip_cleanup: true
-  local_dir: site
-  github_token: $GITHUB_TOKEN
-  on:
-    branch: master
 env:
   global:
   - secure: IfZSXqVkpWR6R0rTgkcTrtSBrigiWTbVHkS6wq3ydvQ33EhaThj0qPH8XVpZkZiLMJJLc3NkYaaoY2cqTrEkxpltDm2yPynKACccLPxp1fLKVaGItcjtmH/vzDxA4W6HgunYbdA+yZbW72OWj2gjR9CUgtOEiD+dJjsP4uzEE+QsLy1FxPImILKOJ0xmn7iZSJO06rBqGexIQ4ZBPDl6VdqhexIesQUGmRjjbPWSulU0F7CkdRoBsJFjye0D36XvtgU02M/XXt5B3hFSLYTIf+3My6Nck/ISXcPXCNB6KgDkqCGbY0d+HWTqvxndUMTtckkbKmWIcc7pIa66bbuonE96ZKpcL64KvA3/KzsIK+2B6C+QC4v16sZaSsdrQ19F4q/fZcuiqKpJFB1EQfbMw/7GgIivzIxBYQtAU7FdosIM7Y7xrASHj/O5YQirLX+1LBoQXhOI47UlfLEuXb+vwTy9s8ZNned/+YCEgu6exQEnhAVFlKkHydtmJ1J94W3oEw57gPbZ5bU30D2kIO2d/cOzIs6M1LQsZmD87hiQAGTl6lVrX3dtn2fzMQ7GNJPmDiDJ+Ku72nNZVBXNcTNILfY38JWgkOw+71PlkeZPrAefAXjgkx2hfHaTB/uaVXElYfnJrF8NfEaCxOColE+eWdFkbypQPTSGL6Qro/J3yzw=
