@@ -24,8 +24,8 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
         git config --global user.name "9cibot"
         git config --global user.email "9cibot@9ci.com"
         git config --global credential.helper "store --file=~/.git-credentials"
-        echo "https://$GH_TOKEN:@github.com" > ~/.git-credentials
-        git clone https://${GH_TOKEN}@github.com/yakworks/view-tools.git -b gh-pages gh-pages --single-branch > /dev/null
+        echo "https://$GITHUB_TOKEN:@github.com" > ~/.git-credentials
+        git clone https://${GITHUB_TOKEN}@github.com/yakworks/view-tools.git -b gh-pages gh-pages --single-branch > /dev/null
 
         python3 -m mkdocs build
 
