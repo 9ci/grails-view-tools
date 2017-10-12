@@ -27,8 +27,16 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
         cd gh-pages
         cp -r ../site/. .
         git add .
-        git commit -a -m "Update docs for Travis build: https://travis-ci.org/$TRAVIS_REPO_SLUG/builds/$TRAVIS_BUILD_ID"
-        git push origin HEAD
+
+        #If there are any changes, do commit and push
+        if [[ -z $(git status -s) ]]
+        then
+            git commit -a -m "Update docs for Travis build: https://travis-ci.org/$TRAVIS_REPO_SLUG/builds/$TRAVIS_BUILD_ID"
+            git push origin HEAD
+        else
+            echo "### No changes to docs"
+        fi
+
         cd ..
         rm -rf gh-pages
         rm -rf site
