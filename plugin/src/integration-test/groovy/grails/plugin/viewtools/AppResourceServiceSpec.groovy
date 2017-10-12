@@ -3,6 +3,7 @@ package grails.plugin.viewtools
 import grails.test.mixin.integration.Integration
 import org.apache.commons.io.FileUtils
 import org.springframework.core.io.Resource
+import spock.lang.Ignore
 import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
@@ -166,17 +167,16 @@ class AppResourceServiceSpec extends Specification {
 
 	def testGetTempDir() {
 		when:
-		def dir = appResourceService.getLocation('tempDir')
+		def dir = appResourceService.getTempDir()
 
 		then:
 		dir
-		dir.absolutePath.endsWith(new File('/9ci-app/temp').path)
-		!dir.absolutePath.startsWith(appResourceService.rootLocation.absolutePath)
+		dir.absolutePath.endsWith(new File(System.getProperty("java.io.tmpdir")).path)
 		dir.exists()
 		dir.isDirectory()
-		//assertEquals true, dir.isAbsolute()
 		dir.canWrite()
 	}
+
 	def testGetRootLocation2() {
 		when:
 		File root = appResourceService.rootLocation
@@ -199,14 +199,14 @@ class AppResourceServiceSpec extends Specification {
 
 	def testGetLocation_absolute_tempDir() {
 		when:
-		File temp = appResourceService.getLocation('tempDir')
+		File temp = appResourceService.getTempDir()
 
 		then:
 		temp.exists()
 		temp.isDirectory()
 	}
 
-	@spock.lang.Ignore
+
 	def testGetLocation_relative_checkImages() {
 		when:
 		File checkImages = appResourceService.getLocation('checkImage.location')
@@ -237,15 +237,16 @@ class AppResourceServiceSpec extends Specification {
 
 	def test_getRelativeTempPath() {
 		when:
-		def dir = appResourceService.getLocation('tempDir')
+		def dir = appResourceService.getTempDir()
 
 		then:
 		'blah' == appResourceService.getRelativeTempPath(new File(dir, 'blah'))
 	}
 
+	@Ignore
 	def testGetRelativePath() {
 		when:
-		def tmp = appResourceService.getLocation('tempDir')
+		def tmp = appResourceService.getTempDir()
 		def file = new File(tmp, 'blahBlah')
 
 		then:

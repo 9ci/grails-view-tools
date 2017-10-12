@@ -157,8 +157,10 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
         String baseName = FilenameUtils.getBaseName(originalFileName)
         if(baseName.length() < 3) baseName  = baseName + "tmp"
         String extension = FilenameUtils.getExtension(originalFileName)
-        File tempDir = getLocation('tempDir')
+        File tempDir = getTempDir()
+
         File tmpFile = File.createTempFile(baseName, (extension?".${extension}":''), tempDir)
+
         if(data) {
             if(data instanceof String) {
                 FileUtils.writeStringToFile(tmpFile, data)
@@ -174,19 +176,29 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
         return tmpFile
     }
 
+    File getTempDir() {
+        File tempDir
+        String tmpDirPath = getResourceConfig("tempDir")
+        if(tmpDirPath) { tempDir = new File(tmpDirPath) }
+        else { tempDir = new File(System.getProperty('java.io.tmpdir')) }
+
+        return tempDir
+
+    }
+
     /** Deletes any files in the temp directory which are in the list. */
     void deleteTempUploadedFiles(String attachmentListJson){
         if(attachmentListJson){
             List fileDetailsList = JSON.parse(attachmentListJson)
             fileDetailsList.each {fileDetails->
-                FileUtils.forceDelete(new File(getLocation('tempDir'), fileDetails.tempFilename))
+                FileUtils.forceDelete(new File(tempDir, fileDetails.tempFilename))
             }
         }
     }
 
     void deleteTempUploadedFiles(List attachmentList){
         attachmentList.each { file ->
-            FileUtils.forceDelete(new File(getLocation('tempDir'), file.tempFilename))
+            FileUtils.forceDelete(new File(tempDir, file.tempFilename))
         }
     }
 
@@ -354,7 +366,9 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
     /**
      * returns the path relative to the the temporary resource directory
      */
-    String getRelativeTempPath(File file) { return getRelativePath('tempDir', file) }
+    String getRelativeTempPath(File file) {
+        return getRelativePath(tempDir, file)
+    }
 
 
     @CompileStatic

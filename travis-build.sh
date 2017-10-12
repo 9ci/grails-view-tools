@@ -4,30 +4,24 @@ set -e
 
 rm -rf ./build
 
-echo "### Running Tests ###"
-./gradlew clean check --stacktrace
+echo "### Running build for branch $TRAVIS_BRANCH ###"
+./gradlew clean check --stacktrace --no-daemon
 
-function getVersion {
-   PROPERTY_FILE=gradle.properties
-   PROP_VALUE=`cat $PROPERTY_FILE | grep "projectVersion" | cut -d'=' -f2`
-   echo $PROP_VALUE
-}
+if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG == "yakworks/view-tools" && $TRAVIS_PULL_REQUEST == 'false' ]]; then
 
-VERSION=$(getVersion)
-
-if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG == "yakworks/view-tools" && $TRAVIS_PULL_REQUEST == 'false' ]]; then
-    if [[ "$VERSION" == *-SNAPSHOT ]]
+    if [[ -n $TRAVIS_TAG ]]
     then
-        echo "### publishing snapshot"
-        ./gradlew view-tools:publish
+        echo "### publishing release to BinTray"
+        ./gradlew view-tools:bintrayUpload --no-daemon
     else
-        echo "### publishing to BinTray"
-        ./gradlew view-tools:bintrayUpload
+         echo "### publishing snapshot"
+        ./gradlew view-tools:publish --no-daemon
     fi
 
 else
-  echo "Not on master branch, so not publishing"
+  echo "Not a Tag or Not on master branch, not publishing"
   echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"
+  echo "TRAVIS_TAG: $TRAVIS_TAG"
   echo "TRAVIS_REPO_SLUG: $TRAVIS_REPO_SLUG"
   echo "TRAVIS_PULL_REQUEST: $TRAVIS_PULL_REQUEST"
 fi

@@ -10,12 +10,6 @@ nine {
 	resources {
 
 		currentTenant = { return [id:1, num:"tenant-name"]}
-		tempDir = {
-			def props = System.properties
-			File tmp = new File("${props['java.io.tmpdir']}/${props['user.name']}/9ci-app/temp")
-			if(!tmp.exists()) tmp.mkdirs()
-			return tmp.canonicalPath
-		}
 		
 		attachments.location = 'attachments'
 

@@ -29,8 +29,8 @@ if(isSnapshot) {
 			maven {
 				url "http://repo.9ci.com/artifactory/grails-plugins"
 				credentials {
-					username "$artifactoryUsername"
-					password "$artifactoryPassword"
+					username System.getenv("ARTIFACTORY_USER") ?: project.artifactoryUsername
+					password System.getenv("ARTIFACTORY_PASSWORD") ?: project.artifactoryPassword
 				}
 			}
 		}
