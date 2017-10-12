@@ -31,6 +31,8 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
         git push origin HEAD
         cd ..
         rm -rf gh-pages
+        rm -rf site
+        echo "### Done publishing docs"
     fi
 
 else
