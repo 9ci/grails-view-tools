@@ -15,6 +15,7 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
 
     if [[ $TRAVIS_BRANCH == 'master' ]]
     then
+
         echo "### publishing docs"
         git config --global user.name "9cibot"
         git config --global user.email "9cibot@9ci.com"
@@ -25,7 +26,11 @@ if [[ -n $TRAVIS_TAG ]] || [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_REPO_SLUG ==
         python3 -m mkdocs build
 
         cd gh-pages
-        cp -r ../site/. .
+        cp -r ../site/. . #Copy Mkdocs
+
+        mkdir api #Copy Java API
+        cp -r ../plugin/build/docs/. ./api
+
         git add .
 
         #If there are any changes, do commit and push
