@@ -70,6 +70,20 @@ The data can be either a file a String, or a byte array
     File directory = appResourceService.getLocation(key)
 ```
 
+**Temporary Files**
+App resource service provides helper method to create temporary files.
+```groovy
+ appResourceService.createTempFile() 
+```
+By default the temporary files are stored in system temp directory.
+However location of tempDir can be changed in configuration as shown below.
+
+```groovy
+nine.resources.tempDir = "/path/to/dir"
+```
+
+**Note:** OS takes care of cleaning system temp directory, however if you explicitly specify the location of tempDir then you will need to take care of cleaning up the temp files regularly.
+
 Here key is the config key, eg (attachments.location or views.location)
 
 **ConfigKeyAppResourceLoader**
