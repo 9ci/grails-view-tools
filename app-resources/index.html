@@ -339,7 +339,8 @@ This values are passed as tenantId and tenantSubDomain when retrieving the value
 <p>The data can be either a file a String, or a byte array</p>
 <p><strong>Accessing a directory under root location</strong>
 <div class="codehilite"><pre><span></span>    <span class="n">File</span> <span class="n">directory</span> <span class="o">=</span> <span class="n">appResourceService</span><span class="o">.</span><span class="na">getLocation</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
-</pre></div></p>
+</pre></div>
+Here key is the config key, eg (attachments.location or views.location)</p>
 <p><strong>Temporary Files</strong>
 App resource service provides helper method to create temporary files.
 <div class="codehilite"><pre><span></span> <span class="n">appResourceService</span><span class="o">.</span><span class="na">createTempFile</span><span class="o">()</span> 
@@ -350,7 +351,6 @@ However location of tempDir can be changed in configuration as shown below.</p>
 </pre></div>
 
 <p><strong>Note:</strong> OS takes care of cleaning system temp directory, however if you explicitly specify the location of tempDir then you will need to take care of cleaning up the temp files regularly.</p>
-<p>Here key is the config key, eg (attachments.location or views.location)</p>
 <p><strong>ConfigKeyAppResourceLoader</strong></p>
 <p>ConfigKeyAppResourceLoader provides ability to load resources from a directory configured as app resource location.</p>
 <p>Define ConfigKeyAppResourceLoader as a bean in grails-app/conf/spring/resources.groovy</p>
