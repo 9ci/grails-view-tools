@@ -39,7 +39,7 @@ in different browsers. Adapted from http://mrhaki.blogspot.com/2015/09/grails-go
 integrationTest {
     systemProperties['geb.build.reportsDir'] = reportsDir
     //# this is a hack to get the gradle subproject to run functional tests
-    //systemProperties['server.tomcat.basedir'] = 'src/main/webapp'
+    systemProperties['server.tomcat.basedir'] = 'src/main/webapp'
 
     systemProperties System.properties
 
