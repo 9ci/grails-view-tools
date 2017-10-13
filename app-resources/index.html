@@ -340,6 +340,16 @@ This values are passed as tenantId and tenantSubDomain when retrieving the value
 <p><strong>Accessing a directory under root location</strong>
 <div class="codehilite"><pre><span></span>    <span class="n">File</span> <span class="n">directory</span> <span class="o">=</span> <span class="n">appResourceService</span><span class="o">.</span><span class="na">getLocation</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
 </pre></div></p>
+<p><strong>Temporary Files</strong>
+App resource service provides helper method to create temporary files.
+<div class="codehilite"><pre><span></span> <span class="n">appResourceService</span><span class="o">.</span><span class="na">createTempFile</span><span class="o">()</span> 
+</pre></div>
+By default the temporary files are stored in system temp directory.
+However location of tempDir can be changed in configuration as shown below.</p>
+<div class="codehilite"><pre><span></span><span class="n">nine</span><span class="o">.</span><span class="na">resources</span><span class="o">.</span><span class="na">tempDir</span> <span class="o">=</span> <span class="s2">&quot;/path/to/dir&quot;</span>
+</pre></div>
+
+<p><strong>Note:</strong> OS takes care of cleaning system temp directory, however if you explicitly specify the location of tempDir then you will need to take care of cleaning up the temp files regularly.</p>
 <p>Here key is the config key, eg (attachments.location or views.location)</p>
 <p><strong>ConfigKeyAppResourceLoader</strong></p>
 <p>ConfigKeyAppResourceLoader provides ability to load resources from a directory configured as app resource location.</p>
