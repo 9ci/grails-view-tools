@@ -5,7 +5,7 @@ nine {
 		views.location = "views"
 
 		rootLocation = { args ->
-			File file = new File("test-projects/app/root-location")
+			File file = new File("root-location")
 			if (!file.exists()) {
 				println "Creating rootLocation ${file.canonicalPath} for testing purposes."
 				file.mkdirs()
