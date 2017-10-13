@@ -69,6 +69,7 @@ The data can be either a file a String, or a byte array
 ```groovy
     File directory = appResourceService.getLocation(key)
 ```
+Here key is the config key, eg (attachments.location or views.location)
 
 **Temporary Files**
 App resource service provides helper method to create temporary files.
@@ -84,7 +85,6 @@ nine.resources.tempDir = "/path/to/dir"
 
 **Note:** OS takes care of cleaning system temp directory, however if you explicitly specify the location of tempDir then you will need to take care of cleaning up the temp files regularly.
 
-Here key is the config key, eg (attachments.location or views.location)
 
 **ConfigKeyAppResourceLoader**
 
