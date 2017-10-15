@@ -11,6 +11,10 @@ buildscript {
 		classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.8.2"
 	}
 }
+
+apply plugin: 'idea'
+apply plugin:'groovy'
+
 repositories {
 	mavenLocal()
 	maven { url "https://repo.grails.org/grails/core" }
