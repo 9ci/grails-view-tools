@@ -70,8 +70,10 @@ logs
 .idea/**/uiDesigner.xml
 .idea/**/gradle.xml
 .idea/**/libraries
-
-# Mongo Explorer plugin:
+.idea/artifacts
+.idea/modules.xml
+.idea/vcs.xml
+.idea/modules
 .idea/**/mongoSettings.xmlout/
 
 
@@ -149,4 +151,3 @@ Session.vim
 
 /web-app/
 /site/*
-.idea/artifacts
