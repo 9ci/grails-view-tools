@@ -187,6 +187,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
      * @return The Resouce of the template
      */
     //XXX This does not work in grails3
+    @CompileDynamic
     Resource findWithPluginController(String uri) {
         log.debug("***** Trying findWithPluginController ******")
         HttpServletRequest request = GrailsWebRequest.lookup()?.getCurrentRequest()
