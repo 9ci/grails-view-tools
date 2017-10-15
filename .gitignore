@@ -44,7 +44,7 @@ logs
 
 # "temporary" build files
 **/target
-/out
+**/out
 
 ### Java template
 *.class
