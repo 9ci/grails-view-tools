@@ -10,7 +10,19 @@
           <root url="file://$MODULE_DIR$/../../../../test-projects/app/src/main/webapp" relative="/" />
           <root url="file://$MODULE_DIR$/../../../../test-projects/app/build/assets" relative="/assets" />
         </webroots>
-        <sourceRoots />
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/grails-app/init" />
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/grails-app/i18n" />
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/src/main/groovy" />
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/grails-app/controllers" />
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/src/main/resources" />
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/grails-app/views" />
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/src/integrationTest/resources" />
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/src/integrationTest/java" />
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/src/main/java" />
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/grails-app/conf" />
+          <root url="file://$MODULE_DIR$/../../../../test-projects/app/src/integrationTest/groovy" />
+        </sourceRoots>
       </configuration>
     </facet>
   </component>
@@ -53,7 +65,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.hibernate:hibernate-ehcache:5.1.1.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:1.4.6.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.codehaus.groovy:groovy-ant:2.4.11" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.openclover:clover:4.2.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: ch.qos.logback:logback-classic:1.1.11" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.slf4j:jcl-over-slf4j:1.7.25" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.slf4j:jul-to-slf4j:1.7.25" level="project" />
@@ -191,7 +202,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.hibernate:hibernate-ehcache:5.1.1.Final" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:1.4.6.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.codehaus.groovy:groovy-ant:2.4.11" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.openclover:clover:4.2.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.h2database:h2:1.4.194" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.bertramlabs.plugins:asset-pipeline-grails:2.14.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: ch.qos.logback:logback-classic:1.1.11" level="project" />
@@ -338,7 +348,6 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.hibernate:hibernate-ehcache:5.1.1.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:1.4.6.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.codehaus.groovy:groovy-ant:2.4.11" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.openclover:clover:4.2.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.grails:grails-plugin-testing:3.2.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.grails.plugins:geb:1.0.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.seleniumhq.selenium:selenium-support:2.53.1" level="project" />
