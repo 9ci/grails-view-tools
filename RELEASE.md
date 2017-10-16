@@ -1,7 +1,7 @@
 # Introduction
 This document describes the release process designed and implemented for `grails view tools plugin`. Its main purpose is to explain to developers and maintainers how to prepare and release a new version of this plugin.
 
-**The Process**  
+## The Process
 We publish snapshots and releases for the plugin.
 Snapshots are published from master branch. The artifacts are released to 9ci artifactory using ```gradle publish``` command.
  
