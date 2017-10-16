@@ -159,7 +159,7 @@ class AppResourceServiceSpec extends Specification {
 		dir != null
 		//File base = new File('target/resources/virgin-2/')
 		// This next line will fail if you change nine.attachments.directory in Config.groovy OR the test data for id=2
-		dir.path.endsWith(new File('/rootLocation').path)
+		dir.path.endsWith(new File('/root-location').path)
 		dir.exists()
 		dir.isDirectory()
 		dir.canWrite()

@@ -2,35 +2,42 @@
 
 apply plugin:"org.grails.grails-plugin-publish"
 
-grailsPublish {
-	user = System.getenv("BINTRAY_USER") ?: project.bintrayUser
-	key = System.getenv("BINTRAY_KEY") ?: project.bintrayKey
+String binTrayUser = System.getenv("BINTRAY_USER") ?: project.hasProperty('bintrayUser') ? project.bintrayUser : null
+String binTrayKey = System.getenv("BINTRAY_KEY") ?: project.hasProperty('bintrayKey') ? project.bintrayKey : null
+String artifactoryUsername = System.getenv("ARTIFACTORY_USER") ?:  project.hasProperty('artifactoryUsername') ? project.artifactoryUsername : null
+String artifactoryPassword = System.getenv("ARTIFACTORY_PASSWORD") ?: project.hasProperty('artifactoryPassword') ? project.artifactoryPassword : null
 
-	desc = "${project.title} - ${project.projectDesc}".toString()
+if(binTrayUser && binTrayKey) {
+	grailsPublish {
+		user = binTrayUser
+		key = binTrayKey
 
-	developers = [joshuaB: 'Joshua B', snimavat: "Sudhir Nimavat"]
-	githubSlug = "${project.githubSlug}"
-	issueTrackerUrl = "https://github.com/${project.githubSlug}/issues"
-	vcsUrl = "https://github.com/githubSlug"
-	
-	license {
-		name = 'Apache-2.0'
-	}
-	
-	title = project.title
-	userOrg = '9ci' 
-	repo = 'grails-plugins' 
+		desc = "${project.title} - ${project.projectDesc}".toString()
+
+		developers = [joshuaB: 'Joshua B', snimavat: "Sudhir Nimavat"]
+		githubSlug = "${project.githubSlug}"
+		issueTrackerUrl = "https://github.com/${project.githubSlug}/issues"
+		vcsUrl = "https://github.com/githubSlug"
+
+		license {
+			name = 'Apache-2.0'
+		}
+
+		title = project.title
+		userOrg = '9ci'
+		repo = 'grails-plugins'
+ }
 }
 
-if(isSnapshot) {
+if(isSnapshot && artifactoryUsername && artifactoryPassword) {
 	publishing {
 		println "SNAPSHOT - " + project.name + ":" + version.toString()
 		repositories {
 			maven {
 				url "http://repo.9ci.com/artifactory/grails-plugins"
 				credentials {
-					username System.getenv("ARTIFACTORY_USER") ?: project.artifactoryUsername
-					password System.getenv("ARTIFACTORY_PASSWORD") ?: project.artifactoryPassword
+					username artifactoryUsername
+					password artifactoryPassword
 				}
 			}
 		}

@@ -88,7 +88,7 @@ ruleset {
     IfStatementCouldBeTernary
     InvertedIfElse
     LongLiteralWithLowerCaseL
-    'NoDef' doNotApplyToFilesMatching: '.*Spec.groovy'
+    'NoDef' doNotApplyToFilesMatching: '.*Spec.groovy|.*Controller.groovy|.*GrailsPlugin.groovy'
     //ParameterReassignment
     TernaryCouldBeElvis
     VectorIsObsolete
@@ -97,7 +97,7 @@ ruleset {
     'AbstractClassWithPublicConstructor' enabled: false
     AbstractClassWithoutAbstractMethod
     BooleanMethodReturnsNull
-    BuilderMethodWithSideEffects
+    //BuilderMethodWithSideEffects
     CloneableWithoutClone
     CloseWithoutCloseable
     CompareToWithoutComparable
@@ -157,7 +157,7 @@ ruleset {
     BracesForMethod
     BracesForTryCatchFinally
     //ClassJavadoc
-    //ClosureStatementOnOpeningLineOfMultipleLineClosure
+    ClosureStatementOnOpeningLineOfMultipleLineClosure
     ConsecutiveBlankLines
     //FileEndsWithoutNewline
     //'LineLength' doNotApplyToFilesMatching: '*Spec.groovy'
@@ -177,7 +177,7 @@ ruleset {
     SpaceAfterSemicolon
     //SpaceBeforeClosingBrace
     //SpaceBeforeOpeningBrace
-    TrailingWhitespace
+    //TrailingWhitespace
 
     // rulesets/generic.xml
     IllegalClassMember
@@ -231,7 +231,7 @@ ruleset {
     //MisorderedStaticImports
     //'NoWildcardImports' doNotApplyToFilesMatching: '.*Spec.groovy'
     UnnecessaryGroovyImport
-    //UnusedImport
+    UnusedImport
 
     // rulesets/jdbc.xml
     DirectConnectionManagement
@@ -248,7 +248,7 @@ ruleset {
     JUnitLostTest
     JUnitPublicField
     JUnitPublicNonTestMethod
-    JUnitPublicProperty
+    //JUnitPublicProperty
     JUnitSetUpCallsSuper
     JUnitStyleAssertions
     JUnitTearDownCallsSuper
@@ -322,7 +322,7 @@ ruleset {
     // rulesets/unnecessary.xml
     AddEmptyString
     ConsecutiveLiteralAppends
-    ConsecutiveStringConcatenation
+    //ConsecutiveStringConcatenation
     UnnecessaryBigDecimalInstantiation
     UnnecessaryBigIntegerInstantiation
     'UnnecessaryBooleanExpression' doNotApplyToFilesMatching: '.*Spec.groovy'
@@ -375,7 +375,5 @@ ruleset {
     UnusedPrivateMethod
     UnusedPrivateMethodParameter
     //UnusedVariable
-
-
 
 }
