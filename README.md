@@ -17,6 +17,11 @@ Run
 And then ```mkdocs serve```
 
 **Publishing**  
+Build are automatically published by travis. 
+Snapshots are published from master branch, and releases are published from tags to BinTray.
+
+If you want to publish artifacts from your local system.
+ 
 Define following properties in ~/.gradle/gradle.properties
 
 - bintrayUser
