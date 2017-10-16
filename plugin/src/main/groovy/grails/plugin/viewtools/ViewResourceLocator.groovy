@@ -3,19 +3,16 @@ package grails.plugin.viewtools
 import grails.plugins.GrailsPlugin
 import grails.plugins.GrailsPluginManager
 import grails.plugins.PluginManagerAware
-import grails.util.Environment
 import grails.util.GrailsWebUtil
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
+import org.grails.gsp.GroovyPageResourceLoader
 
 //import org.grails.core.artefact.ControllerArtefactHandler
-
-import org.grails.gsp.GroovyPageResourceLoader
 import org.grails.io.support.GrailsResourceUtils
 import org.grails.plugins.BinaryGrailsPlugin
 import org.grails.web.servlet.mvc.GrailsWebRequest
-
 import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware

@@ -16,7 +16,6 @@
 package grails.plugin.viewtools
 
 import grails.util.GrailsWebMockUtil
-import groovy.transform.CompileStatic
 import grails.util.Holders
 import groovy.util.logging.Log4j
 import org.grails.web.context.ServletEnvironmentGrailsApplicationDiscoveryStrategy
@@ -28,7 +27,6 @@ import org.springframework.context.i18n.LocaleContext
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.web.context.WebApplicationContext
-import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.servlet.DispatcherServlet
 import org.springframework.web.servlet.support.RequestContextUtils

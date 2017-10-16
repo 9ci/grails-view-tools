@@ -215,7 +215,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
         return getRelativePath(ATTACHMENT_LOCATION_KEY, file)
     }
 
-    Map getCurrentTenant() {
+    def getCurrentTenant() {
         Validate.notNull(currentTenantClosure)
         return currentTenantClosure.call()
     }
@@ -369,7 +369,6 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
     String getRelativeTempPath(File file) {
         return getRelativePath(tempDir, file)
     }
-
 
     @CompileStatic
     def getResourceConfig(String subKey) {

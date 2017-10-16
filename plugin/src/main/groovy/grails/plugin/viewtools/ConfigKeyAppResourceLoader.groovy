@@ -1,8 +1,6 @@
 package grails.plugin.viewtools
 
 import org.apache.commons.lang.Validate
-import org.springframework.context.ApplicationContext
-import org.springframework.context.ApplicationContextAware
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
 

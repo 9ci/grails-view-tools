@@ -23,8 +23,6 @@ import org.springframework.web.servlet.View
 import org.springframework.web.servlet.view.AbstractUrlBasedView
 import org.springframework.web.servlet.view.UrlBasedViewResolver
 
-import javax.sql.DataSource
-
 /**
  * Uses Springs ViewResolver design concepts. The primary lookup uses {@link grails.plugin.viewtools.ViewResourceLocator}
  * The main DispatcherServlet spins through and calls the ViewResolvers ViewResolver.resolveViewName(String viewName, Locale locale)
