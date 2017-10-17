@@ -118,6 +118,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
      *        location:(string of the location relative to rootLocation),
      *        file: the File instace that we put in that directory
      */
+    @SuppressWarnings("ReturnsNullInsteadOfEmptyCollection")
     Map createAttachmentFile(Long attachmentId, String name, String extension, data) {
         if(!data) return null
         String prefix = ""
@@ -153,6 +154,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
      * @return a non-null File instance, which has a unique name within the tempDir, and
      *         if data is non-null will exist and will contain the data specified.
      */
+    @SuppressWarnings("FileCreateTempFile")
     File createTempFile(String originalFileName, data) {
         String baseName = FilenameUtils.getBaseName(originalFileName)
         if(baseName.length() < 3) baseName  = baseName + "tmp"
@@ -215,11 +217,13 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
         return getRelativePath(ATTACHMENT_LOCATION_KEY, file)
     }
 
+    @SuppressWarnings("NoDef")
     def getCurrentTenant() {
         Validate.notNull(currentTenantClosure)
         return currentTenantClosure.call()
     }
 
+    @SuppressWarnings("NoDef")
     public String getTenantUniqueKey() {
         def client = currentTenant
         return "${client.num}-${client.id}"
@@ -371,6 +375,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
     }
 
     @CompileStatic
+    @SuppressWarnings("NoDef")
     def getResourceConfig(String subKey) {
         return grailsApplication.config.getProperty(buildResourceKey(subKey), Object)
     }
