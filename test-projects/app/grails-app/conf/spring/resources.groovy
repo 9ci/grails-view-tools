@@ -1,3 +1,4 @@
+import grails.plugin.viewtools.AppResourceLoader
 import grails.plugin.viewtools.ConfigKeyAppResourceLoader
 import grails.util.Environment
 import org.springframework.core.io.ResourceLoader
@@ -30,6 +31,10 @@ beans = {
 
     }
 
+    appResourceLoader(AppResourceLoader) {bean ->
+        resourcesConfigRootKey = "nine.resources"
+        bean.autowire = true
+    }
     tenantViewResourceLoader(TenantViewResourceLoader)
     configKeyAppResourceLoader(ConfigKeyAppResourceLoader) {
         baseAppResourceKey = "views.location"

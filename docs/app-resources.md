@@ -3,10 +3,10 @@ AppResourceLoader provides a consistent and convention based way to lookup File 
 
 ## Configuration
 
-**Basic configuration**
+### Basic configuration**
 ```groovy
     
-nine {
+app {
 	resources {
 
 		currentTenant = { return [id:1, num:"tenant-name"]}
@@ -25,7 +25,20 @@ nine {
 
 ```
 
-**Defining root location**
+#### Define resources config root.  
+By default, the resources configuration is expected to be under app.resources. However it can be changed by overriding the appResourceLoader bean definition.
+
+```groovy
+
+    appResourceLoader(AppResourceLoader) {bean ->
+        resourcesConfigRootKey = "nine.resources"
+        bean.autowire = true
+    }
+
+```
+
+
+#### Defining root location
 
 AppResources needs root location directory to be defined and should exist.
 
@@ -39,7 +52,7 @@ rootLocation = { args ->
 
 The closure is passed a map as argument containing keys **tenantId** and **tenantSubDomain**.
 
-**Defining currentTenant**
+#### Defining currentTenant
 ```groovy
     currentTenant = { return [id:1, num:"tenant-name"]}    
 ```
@@ -48,7 +61,7 @@ This is also a closure and can return dynamic value based on some criteria.
 The closure can return a map or any object which has **id** and **num** properties.
 This values are passed as tenantId and tenantSubDomain when retrieving the value of root location.
 
-**Attachments**
+#### Attachments
 
 App resources provides utilities for storing and retrieving attachments.
 
@@ -71,7 +84,7 @@ The data can be either a file a String, or a byte array
 ```
 Here key is the config key, eg (attachments.location or views.location)
 
-**Temporary Files**
+#### Temporary Files
 App resource service provides helper method to create temporary files.
 ```groovy
  appResourceLoader.createTempFile() 
@@ -80,7 +93,7 @@ By default the temporary files are stored in system temp directory.
 However location of tempDir can be changed in configuration as shown below.
 
 ```groovy
-nine.resources.tempDir = "/path/to/dir"
+app.resources.tempDir = "/path/to/dir"
 ```
 
 **Note:** OS takes care of cleaning system temp directory, however if you explicitly specify the location of tempDir then you will need to take care of cleaning up the temp files regularly.
@@ -113,7 +126,7 @@ Define ConfigKeyAppResourceLoader as a bean in grails-app/conf/spring/resources.
 Define views.location app resource directory
 
 ```groovy
-nine {
+app {
 	resources {
 	    views.location = "views"
 	}

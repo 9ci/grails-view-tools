@@ -33,7 +33,7 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
     /**
      * The path to resources config root. eg "nine.resources"
      */
-    String resourcesConfigRootKey = "nine.resources"
+    String resourcesConfigRootKey = "app.resources"
 
     private Closure rootLocationClosure
     private Closure currentTenantClosure
@@ -164,7 +164,7 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
         File tempDir = getTempDir()
 
         File tmpFile = File.createTempFile(baseName, (extension?".${extension}":''), tempDir)
-        
+
         if(data) {
             if(data instanceof String) {
                 FileUtils.writeStringToFile(tmpFile, data)
