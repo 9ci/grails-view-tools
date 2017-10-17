@@ -10,11 +10,10 @@ Guide: https://yakworks.github.io/view-tools/
 API: https://yakworks.github.io/view-tools/api/
 
 **Running mkdocs locally**  
-Ensure you have python installed
-
+Docs are built with https://yakworks.github.io/mkdocs-material-components/
 Run 
 > ```pip install -r pip-requirements.txt```
-And then ```mkdocs serve```
+And then ```mkdocs serve``` see the docs if you have troubles
 
 **Publishing**  
 Build are automatically published by travis. 
@@ -30,6 +29,9 @@ Define following properties in ~/.gradle/gradle.properties
 - artifactoryPassword
 
 bintray credentials are used for **bintrayUpload** task. Artifactory credentials are used for publishing snapshots to 9ci artifactory.
+
+**Using latests SNAPSHOT**
+TODO
 
 
 
