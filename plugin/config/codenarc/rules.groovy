@@ -1,4 +1,3 @@
-package codenarc
 
 ruleset {
 
@@ -88,7 +87,7 @@ ruleset {
     IfStatementCouldBeTernary
     InvertedIfElse
     LongLiteralWithLowerCaseL
-    //'NoDef' doNotApplyToFilesMatching: '.*Spec.groovy|.*Controller.groovy|.*GrailsPlugin.groovy'
+    'NoDef' doNotApplyToFilesMatching: '.*Spec.groovy|.*Controller.groovy|.*GrailsPlugin.groovy'
     //ParameterReassignment
     TernaryCouldBeElvis
     VectorIsObsolete
@@ -111,7 +110,7 @@ ruleset {
     'PrivateFieldCouldBeFinal' enabled: false
     PublicInstanceField
     ReturnsNullInsteadOfEmptyArray
-    //ReturnsNullInsteadOfEmptyCollection
+    ReturnsNullInsteadOfEmptyCollection
     //SimpleDateFormatMissingLocale
     StatelessSingleton
     ToStringReturnsNull
@@ -292,7 +291,7 @@ ruleset {
     VariableName
 
     // rulesets/security.xml
-    //FileCreateTempFile
+    FileCreateTempFile
     InsecureRandom
     'JavaIoPackageAccess' enabled: false
     NonFinalPublicField
