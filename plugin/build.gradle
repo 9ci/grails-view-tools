@@ -21,8 +21,9 @@ bootRun {
 }
 
 codenarc {
-    toolVersion = '0.25.2'
-    configFile = file("${projectDir}/grails-app/conf/codenarc/rules.groovy")
+    toolVersion = '0.27.0'
+    configFile = file("${projectDir}/config/codenarc/rules.groovy")
+    reportFormat = 'html'
     maxPriority1Violations = 0
     maxPriority2Violations = 0
     maxPriority3Violations = 0
