@@ -24,4 +24,5 @@ New releaseses are published from tags. Follow the following steps to publish a 
 - If any code changes were made to the branch, merge back to master
 - increment the snapshot version in master branch
 
-
+We create a new branch for release tag release from the branch so that if we have to make any specific changes for release we can do it in branch.
+And we do update the version in branch and not master. Also we can have different release branches for Grails 3.2.x vs Grails 3.3.x
