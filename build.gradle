@@ -28,7 +28,7 @@ project(':view-tools') {
 }
 
 ext {
-	commonBuild = projectDir
+	commonBuild = "https://raw.githubusercontent.com/yakworks/grails-common-build/master"
 	grailsApps = ['test-app']
 	grailsPlugins = ['view-tools', 'foobar-plugin']
 }
