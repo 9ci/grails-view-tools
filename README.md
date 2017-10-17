@@ -30,8 +30,21 @@ Define following properties in ~/.gradle/gradle.properties
 
 bintray credentials are used for **bintrayUpload** task. Artifactory credentials are used for publishing snapshots to 9ci artifactory.
 
-**Using latests SNAPSHOT**
-TODO
+**Using latests SNAPSHOT**  
+Configure 9ci repo in build.gradle
 
+```groovy
+repositories {
+  maven { url "http://repo.9ci.com/artifactory/grails-plugins" }
+ }
+```
+
+Add dependency for snapshot  
+
+```groovy
+dependencies {
+ compile "org.grails.plugins:view-tools:0.10-SNAPSHOT" //see gradle.properties for latest snapshot version.
+}
+```
 
 
