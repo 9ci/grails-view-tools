@@ -10,7 +10,7 @@ dependencies {
 
     compile "org.springframework:spring-test"
 
-    codenarc 'org.codenarc:CodeNarc:0.25.2'
+    codenarc 'org.codenarc:CodeNarc:0.27.0'
 }
 
 bootRepackage.enabled = false
