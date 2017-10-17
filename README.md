@@ -43,7 +43,7 @@ Add dependency for snapshot
 
 ```groovy
 dependencies {
- compile "org.grails.plugins:view-tools:0.10-SNAPSHOT" //see gradle.properties for latest snapshot version.
+ compile("org.grails.plugins:view-tools:0.10-SNAPSHOT") { changing = true } //see gradle.properties for latest snapshot version.
 }
 ```
 
