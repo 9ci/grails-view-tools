@@ -14,7 +14,7 @@ class ConfigKeyAppResourceLoader implements ResourceLoader  {
      */
     String baseAppResourceKey
 
-    AppResourceService appResourceService
+    AppResourceLoader appResourceLoader
 
     void setBaseAppResourceKey(String key) {
         Validate.notEmpty(key)
@@ -23,7 +23,7 @@ class ConfigKeyAppResourceLoader implements ResourceLoader  {
 
     @Override
     Resource getResource(String uri) {
-        return appResourceService.getResourceRelative(baseAppResourceKey, uri)
+        return appResourceLoader.getResourceRelative(baseAppResourceKey, uri)
     }
 
     @Override

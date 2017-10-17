@@ -5,6 +5,7 @@ import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.core.support.GrailsConfigurationAware
 import groovy.transform.CompileStatic
+import groovy.util.logging.Slf4j
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.Validate
@@ -21,7 +22,8 @@ import javax.annotation.PostConstruct
  * See Attachments and application.groovy for more description of how this works
  *
  */
-class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
+@Slf4j
+class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
     public static final String ATTACHMENT_LOCATION_KEY = "attachments.location"
 
     GrailsApplication grailsApplication
@@ -54,7 +56,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
         if((!location.startsWith('/')) && !(location.startsWith('file:'))) {
             urlToUse = "file:${rootLocation.canonicalPath}/${location}/"
         }
-        log.debug "AppResourceService.getResource with $urlToUse"
+        log.debug "appResourceLoader.getResource with $urlToUse"
         resourceLoader.getResource(urlToUse)
     }
 
@@ -162,7 +164,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
         File tempDir = getTempDir()
 
         File tmpFile = File.createTempFile(baseName, (extension?".${extension}":''), tempDir)
-
+        
         if(data) {
             if(data instanceof String) {
                 FileUtils.writeStringToFile(tmpFile, data)
@@ -273,7 +275,7 @@ class AppResourceService implements ResourceLoader, GrailsConfigurationAware {
     List getScripts(Map args = [:]) {
         String key = 'scripts.locations'
         Closure closure = getResourceConfig(key)
-        log.debug "getScripts:  closure is ${closure}"
+        AppResourceLoader.log.debug "getScripts:  closure is ${closure}"
         if(!closure) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
         List files = []
         closure(mergeClientValues(args)).each { name -> files << getProperFile(name, key, true) }

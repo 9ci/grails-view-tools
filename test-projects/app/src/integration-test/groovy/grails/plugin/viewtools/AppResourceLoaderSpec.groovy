@@ -4,22 +4,21 @@ import grails.test.mixin.integration.Integration
 import org.apache.commons.io.FileUtils
 import org.springframework.core.io.Resource
 import spock.lang.Ignore
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 
 @Integration
-class AppResourceServiceSpec extends Specification {
+class AppResourceLoaderSpec extends Specification {
 
-	@Shared AppResourceService appResourceService
+	@Shared AppResourceLoader appResourceLoader
 
 	void cleanupSpec() {
-		FileUtils.deleteDirectory(appResourceService.getLocation("attachments.location"))
+		FileUtils.deleteDirectory(appResourceLoader.getLocation("attachments.location"))
 	}
 
 	def testCreateAttachmentFile_empty_noCreation() {
 		when:
-		def result = appResourceService.createAttachmentFile(1L, null,'txt', null)
+		def result = appResourceLoader.createAttachmentFile(1L, null,'txt', null)
 
 		then:
 		result == null
@@ -28,7 +27,7 @@ class AppResourceServiceSpec extends Specification {
 	def testCreateAttachmentFile_string() {
 		when:
 		def CONTENT = 'hello, world!'
-		def result = appResourceService.createAttachmentFile(2L, 'xyz','txt', CONTENT)
+		def result = appResourceLoader.createAttachmentFile(2L, 'xyz','txt', CONTENT)
 
 		then:
 		result
@@ -41,7 +40,7 @@ class AppResourceServiceSpec extends Specification {
 		result.file
 		//assert result.file.absolutePath == "xxx"
 		'xyz_2.txt' == result.file.name
-		result.location == appResourceService.getRelativePath('attachments.location', result.file)
+		result.location == appResourceLoader.getRelativePath('attachments.location', result.file)
 		result.file.exists()
 		CONTENT.size() == result.file.size()
 	}
@@ -49,7 +48,7 @@ class AppResourceServiceSpec extends Specification {
 	def testCreateAttachmentFile_bytes() {
 		when:
 		def CONTENT = 'hello, world!'.bytes
-		def result = appResourceService.createAttachmentFile(2L, null,'txt', CONTENT)
+		def result = appResourceLoader.createAttachmentFile(2L, null,'txt', CONTENT)
 
 		then:
 		result
@@ -58,14 +57,14 @@ class AppResourceServiceSpec extends Specification {
 		result.location.endsWith(".txt")
 		result.file
 		'2.txt' == result.file.name
-		result.location == appResourceService.getRelativePath('attachments.location', result.file)
+		result.location == appResourceLoader.getRelativePath('attachments.location', result.file)
 		result.file.exists()
 		CONTENT.size() == result.file.size()
 	}
 
 	def testCreateAttachmentFile_empty_data() {
 		when:
-		def result = appResourceService.createAttachmentFile(2L, null,'txt', null)
+		def result = appResourceLoader.createAttachmentFile(2L, null,'txt', null)
 
 		then:
 		result == null
@@ -75,9 +74,9 @@ class AppResourceServiceSpec extends Specification {
 		when:
 		File origFile = new File('src/integration-test/resources/grails_logo.jpg')
 		def data = FileUtils.readFileToByteArray(origFile)
-		File tmpFile = appResourceService.createTempFile('grails_logo.jpg', data)
+		File tmpFile = appResourceLoader.createTempFile('grails_logo.jpg', data)
 		tmpFile.deleteOnExit()
-		def result = appResourceService.createAttachmentFile(2L, null,'jpg', tmpFile)
+		def result = appResourceLoader.createAttachmentFile(2L, null,'jpg', tmpFile)
 
 		then:
 		result
@@ -86,7 +85,7 @@ class AppResourceServiceSpec extends Specification {
 		result.location.endsWith(".jpg")
 		result.file
 		tmpFile.name+"_2.jpg" == result.file.name
-		result.location == appResourceService.getRelativePath('attachments.location', result.file)
+		result.location == appResourceLoader.getRelativePath('attachments.location', result.file)
 		result.file.exists()
 
 		cleanup:
@@ -96,52 +95,52 @@ class AppResourceServiceSpec extends Specification {
 
 	def testCreateTempFile_empty() {
 		when:
-		def file = appResourceService.createTempFile("hello.txt", null)
+		def file = appResourceLoader.createTempFile("hello.txt", null)
 
 		then:
 		file
 		file.name.startsWith('hello')
 		file.name.endsWith('txt')
 		0 == file.size()
-		file.name == appResourceService.getRelativeTempPath(file)
+		file.name == appResourceLoader.getRelativeTempPath(file)
 	}
 
 	def testCreateTempFile_string() {
 		when:
-		def file = appResourceService.createTempFile("hello.txt", 'hello, world!')
+		def file = appResourceLoader.createTempFile("hello.txt", 'hello, world!')
 
 		then:
 		file
 		file.name.startsWith('hello')
 		file.name.endsWith('txt')
 		13 == file.size()
-		file.name == appResourceService.getRelativeTempPath(file)
+		file.name == appResourceLoader.getRelativeTempPath(file)
 	}
 
 	def testCreateTempFile_bytes() {
 		when:
 		def bytes = 'hello, world!'.getBytes()
-		def file = appResourceService.createTempFile("hello.txt", bytes)
+		def file = appResourceLoader.createTempFile("hello.txt", bytes)
 
 		then:
 		file
 		file.name.startsWith('hello')
 		file.name.endsWith('txt')
 		bytes.size() == file.size()
-		file.name == appResourceService.getRelativeTempPath(file)
+		file.name == appResourceLoader.getRelativeTempPath(file)
 	}
 
 	def testDeleteTempUploadedFiles() {
 		when:
-		def file1 = appResourceService.createTempFile('file1.txt', 'hello, world!')
-		def file2 = appResourceService.createTempFile('file2.txt', 'goodbye cruel world.')
+		def file1 = appResourceLoader.createTempFile('file1.txt', 'hello, world!')
+		def file2 = appResourceLoader.createTempFile('file2.txt', 'goodbye cruel world.')
 
 		then:
 		file1.exists()
 		file2.exists()
 
 		when:
-		appResourceService.deleteTempUploadedFiles(
+		appResourceLoader.deleteTempUploadedFiles(
 			"[ {'tempFilename':'${file1.name}','originalFilename':'file1.txt','extension':'txt','filesQueued':'0'},"
 			+ "{'tempFilename':'${file2.name}','originalFilename':'file2.txt','extension':'txt','filesQueued':'0'}]"
 		)
@@ -153,7 +152,7 @@ class AppResourceServiceSpec extends Specification {
 
 	def testGetRootLocation1() {
 		when:
-		def dir = appResourceService.rootLocation
+		def dir = appResourceLoader.rootLocation
 
 		then:
 		dir != null
@@ -167,7 +166,7 @@ class AppResourceServiceSpec extends Specification {
 
 	def testGetTempDir() {
 		when:
-		def dir = appResourceService.getTempDir()
+		def dir = appResourceLoader.getTempDir()
 
 		then:
 		dir
@@ -179,7 +178,7 @@ class AppResourceServiceSpec extends Specification {
 
 	def testGetRootLocation2() {
 		when:
-		File root = appResourceService.rootLocation
+		File root = appResourceLoader.rootLocation
 		println "root location is ${root.absolutePath}"
 
 		then:
@@ -190,7 +189,7 @@ class AppResourceServiceSpec extends Specification {
 
 	def testGetLocation_absolute_scripts() {
 		when:
-		List scripts = appResourceService.scripts
+		List scripts = appResourceLoader.scripts
 
 		then:
 		scripts[0].exists()
@@ -199,7 +198,7 @@ class AppResourceServiceSpec extends Specification {
 
 	def testGetLocation_absolute_tempDir() {
 		when:
-		File temp = appResourceService.getTempDir()
+		File temp = appResourceLoader.getTempDir()
 
 		then:
 		temp.exists()
@@ -209,7 +208,7 @@ class AppResourceServiceSpec extends Specification {
 
 	def testGetLocation_relative_checkImages() {
 		when:
-		File checkImages = appResourceService.getLocation('checkImage.location')
+		File checkImages = appResourceLoader.getLocation('checkImage.location')
 		println "checkImageDir is ${checkImages.absolutePath}"
 
 		then:
@@ -219,7 +218,7 @@ class AppResourceServiceSpec extends Specification {
 
 	def test_getAttachmentsMonthDirectory() {
 		when:
-		def dir = appResourceService.getMonthDirectory('attachments.location')
+		def dir = appResourceLoader.getMonthDirectory('attachments.location')
 
 		then:
 		dir != null
@@ -237,25 +236,25 @@ class AppResourceServiceSpec extends Specification {
 
 	def test_getRelativeTempPath() {
 		when:
-		def dir = appResourceService.getTempDir()
+		def dir = appResourceLoader.getTempDir()
 
 		then:
-		'blah' == appResourceService.getRelativeTempPath(new File(dir, 'blah'))
+		'blah' == appResourceLoader.getRelativeTempPath(new File(dir, 'blah'))
 	}
 
 	@Ignore
 	def testGetRelativePath() {
 		when:
-		def tmp = appResourceService.getTempDir()
+		def tmp = appResourceLoader.getTempDir()
 		def file = new File(tmp, 'blahBlah')
 
 		then:
-		appResourceService.getRelativePath('tempDir', file) == 'blahBlah'
+		appResourceLoader.getRelativePath('tempDir', file) == 'blahBlah'
 	}
 
 	def testMergeClientValues_emptyMap() {
 		when:
-		def result = appResourceService.mergeClientValues()
+		def result = appResourceLoader.mergeClientValues()
 
 		then:
 		result.tenantId==1
@@ -266,7 +265,7 @@ class AppResourceServiceSpec extends Specification {
 	def testMergeClientValues_fullMap_noUnexpectedCollisions() {
 		when:
 		Map args = [tenantId:7, name:'blah', num: 'seventy', numbers:['one', 'two', 'three']]
-		def result = appResourceService.mergeClientValues(args)
+		def result = appResourceLoader.mergeClientValues(args)
 
 		then:
 		result.tenantId == 7
@@ -302,7 +301,7 @@ class AppResourceServiceSpec extends Specification {
 		File origFile = new File('src/integration-test/resources/grails_logo.jpg')
 		def data = FileUtils.readFileToByteArray(origFile)
 
-		File viewsDirectory = appResourceService.getLocation("views.location")
+		File viewsDirectory = appResourceLoader.getLocation("views.location")
 
 		assert viewsDirectory.exists()
 
@@ -313,13 +312,13 @@ class AppResourceServiceSpec extends Specification {
 		viewFile.exists()
 
 		when:
-		Resource resource = appResourceService.getResource("views/test.view")
+		Resource resource = appResourceLoader.getResource("views/test.view")
 
 		then:
 		resource.exists()
 
 		when:
-		resource = appResourceService.getResourceRelative("config:views.location", "test.view")
+		resource = appResourceLoader.getResourceRelative("config:views.location", "test.view")
 
 		then:
 		resource.exists()

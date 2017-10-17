@@ -1,5 +1,5 @@
 
-AppResourceService provides a consistent and convention based way to lookup File system resources.
+AppResourceLoader provides a consistent and convention based way to lookup File system resources.
 
 ## Configuration
 
@@ -60,21 +60,21 @@ Declare attachments.location as a subdirectory under root location
 
 _**Create an attachment**_
 ```groovy
-    appResourceService.createAttachmentFile(Long attachmentId, String name, String extension, data)
+    appResourceLoader.createAttachmentFile(Long attachmentId, String name, String extension, data)
 ```
 
 The data can be either a file a String, or a byte array
 
 **Accessing a directory under root location**
 ```groovy
-    File directory = appResourceService.getLocation(key)
+    File directory = appResourceLoader.getLocation(key)
 ```
 Here key is the config key, eg (attachments.location or views.location)
 
 **Temporary Files**
 App resource service provides helper method to create temporary files.
 ```groovy
- appResourceService.createTempFile() 
+ appResourceLoader.createTempFile() 
 ```
 By default the temporary files are stored in system temp directory.
 However location of tempDir can be changed in configuration as shown below.
@@ -105,7 +105,7 @@ Define ConfigKeyAppResourceLoader as a bean in grails-app/conf/spring/resources.
 
     configKeyAppResourceLoader(ConfigKeyAppResourceLoader) {
         baseAppResourceKey = "views.location"
-        appResourceService = ref("appResourceService")
+        appResourceLoader = ref("appResourceLoader")
     }
 
 ```

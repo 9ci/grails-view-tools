@@ -36,4 +36,12 @@ Used in freemarker and new jasper-spring.
     def issueManagement = [ system: "github", url: "https://github.com/9ci/grails-view-tools/issues" ]
     def scm = [ url: "https://github.com/9ci/grails-view-tools" ]
 
+    Closure doWithSpring() {
+        return {
+            appResourceLoader(AppResourceLoader) { bean ->
+                bean.autowire =  true
+            }
+        }
+    }
+
 }

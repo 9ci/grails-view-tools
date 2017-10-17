@@ -33,7 +33,7 @@ beans = {
     tenantViewResourceLoader(TenantViewResourceLoader)
     configKeyAppResourceLoader(ConfigKeyAppResourceLoader) {
         baseAppResourceKey = "views.location"
-        appResourceService = ref("appResourceService")
+        appResourceLoader = ref("appResourceLoader")
     }
 
     simpleViewResolver(SimpleViewResolver) { bean ->
