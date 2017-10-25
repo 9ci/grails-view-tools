@@ -22,7 +22,7 @@ bootRun {
 
 codenarc {
     toolVersion = '0.27.0'
-    configFile = file("${projectDir}/config/codenarc/rules.groovy")
+    config = project.resources.text.fromString("${commonBuild}/codenarc/rules.groovy".toURL().text)
     reportFormat = 'html'
     maxPriority1Violations = 0
     maxPriority2Violations = 0
