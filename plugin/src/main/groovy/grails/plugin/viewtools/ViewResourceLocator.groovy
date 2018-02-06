@@ -443,6 +443,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
         return new PluginViewPathInfo(uri)
     }
 
+    @CompileStatic
     static class PluginViewPathInfo {
         public String basePath  //without the "/plugins/ prefix
         public String pluginName //the file system name "xxx-plugin-0.1"
@@ -461,6 +462,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
     /**
      * a simple resource that build from a URI and adds the base path the resource used to find it
      */
+    @CompileStatic
     public class ViewContextResource extends UrlResource implements ContextResource {
         private String pathWithinContext //the path given to a resourceLoader to find this Resource
 
@@ -478,6 +480,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
      * FileSystemResource that explicitly expresses a context-relative path
      * through implementing the ContextResource interface.
      */
+    @CompileStatic
     static class FileSystemContextResource extends FileSystemResource implements ContextResource {
 
         public FileSystemContextResource(String path) {

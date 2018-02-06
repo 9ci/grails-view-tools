@@ -4,6 +4,7 @@ import grails.config.Config
 import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.core.support.GrailsConfigurationAware
+import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 import org.apache.commons.io.FileUtils
@@ -23,6 +24,7 @@ import javax.annotation.PostConstruct
  *
  */
 @Slf4j
+@CompileDynamic
 class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
     public static final String ATTACHMENT_LOCATION_KEY = "attachments.location"
 
@@ -140,7 +142,7 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
             if(data instanceof byte[]) FileUtils.writeByteArrayToFile(file, data)
             if(data instanceof String) FileUtils.writeStringToFile(file, data)
         }
-        
+
         return [location:getRelativePath(ATTACHMENT_LOCATION_KEY, file), file:file]
     }
 

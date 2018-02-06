@@ -90,6 +90,7 @@ public class SandboxResourceLoader extends FileSystemResourceLoader {
      * FileSystemResource that explicitly expresses a context-relative path
      * through implementing the ContextResource interface.
      */
+    @CompileStatic
     private static class FileSystemContextResource extends FileSystemResource implements ContextResource {
 
         public FileSystemContextResource(String path) {

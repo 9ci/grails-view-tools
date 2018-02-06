@@ -1,5 +1,6 @@
 package grails.plugin.viewtools
 
+import groovy.transform.CompileStatic
 import org.apache.commons.lang.Validate
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
@@ -7,6 +8,7 @@ import org.springframework.core.io.ResourceLoader
 /**
  * ConfigKeyAppResourceLoader provides ability to load resources from a directory configured as app resource location.
  */
+@CompileStatic
 class ConfigKeyAppResourceLoader implements ResourceLoader  {
 
     /**

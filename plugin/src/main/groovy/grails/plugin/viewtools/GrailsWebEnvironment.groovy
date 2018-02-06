@@ -17,6 +17,7 @@ package grails.plugin.viewtools
 
 import grails.util.GrailsWebMockUtil
 import grails.util.Holders
+import groovy.transform.CompileDynamic
 import groovy.util.logging.Log4j
 import org.grails.web.context.ServletEnvironmentGrailsApplicationDiscoveryStrategy
 import org.grails.web.servlet.WrappedResponseHolder
@@ -36,119 +37,121 @@ import org.springframework.web.servlet.support.RequestContextUtils
  * All this does is bind a mock request and mock response is one doesn't exist
  * deals with setting the WrappedResponseHolder.wrappedResponse as well
  */
-@Log4j //log
-//@CompileStatic
+@Log4j
+//log
+@CompileDynamic
 @SuppressWarnings(['NoDef', 'CloseWithoutCloseable'])
 class GrailsWebEnvironment {
 
-	final Writer out
-	final Locale locale
-	final ApplicationContext applicationContext
+    final Writer out
+    final Locale locale
+    final ApplicationContext applicationContext
 
-	private GrailsWebRequest originalRequestAttributes
-	private GrailsWebRequest renderRequestAttributes
+    private GrailsWebRequest originalRequestAttributes
+    private GrailsWebRequest renderRequestAttributes
 
     GrailsWebEnvironment(ApplicationContext applicationContext, Writer out, Locale locale = null) {
-		this.out = out
-		this.locale = locale
-		this.applicationContext = applicationContext
-	}
+        this.out = out
+        this.locale = locale
+        this.applicationContext = applicationContext
+    }
 
-	void initCopy() {
-		originalRequestAttributes = RequestContextHolder.getRequestAttributes() as GrailsWebRequest
+    void initCopy() {
+        originalRequestAttributes = RequestContextHolder.getRequestAttributes() as GrailsWebRequest
 
-		def renderLocale = locale
-		if (!renderLocale && originalRequestAttributes) {
-			renderLocale = RequestContextUtils.getLocale(originalRequestAttributes.request)
-		}
-		renderRequestAttributes = bindMockWebRequest(applicationContext,  out, renderLocale)
+        def renderLocale = locale
+        if (!renderLocale && originalRequestAttributes) {
+            renderLocale = RequestContextUtils.getLocale(originalRequestAttributes.request)
+        }
+        renderRequestAttributes = bindMockWebRequest(applicationContext, out, renderLocale)
 
-		if (originalRequestAttributes) {
-			renderRequestAttributes.controllerName = originalRequestAttributes.controllerName
-		}
-	}
+        if (originalRequestAttributes) {
+            renderRequestAttributes.controllerName = originalRequestAttributes.controllerName
+        }
+    }
 
-	void close() {
-		//TODO Investigate this -> RequestContextHolder.resetRequestAttributes()
-		//see http://grails.1312388.n4.nabble.com/inheriting-thread-local-state-when-using-spring-beans-in-Grails-with-request-scope-td4426102.html
-		//https://github.com/rawls238/Scientist4J/issues/12
-		RequestContextHolder.setRequestAttributes(originalRequestAttributes) // null ok
-		WrappedResponseHolder.wrappedResponse = originalRequestAttributes?.currentResponse
-	}
+    void close() {
+        //TODO Investigate this -> RequestContextHolder.resetRequestAttributes()
+        //see http://grails.1312388.n4.nabble.com/inheriting-thread-local-state-when-using-spring-beans-in-Grails-with-request-scope-td4426102.html
+        //https://github.com/rawls238/Scientist4J/issues/12
+        RequestContextHolder.setRequestAttributes(originalRequestAttributes) // null ok
+        WrappedResponseHolder.wrappedResponse = originalRequestAttributes?.currentResponse
+    }
 
-	/**
-	 * Establish an environment inheriting the locale of the current request if there is one
-	 */
-	static void withNew(ApplicationContext applicationContext, Writer out, Closure block) {
-		withNew(applicationContext, out, null, block)
-	}
+    /**
+     * Establish an environment inheriting the locale of the current request if there is one
+     */
+    static void withNew(ApplicationContext applicationContext, Writer out, Closure block) {
+        withNew(applicationContext, out, null, block)
+    }
 
-	/**
-	 * Establish an environment with a specific locale
-	 */
-	static void withNew(ApplicationContext applicationContext, Writer out, Locale locale, Closure block) {
-		def env = new GrailsWebEnvironment(applicationContext, out, locale)
-		env.initCopy()
-		try {
-			block(env)
-		} finally {
-			env.close()
-		}
-	}
+    /**
+     * Establish an environment with a specific locale
+     */
+    static void withNew(ApplicationContext applicationContext, Writer out, Locale locale, Closure block) {
+        def env = new GrailsWebEnvironment(applicationContext, out, locale)
+        env.initCopy()
+        try {
+            block(env)
+        } finally {
+            env.close()
+        }
+    }
 
-	String getControllerName() {
-		renderRequestAttributes.controllerName
-	}
+    String getControllerName() {
+        renderRequestAttributes.controllerName
+    }
 
-	static GrailsWebRequest bindRequestIfNull() {
+    static GrailsWebRequest bindRequestIfNull() {
 
-		return bindRequestIfNull( Holders.grailsApplication.mainContext )
-	}
+        return bindRequestIfNull(Holders.grailsApplication.mainContext)
+    }
 
-	static GrailsWebRequest bindRequestIfNull(ApplicationContext appCtx) {
-		return bindRequestIfNull( appCtx,  new StringWriter() )
-	}
+    static GrailsWebRequest bindRequestIfNull(ApplicationContext appCtx) {
+        return bindRequestIfNull(appCtx, new StringWriter())
+    }
 
-	static GrailsWebRequest bindRequestIfNull(ApplicationContext appCtx, Writer out, Locale preferredLocale = null) {
-		GrailsWebRequest grailsWebRequest = (GrailsWebRequest)RequestContextHolder.getRequestAttributes()
-		if (grailsWebRequest) {
-			//TODO unbindRequest = false
-			log.debug("grailsWebRequest exists")
-			return grailsWebRequest
-		}
+    static GrailsWebRequest bindRequestIfNull(ApplicationContext appCtx, Writer out, Locale preferredLocale = null) {
+        GrailsWebRequest grailsWebRequest = (GrailsWebRequest) RequestContextHolder.getRequestAttributes()
+        if (grailsWebRequest) {
+            //TODO unbindRequest = false
+            log.debug("grailsWebRequest exists")
+            return grailsWebRequest
+        }
 
-		return bindMockWebRequest( appCtx,  out,  preferredLocale )
-	}
+        return bindMockWebRequest(appCtx, out, preferredLocale)
+    }
 
-	static GrailsWebRequest bindMockWebRequest(ApplicationContext appCtx, Writer wout, Locale preferredLocale = null) {
-		//TODO unbindRequest = true
-		log.debug("a mock grailsWebRequest is being bound")
+    @SuppressWarnings(['CompileStatic'])
+    static GrailsWebRequest bindMockWebRequest(ApplicationContext appCtx, Writer wout, Locale preferredLocale = null) {
+        //TODO unbindRequest = true
+        log.debug("a mock grailsWebRequest is being bound")
 
-		//from tests stuff TODO would be good to see if these are avliable and use them
-		//def request = new GrailsMockHttpServletRequest()
+        //from tests stuff TODO would be good to see if these are avliable and use them
+        //def request = new GrailsMockHttpServletRequest()
         //def response = new GrailsMockHttpServletResponse()
 
-		GrailsWebRequest grailsWebRequest = GrailsWebMockUtil.bindMockWebRequest(appCtx as WebApplicationContext)
-		//setup locale on request and in LocaleContextHolder
-		LocaleContextHolder.setLocaleContext(new LocaleContext() {
-			Locale getLocale() {
-				return appCtx.localeResolver.resolveLocale(grailsWebRequest.request)
-			}
-		})
-		//LOCALE_RESOLVER_ATTRIBUTE(request attr) LOCALE_RESOLVER_BEAN_NAME(localResolver) LOCALE_SESSION_ATTRIBUTE_NAME()
-		MockHttpServletRequest request = grailsWebRequest.request as MockHttpServletRequest
-		request.setAttribute(DispatcherServlet.LOCALE_RESOLVER_ATTRIBUTE, appCtx.localeResolver)
-		request.addPreferredLocale(preferredLocale?:Locale.default)
-		//setup contextPath so tags like resouce and linkTo work
-		request.contextPath = (appCtx as WebApplicationContext).servletContext.contextPath
-		//setup the default out
-		grailsWebRequest.setOut(wout)
-		//holders
-		if (!Holders.servletContext) Holders.servletContext = grailsWebRequest.servletContext
-		Holders.addApplicationDiscoveryStrategy(new ServletEnvironmentGrailsApplicationDiscoveryStrategy(grailsWebRequest.servletContext))
-		grailsWebRequest.servletContext.setAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT, appCtx)
-		//WrappedResponseHolder
-		WrappedResponseHolder.wrappedResponse = grailsWebRequest.currentResponse
-		return grailsWebRequest
-	}
+        GrailsWebRequest grailsWebRequest = GrailsWebMockUtil.bindMockWebRequest(appCtx as WebApplicationContext)
+        //setup locale on request and in LocaleContextHolder
+        LocaleContextHolder.setLocaleContext(new LocaleContext() {
+            Locale getLocale() {
+                return appCtx.localeResolver.resolveLocale(grailsWebRequest.request)
+            }
+        })
+        //LOCALE_RESOLVER_ATTRIBUTE(request attr) LOCALE_RESOLVER_BEAN_NAME(localResolver) LOCALE_SESSION_ATTRIBUTE_NAME()
+        MockHttpServletRequest request = grailsWebRequest.request as MockHttpServletRequest
+        request.setAttribute(DispatcherServlet.LOCALE_RESOLVER_ATTRIBUTE, appCtx.localeResolver)
+        request.addPreferredLocale(preferredLocale ?: Locale.default)
+        //setup contextPath so tags like resouce and linkTo work
+        request.contextPath = (appCtx as WebApplicationContext).servletContext.contextPath
+        //setup the default out
+        grailsWebRequest.setOut(wout)
+        //holders
+        if (!Holders.servletContext) Holders.servletContext = grailsWebRequest.servletContext
+        Holders.addApplicationDiscoveryStrategy(new ServletEnvironmentGrailsApplicationDiscoveryStrategy(grailsWebRequest.servletContext))
+        grailsWebRequest.servletContext.setAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT, appCtx)
+        //WrappedResponseHolder
+        WrappedResponseHolder.wrappedResponse = grailsWebRequest.currentResponse
+        return grailsWebRequest
+    }
 }
