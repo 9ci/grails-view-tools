@@ -1,17 +1,16 @@
 package grails.plugin.viewtools
 
-import grails.test.mixin.integration.Integration
-import grails.transaction.*
-import spock.lang.*
-
 import grails.core.GrailsApplication
-//import org.codehaus.groovy.grails.commons.GrailsApplication
-
+import grails.testing.mixin.integration.Integration
 import org.grails.web.servlet.WrappedResponseHolder
-//import org.codehaus.groovy.grails.web.servlet.WrappedResponseHolder
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
+
+//import org.codehaus.groovy.grails.commons.GrailsApplication
+//import org.codehaus.groovy.grails.web.servlet.WrappedResponseHolder
+import spock.lang.Specification
+
 //import grails.test.spock.IntegrationSpec
 
 @Integration

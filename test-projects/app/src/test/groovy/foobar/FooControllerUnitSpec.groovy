@@ -1,18 +1,9 @@
 package foobar
-import grails.test.mixin.TestFor
+
+import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 
-/**
- * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
- */
-@TestFor(FooController)
-class FooControllerUnitSpec extends Specification {
-
-    def setup() {
-    }
-
-    def cleanup() {
-    }
+class FooControllerUnitSpec extends Specification implements ControllerUnitTest<FooController> {
 
     void "test index"() {
         when:

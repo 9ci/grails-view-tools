@@ -2,16 +2,15 @@ package grails.plugin.viewtools
 
 import foobar.DemoController
 import foobar.TenantViewResourceLoader
-import grails.test.mixin.integration.Integration
+import grails.testing.mixin.integration.Integration
 import org.grails.web.servlet.mvc.GrailsWebRequest
 import org.grails.web.util.GrailsApplicationAttributes
 import org.springframework.core.io.Resource
 import org.springframework.util.StringUtils
+import spock.lang.Specification
 
 //import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 //import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-import spock.lang.Specification
-
 @Integration
 //@Rollback
 class ViewResourceLocatorIntegrationSpec extends Specification  {
