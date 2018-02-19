@@ -28,7 +28,7 @@ project(':view-tools') {
 }
 
 ext {
-	commonBuild = "https://raw.githubusercontent.com/yakworks/grails-common-build/master"
+    commonBuild = new File(project.rootDir, "gradle").absolutePath
 	grailsApps = ['test-app']
 	grailsPlugins = ['view-tools', 'foobar-plugin']
 }
@@ -62,9 +62,4 @@ subprojects {
 		group "org.grails"
 	}
 
-    dependencies {
-        testCompile "org.grails:grails-gorm-testing-support"
-        testCompile "org.grails:grails-plugin-testing"
-        testCompile "org.grails:grails-web-testing-support"
-    }
 }
