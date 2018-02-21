@@ -1,10 +1,7 @@
 package functional
 
-import grails.test.mixin.integration.Integration
-import grails.transaction.*
-
-import spock.lang.*
-import geb.spock.*
+import geb.spock.GebReportingSpec
+import grails.testing.mixin.integration.Integration
 
 @Integration
 class FooControllerSpec extends GebReportingSpec {

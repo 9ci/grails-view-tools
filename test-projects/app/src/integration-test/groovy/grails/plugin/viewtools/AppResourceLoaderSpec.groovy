@@ -1,6 +1,6 @@
 package grails.plugin.viewtools
 
-import grails.test.mixin.integration.Integration
+import grails.testing.mixin.integration.Integration
 import org.apache.commons.io.FileUtils
 import org.springframework.core.io.Resource
 import spock.lang.Ignore
