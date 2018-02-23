@@ -409,7 +409,7 @@ Loads from a local grails-app folder for dev and from WEB-INF in
 development mode.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p><strong>Grails 3</strong>
-<div class="codehilite"><pre><span></span>compile org.grails.plugins:view-tools:0.9-grails3
+<div class="codehilite"><pre><span></span>compile org.grails.plugins:view-tools:1.0-SNAPSHOT
 </pre></div></p>
 <p><strong>Grails 2</strong>
 <div class="codehilite"><pre><span></span><span class="n">compile</span> <span class="o">:</span><span class="n">view</span><span class="o">-</span><span class="n">tools</span><span class="o">:</span><span class="mf">0.3</span><span class="o">-</span><span class="n">grails2</span>
@@ -443,8 +443,8 @@ development mode.</p>
 based on the RenderEnvironment in grails-rendering and private class in grails-mail
 All this does is bind a mock request and mock response is one doesn't exist
 deals with setting the WrappedResponseHolder.wrappedResponse as well
-You will need the spring test lib on your main compile
-<code class="codehilite">compile &quot;org.springframework:spring-test&quot;</code></p>
+You will need the spring test lib on your main compile</p>
+<p><code class="codehilite">compile &quot;org.springframework:spring-test&quot;</code></p>
 <h3 id="example-app">Example App<a class="headerlink" href="#example-app" title="Permanent link">&para;</a></h3>
 <p>see <a href="https://github.com/yakworks/view-tools/tree/master/test-projects/app">https://github.com/yakworks/view-tools/tree/master/test-projects/app</a>
 It contains a number of examples as well as a simple spring based viewResolver that uses ViewResourceLocator to find the template files it needs.</p>
