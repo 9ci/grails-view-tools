@@ -16,7 +16,7 @@ development mode.
 ## Install
 **Grails 3**
 ```
-compile org.grails.plugins:view-tools:0.9-grails3
+compile org.grails.plugins:view-tools:1.0-SNAPSHOT
 ```
 
 **Grails 2**
@@ -57,6 +57,7 @@ based on the RenderEnvironment in grails-rendering and private class in grails-m
 All this does is bind a mock request and mock response is one doesn't exist
 deals with setting the WrappedResponseHolder.wrappedResponse as well
 You will need the spring test lib on your main compile
+
 ```compile "org.springframework:spring-test"```
 
 ### Example App
