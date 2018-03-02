@@ -182,10 +182,18 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
         return tmpFile
     }
 
+    @SuppressWarnings(['NoDef'])
     File getTempDir() {
         File tempDir
-        String tmpDirPath = getResourceConfig("tempDir")
-        if(tmpDirPath) { tempDir = new File(tmpDirPath) }
+        def tmpDirPath = getResourceConfig("tempDir")
+        if(tmpDirPath) {
+            if(tmpDirPath instanceof Closure) {
+                tempDir = new File(tmpDirPath.call())
+            } else {
+                tempDir = new File(tmpDirPath)
+            }
+        }
+
         else { tempDir = new File(System.getProperty('java.io.tmpdir')) }
 
         return tempDir
