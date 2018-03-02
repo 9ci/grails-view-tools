@@ -345,8 +345,9 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      *
      * @param args A Map of values to be passed to the configuration Closure, if it's a Closure.
      */
+    @SuppressWarnings(["NoDef"])
     Map mergeClientValues(Map args = [:]) {
-        Map client = currentTenant
+        def client = currentTenant
         Map localEnv = [tenantId:client.id, tenantSubDomain:client.num] << args
     }
 
