@@ -53,9 +53,9 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      * For example, '2010-11/23452.pdf' would look for file://myroot/2010-11/23452.pdf if that what was set in
      * nine.attachments.directory
      */
-    Resource getResource(String location){
+    Resource getResource(String location) {
         String urlToUse = location
-        if((!location.startsWith('/')) && !(location.startsWith('file:'))) {
+        if ((!location.startsWith('/')) && !(location.startsWith('file:'))) {
             urlToUse = "file:${rootLocation.canonicalPath}/${location}/"
         }
         log.debug "appResourceLoader.getResource with $urlToUse"
@@ -63,32 +63,30 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
     }
 
     /**
-    * gets a resource with a locationBase and a relative location
-    *   - if relative location starts with "/" just pass it to getResource() and ignore locationBase (will look in war (web-app in dev))
-    *   - if locationBase is null then we will use a default getLocation('attachments.location')
-    *   - if relative location starts with URL like classpath:,file:, http: it be passed directly to resourceLoader
-    *   - if locationBase starts with config: then it will use whatever key comes after
-    *     to find the location (ex- config:reports.location)
-    *
-    * @param locationBase if null uses the default key of 'attachments.location'
-    * @param location the relative location to use
-    */
-    Resource getResourceRelative(String locationBase, String location){
+     * gets a resource with a locationBase and a relative location
+     *   - if relative location starts with "/" just pass it to getResource() and ignore locationBase (will look in war (web-app in dev))
+     *   - if locationBase is null then we will use a default getLocation('attachments.location')
+     *   - if relative location starts with URL like classpath:,file:, http: it be passed directly to resourceLoader
+     *   - if locationBase starts with config: then it will use whatever key comes after
+     *     to find the location (ex- config:reports.location)
+     *
+     * @param locationBase if null uses the default key of 'attachments.location'
+     * @param location the relative location to use
+     */
+    Resource getResourceRelative(String locationBase, String location) {
         //fast return if location starts with "/"
-        if(location.startsWith('/')){
+        if (location.startsWith('/')) {
             return getResource(location)
         }
 
         String locationKey = location
 
-        if(locationBase?.startsWith('config:')){
+        if (locationBase?.startsWith('config:')) {
             String configKey = locationBase.substring('config:'.length())
             locationKey = "${getResourceConfig(configKey)}/$location"
-        }
-        else if(locationBase){
+        } else if (locationBase) {
             locationKey = "${locationBase}/${location}"
-        }
-        else {
+        } else {
             locationKey = ATTACHMENT_LOCATION_KEY
         }
         return getResource(locationKey)
@@ -99,11 +97,11 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      * get resource dir relative to the config key
      * if key is null then it return the root location
      */
-    Resource getResourceDirFromKey(String key){
+    Resource getResourceDirFromKey(String key) {
         return getResource("file:${file.canonicalPath}")
     }
 
-    ClassLoader getClassLoader(){
+    ClassLoader getClassLoader() {
         resourceLoader.getClassLoader()
     }
 
@@ -123,12 +121,12 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      *        file: the File instace that we put in that directory
      */
     @SuppressWarnings("ReturnsNullInsteadOfEmptyCollection")
-    Map createAttachmentFile(Long attachmentId, String name, String extension, data) {
-        if(!data) return null
+    Map createAttachmentFile(Long attachmentId, String name, String extension, Object data) {
+        if (!data) return null
         String prefix = ""
-        if(name){
+        if (name) {
             prefix = "${name}_"
-        }else if(data instanceof File){
+        } else if (data instanceof File) {
             //TODO we should have an option pass in a name so we can name it logically like we are doing with file
             prefix = "${data.name}_"
         }
@@ -137,13 +135,13 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
         //setup the monthly dir for attachments
         File monthDir = getMonthDirectory(ATTACHMENT_LOCATION_KEY)
         File file = new File(monthDir, destFileName)
-        if(data) {
-            if(data instanceof File) FileUtils.moveFile(data, file)
-            if(data instanceof byte[]) FileUtils.writeByteArrayToFile(file, data)
-            if(data instanceof String) FileUtils.writeStringToFile(file, data)
+        if (data) {
+            if (data instanceof File) FileUtils.moveFile(data, file)
+            if (data instanceof byte[]) FileUtils.writeByteArrayToFile(file, data)
+            if (data instanceof String) FileUtils.writeStringToFile(file, data)
         }
 
-        return [location:getRelativePath(ATTACHMENT_LOCATION_KEY, file), file:file]
+        return [location: getRelativePath(ATTACHMENT_LOCATION_KEY, file), file: file]
     }
 
     /**
@@ -159,21 +157,20 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      *         if data is non-null will exist and will contain the data specified.
      */
     @SuppressWarnings("FileCreateTempFile")
-    File createTempFile(String originalFileName, data) {
+    File createTempFile(String originalFileName, Object data) {
         String baseName = FilenameUtils.getBaseName(originalFileName)
-        if(baseName.length() < 3) baseName  = baseName + "tmp"
+        if (baseName.length() < 3) baseName = baseName + "tmp"
         String extension = FilenameUtils.getExtension(originalFileName)
         File tempDir = getTempDir()
 
-        File tmpFile = File.createTempFile(baseName, (extension?".${extension}":''), tempDir)
+        File tmpFile = File.createTempFile(baseName, (extension ? ".${extension}" : ''), tempDir)
 
-        if(data) {
-            if(data instanceof String) {
+        if (data) {
+            if (data instanceof String) {
                 FileUtils.writeStringToFile(tmpFile, data)
-            } else if(data instanceof byte[]) {
+            } else if (data instanceof byte[]) {
                 FileUtils.writeByteArrayToFile(tmpFile, data)
-            }
-            else if(data instanceof ByteArrayOutputStream) {
+            } else if (data instanceof ByteArrayOutputStream) {
                 tmpFile.withOutputStream {
                     data.writeTo(it)
                 }
@@ -186,31 +183,31 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
     File getTempDir() {
         File tempDir
         def tmpDirPath = getResourceConfig("tempDir")
-        if(tmpDirPath) {
-            if(tmpDirPath instanceof Closure) {
+        if (tmpDirPath) {
+            if (tmpDirPath instanceof Closure) {
                 tempDir = new File(tmpDirPath.call())
             } else {
                 tempDir = new File(tmpDirPath)
             }
+        } else {
+            tempDir = new File(System.getProperty('java.io.tmpdir'))
         }
-
-        else { tempDir = new File(System.getProperty('java.io.tmpdir')) }
 
         return tempDir
 
     }
 
     /** Deletes any files in the temp directory which are in the list. */
-    void deleteTempUploadedFiles(String attachmentListJson){
-        if(attachmentListJson){
+    void deleteTempUploadedFiles(String attachmentListJson) {
+        if (attachmentListJson) {
             List fileDetailsList = JSON.parse(attachmentListJson)
-            fileDetailsList.each {fileDetails->
+            fileDetailsList.each { fileDetails ->
                 FileUtils.forceDelete(new File(tempDir, fileDetails.tempFilename))
             }
         }
     }
 
-    void deleteTempUploadedFiles(List attachmentList){
+    void deleteTempUploadedFiles(List attachmentList) {
         attachmentList.each { file ->
             FileUtils.forceDelete(new File(tempDir, file.tempFilename))
         }
@@ -241,7 +238,7 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
         return "${client.num}-${client.id}"
     }
 
-    void forceMkdir(String path){
+    void forceMkdir(String path) {
         FileUtils.forceMkdir(new File(path))
     }
 
@@ -253,7 +250,7 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      *    - ${tenantId} (Client.id)
      *    - ${tenantSubDomain} (Client.num)
      * @return a File object referencing the directory.
-     * @throws FileNotFoundException, IllegalArgumentException
+     * @throws FileNotFoundException , IllegalArgumentException
      */
     File getRootLocation() {
         String rootName = rootLocationClosure(mergeClientValues()) // rootLocation exists by default
@@ -269,11 +266,11 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      *     a File which references a directory.  The directory exists.
      *     a List of File, each entry of which is a directory which exists.
      */
-    File getLocation(String key, Map args = [:], boolean create=true) {
+    File getLocation(String key, Map args = [:], boolean create = true) {
         Object value = getResourceConfig(key) // closure, string or null
-        if(!value) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
+        if (!value) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
         String fileName
-        if(value instanceof Closure) {
+        if (value instanceof Closure) {
             fileName = value(mergeClientValues(args)) // Anything fancy must be Closure.
         } else {
             fileName = value as String // No substitution at all, just the string.
@@ -286,13 +283,13 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
         String key = 'scripts.locations'
         Closure closure = getResourceConfig(key)
         AppResourceLoader.log.debug "getScripts:  closure is ${closure}"
-        if(!closure) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
+        if (!closure) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
         List files = []
         closure(mergeClientValues(args)).each { name -> files << getProperFile(name, key, true) }
         return files
     }
 
-    File getSubDirectory(String key, String relativePath, boolean create=true, Map args = [:]) {
+    File getSubDirectory(String key, String relativePath, boolean create = true, Map args = [:]) {
         File base = getLocation(key, args, create)
         File subDirectory = new File(base, relativePath)
         return verifyOrCreateLocation(subDirectory, key, create, false)
@@ -303,14 +300,15 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      * If the name is relative then it is built relative to rootLocation.
      * @return the canonical File which exists.
      */
-    File getProperFile(String fileName, String key, boolean create=true) {
+    File getProperFile(String fileName, String key, boolean create = true) {
         boolean wasAbsolute = false
-        if(!fileName) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
+        if (!fileName) throw new IllegalArgumentException("Application resource key '${key}' is not defined or returns an empty value.")
         File dir = new File(getRootLocation(), fileName)
         File justName = new File(fileName)
-        if(justName.isAbsolute()) {
+        if (justName.isAbsolute()) {
             dir = justName
-            wasAbsolute = true // Shouldn't create absolute files as this may mean a config was not properly set up.  (copied?)
+            wasAbsolute = true
+            // Shouldn't create absolute files as this may mean a config was not properly set up.  (copied?)
         }
         return verifyOrCreateLocation(dir.canonicalFile, key, create, wasAbsolute)
     }
@@ -321,14 +319,14 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      * @param create (boolean) true to create the directory if absent, false to throw an error.
      * @param wasAbsolute (boolean) True if the file was defined in the configuration as an absolute file.
      */
-    File verifyOrCreateLocation(File dir, String key, boolean create, wasAbsolute = false) {
-        if(!dir) throw new IllegalArgumentException("Application resource key ${key} is not defined or returns an empty value.")
-        if(!dir.exists()) {
-            if(!create) throw new FileNotFoundException("Application resource ${key} defines a missing directory at ${dir.canonicalPath} which does not exist and must be manually created.")
-            if(wasAbsolute) throw new FileNotFoundException("Application resource ${key} defines a missing directory at ${dir.canonicalPath} but the location does not exist.  It must be manually created.")
+    File verifyOrCreateLocation(File dir, String key, boolean create, boolean wasAbsolute = false) {
+        if (!dir) throw new IllegalArgumentException("Application resource key ${key} is not defined or returns an empty value.")
+        if (!dir.exists()) {
+            if (!create) throw new FileNotFoundException("Application resource ${key} defines a missing directory at ${dir.canonicalPath} which does not exist and must be manually created.")
+            if (wasAbsolute) throw new FileNotFoundException("Application resource ${key} defines a missing directory at ${dir.canonicalPath} but the location does not exist.  It must be manually created.")
             dir.mkdirs()
         }
-        if(!dir.isDirectory()) throw new IOException("Application resource ${key} should be a directory but ${dir.canonicalPath} is not.")
+        if (!dir.isDirectory()) throw new IOException("Application resource ${key} should be a directory but ${dir.canonicalPath} is not.")
         return dir.canonicalFile
     }
 
@@ -348,7 +346,7 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
     @SuppressWarnings(["NoDef"])
     Map mergeClientValues(Map args = [:]) {
         def client = currentTenant
-        Map localEnv = [tenantId:client.id, tenantSubDomain:client.num] << args
+        Map localEnv = [tenantId: client.id, tenantSubDomain: client.num] << args
     }
 
     /** Gets a month directory for a configuration key.
@@ -356,7 +354,7 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      * @param create If true, create the directory if it's missing.
      * @return a File object which references the month directory, or null on error.
      */
-    File getMonthDirectory(String configKey, boolean create=true) {
+    File getMonthDirectory(String configKey, boolean create = true) {
         String datePart = new Date().format('yyyy-MM')
         File baseDir = getLocation(configKey)
         File monthDir = new File(baseDir, datePart)
@@ -369,7 +367,7 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      * @param key The key name in RallyDefaultConfig.groovy, for example 'attachments.location'
      * @return a String containing the location of child relative to the directory described by key
      */
-    String getRelativePath(String key='rootLocation', File child) {
+    String getRelativePath(String key = 'rootLocation', File child) {
         return getRelativePath(getLocation(key), child)
     }
 
