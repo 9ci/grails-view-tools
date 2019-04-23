@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/yakworks/view-tools.svg?branch=master)](https://travis-ci.org/yakworks/view-tools)
+![CircleCI](https://img.shields.io/circleci/project/github/yakworks/view-tools.svg?longCache=true&style=for-the-badge)
 
 
 Note: Grails 3 sources are master and Grails 2 is in 2.5.x branch
