@@ -1,4 +1,4 @@
-Note: Grails 3 sources are master and Grails 2 is in 2.5.x branch
+Note: Grails 3 sources are on master branch and Grails 2 is in 2.5.x branch
 
 ## Description
 
