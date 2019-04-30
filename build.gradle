@@ -7,6 +7,7 @@ buildscript {
   dependencies {
     classpath "org.grails:grails-gradle-plugin:$grailsVersion"
     classpath "org.yakworks:gradle-plugins:0.1.45"
+    classpath "org.ajoberstar:grgit:2.2.1"
   }
 }
 
