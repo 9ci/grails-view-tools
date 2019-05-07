@@ -23,20 +23,6 @@ bootRun {
     addResources = true
 }
 
-/*
-codenarc {
-    toolVersion = '0.27.0'
-    configFile = file("${commonBuild}/codenarc-rules.groovy")
-    reportFormat = 'html'
-    maxPriority1Violations = 0
-    maxPriority2Violations = 0
-    maxPriority3Violations = 0
-}*/
-
-ext.codenarcRuleset= '''
-  getRule('LineLength').enabled = false
-
-'''
 
 codenarcMain {
     exclude '**/GormToolsGrailsPlugin.groovy'
