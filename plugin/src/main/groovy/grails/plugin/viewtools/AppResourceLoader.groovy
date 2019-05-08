@@ -1,19 +1,25 @@
+/*
+* Copyright 2019 Yak.Works - Licensed under the Apache License, Version 2.0 (the "License")
+* You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+*/
 package grails.plugin.viewtools
 
-import grails.config.Config
-import grails.converters.JSON
-import grails.core.GrailsApplication
-import grails.core.support.GrailsConfigurationAware
+import javax.annotation.PostConstruct
+
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
+
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.Validate
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
 
-import javax.annotation.PostConstruct
+import grails.config.Config
+import grails.converters.JSON
+import grails.core.GrailsApplication
+import grails.core.support.GrailsConfigurationAware
 
 /**
  * A place for file resource related functionality which may required an application context or logged-in user.
@@ -322,8 +328,10 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
     File verifyOrCreateLocation(File dir, String key, boolean create, boolean wasAbsolute = false) {
         if (!dir) throw new IllegalArgumentException("Application resource key ${key} is not defined or returns an empty value.")
         if (!dir.exists()) {
-            if (!create) throw new FileNotFoundException("Application resource ${key} defines a missing directory at ${dir.canonicalPath} which does not exist and must be manually created.")
-            if (wasAbsolute) throw new FileNotFoundException("Application resource ${key} defines a missing directory at ${dir.canonicalPath} but the location does not exist.  It must be manually created.")
+            if (!create) throw new FileNotFoundException("Application resource ${key} defines a missing directory at " +
+                    "${dir.canonicalPath} which does not exist and must be manually created.")
+            if (wasAbsolute) throw new FileNotFoundException("Application resource ${key} defines a missing directory at " +
+                    "${dir.canonicalPath} but the location does not exist.  It must be manually created.")
             dir.mkdirs()
         }
         if (!dir.isDirectory()) throw new IOException("Application resource ${key} should be a directory but ${dir.canonicalPath} is not.")

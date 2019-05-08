@@ -15,8 +15,8 @@ import spock.lang.Specification
 //@Rollback
 class ViewResourceLocatorIntegrationSpec extends Specification  {
 
-	ViewResourceLocator viewResourceLocator
-	DemoController controller
+    ViewResourceLocator viewResourceLocator
+    DemoController controller
     def grailsApplication
 
     StringWriter writer = new StringWriter()
@@ -120,7 +120,7 @@ class ViewResourceLocatorIntegrationSpec extends Specification  {
         TenantViewResourceLoader.currentTenant.set('tenantB')
         assert viewResourceLocator.locate('tenantB.hbs').exists()
     }
-    
+
     void "view under ConfigKeyAppResourceLoader"() {
         when:
         Resource res = viewResourceLocator.locate('appResourceView.md')
