@@ -1,8 +1,11 @@
+/*
+* Copyright 2019 Yak.Works - Licensed under the Apache License, Version 2.0 (the "License")
+* You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+*/
 package grails.plugin.viewtools
 
-import grails.plugins.*
+import grails.plugins.Plugin
 
-@SuppressWarnings(['NoDef'])
 class ViewToolsGrailsPlugin extends Plugin {
 
     // the version or versions of Grails the plugin is designed for
@@ -20,10 +23,10 @@ class ViewToolsGrailsPlugin extends Plugin {
     def author = "Joshua Burnett"
     def authorEmail = "joshdev@9ci.com"
     def description = '''\
-ViewResourceLocator for locating views in grails-app/views, plugins, and custom external paths.
-Also GrailsWebEnvironment for binding a mock request is one doesnt exist so that services can operate without a controller
-Used in freemarker and new jasper-spring.
-'''
+        ViewResourceLocator for locating views in grails-app/views, plugins, and custom external paths.
+        Also GrailsWebEnvironment for binding a mock request is one doesnt exist so that services can operate without a controller
+        Used in freemarker and new jasper-spring.
+        '''.stripIndent()
 
     // URL to the plugin's documentation
     def documentation = "https://github.com/9ci/grails-view-tools"

@@ -1,24 +1,13 @@
 /*
- * Copyright 2010 Grails Plugin Collective
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Copyright 2019 Yak.Works - Licensed under the Apache License, Version 2.0 (the "License")
+* You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+*/
 package grails.plugin.viewtools
 
-import grails.util.GrailsWebMockUtil
-import grails.util.Holders
 import groovy.transform.CompileDynamic
+import groovy.transform.CompileStatic
 import groovy.util.logging.Log4j
+
 import org.grails.web.context.ServletEnvironmentGrailsApplicationDiscoveryStrategy
 import org.grails.web.servlet.WrappedResponseHolder
 import org.grails.web.servlet.mvc.GrailsWebRequest
@@ -32,16 +21,18 @@ import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.servlet.DispatcherServlet
 import org.springframework.web.servlet.support.RequestContextUtils
 
+import grails.util.GrailsWebMockUtil
+import grails.util.Holders
+
 /**
  * based on the RenderEnvironment in grails-rendering and private class in grails-mail
  * All this does is bind a mock request and mock response is one doesn't exist
  * deals with setting the WrappedResponseHolder.wrappedResponse as well
  */
+@SuppressWarnings(['CompileStatic']) //FIXME there is a bug in the codenarc ext that looks at new LocaleContext() as a class
 @Log4j
-//log
-@CompileDynamic
-@SuppressWarnings(['NoDef', 'CloseWithoutCloseable'])
-class GrailsWebEnvironment {
+@CompileStatic
+class GrailsWebEnvironment implements AutoCloseable{
 
     final Writer out
     final Locale locale
@@ -122,7 +113,7 @@ class GrailsWebEnvironment {
         return bindMockWebRequest(appCtx, out, preferredLocale)
     }
 
-    @SuppressWarnings(['CompileStatic'])
+    @CompileDynamic
     static GrailsWebRequest bindMockWebRequest(ApplicationContext appCtx, Writer wout, Locale preferredLocale = null) {
         //TODO unbindRequest = true
         log.debug("a mock grailsWebRequest is being bound")
@@ -133,6 +124,7 @@ class GrailsWebEnvironment {
 
         GrailsWebRequest grailsWebRequest = GrailsWebMockUtil.bindMockWebRequest(appCtx as WebApplicationContext)
         //setup locale on request and in LocaleContextHolder
+
         LocaleContextHolder.setLocaleContext(new LocaleContext() {
             Locale getLocale() {
                 return appCtx.localeResolver.resolveLocale(grailsWebRequest.request)

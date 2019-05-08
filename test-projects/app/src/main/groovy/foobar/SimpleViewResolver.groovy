@@ -1,15 +1,17 @@
 package foobar
 
-import grails.plugin.viewtools.ViewResourceLocator
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+
 import groovy.util.logging.Slf4j
+
 import org.springframework.core.io.ResourceLoader
 import org.springframework.web.servlet.View
 import org.springframework.web.servlet.view.AbstractUrlBasedView
 import org.springframework.web.servlet.view.AbstractView
 import org.springframework.web.servlet.view.UrlBasedViewResolver
 
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import grails.plugin.viewtools.ViewResourceLocator
 
 @Slf4j
 class SimpleViewResolver extends UrlBasedViewResolver{
@@ -52,7 +54,3 @@ class SimpleViewResolver extends UrlBasedViewResolver{
     }
 
 }
-
-
-
-

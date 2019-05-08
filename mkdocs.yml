@@ -1,42 +1,73 @@
-site_name: Grails View Tools
-site_description: Grails plugin to help locate views in the spring mvc context
-site_author: Sudhir Nimavat
-site_url: http://yakworks.github.io/view-tools
-
+# Page tree
 pages:
   - Overview: index.md
+  - Release Notes: release-notes.md
   - App Resources: app-resources.md
 
-# for the github and edit links
-repo_name: yakworks/view-tools
-repo_url: https://github.com/yakworks/view-tools
+# Project information
+site_name: '@title@'
+site_description: '@description@'
+site_author: '@author@'
+site_url:
+copyright: 'Copyright &copy; 2017 9ci Inc'
+
+## edit link settings
+repo_name: '@gitHubSlug@'
+# gradle will replace this url, has to be here for testing though
+repo_url: https://github.com/org/project
 edit_uri: edit/master/docs/
 
+# Config
 docs_dir: 'docs'
 theme: material-components
 
+# Options
 extra:
-  version: 0.10-SNAPSHOT
+  version: '@version@'
+  # adds <meta name="robots" content="noindex,nofollow"> to keep search engines from indexing this
+  # noindex: true
+  feature:
+    tabs: false
   palette:
     primary: 'light green'
     accent: indigo
+  # social:
+  #   - type: globe
+  #     link: http://struct.cc
+  #   - type: github-alt
+  #     link: https://github.com/9ci
+  #   - type: twitter
+  #     link: https://twitter.com/9ci
+  #   - type: linkedin
+  #     link: https://de.linkedin.com/in/basejump
 
+# Extensions
 markdown_extensions:
   - pymdownx.extra # replacement for markdown.extensions.extra see https://facelessuser.github.io/pymdown-extensions/extensions/extra/
-  - pymdownx.github # untility to add a bunch of others
-  - markdown.extensions.sane_lists
   - markdown.extensions.admonition
-  - markdown.extensions.codehilite #(guess_lang=false)
+  - markdown.extensions.codehilite(guess_lang=false)
+  - markdown.extensions.def_list
+  - markdown.extensions.footnotes
   - markdown.extensions.meta
   - markdown.extensions.toc(permalink=true)
   - markdown_include.include:
       base_path: 'docs'
   - pymdownx.arithmatex
+  - pymdownx.betterem(smart_enable=all)
   - pymdownx.caret
-  - pymdownx.details
+  - pymdownx.critic
+  - pymdownx.emoji:
+      #emoji_generator: !!python/name:pymdownx.emoji.to_svg
+      emoji_index: !!python/name:pymdownx.emoji.gemoji
   - pymdownx.inlinehilite
+  - pymdownx.magiclink
   - pymdownx.mark
   - pymdownx.smartsymbols
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - pymdownx.critic
+  - pymdownx.superfences
+  - pymdownx.tasklist(custom_checkbox=true)
+  - pymdownx.tilde
+
+# Google Analytics
+# google_analytics:
+#   - !!python/object/apply:os.getenv ["GOOGLE_ANALYTICS_KEY"]
+#   - auto

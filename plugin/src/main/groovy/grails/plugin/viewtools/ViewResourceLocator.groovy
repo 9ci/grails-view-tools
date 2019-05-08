@@ -1,15 +1,18 @@
+/*
+* Copyright 2019 Yak.Works - Licensed under the Apache License, Version 2.0 (the "License")
+* You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+*/
 package grails.plugin.viewtools
 
-import grails.plugins.GrailsPlugin
-import grails.plugins.GrailsPluginManager
-import grails.plugins.PluginManagerAware
-import grails.util.GrailsWebUtil
+import java.util.concurrent.ConcurrentLinkedQueue
+import javax.annotation.PostConstruct
+import javax.servlet.http.HttpServletRequest
+
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
-import org.grails.gsp.GroovyPageResourceLoader
 
-//import org.grails.core.artefact.ControllerArtefactHandler
+import org.grails.gsp.GroovyPageResourceLoader
 import org.grails.io.support.GrailsResourceUtils
 import org.grails.plugins.BinaryGrailsPlugin
 import org.grails.web.servlet.mvc.GrailsWebRequest
@@ -17,12 +20,17 @@ import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.context.ResourceLoaderAware
-import org.springframework.core.io.*
+import org.springframework.core.io.ContextResource
+import org.springframework.core.io.FileSystemResource
+import org.springframework.core.io.Resource
+import org.springframework.core.io.ResourceLoader
+import org.springframework.core.io.UrlResource
 import org.springframework.util.ResourceUtils
 
-import javax.annotation.PostConstruct
-import javax.servlet.http.HttpServletRequest
-import java.util.concurrent.ConcurrentLinkedQueue
+import grails.plugins.GrailsPlugin
+import grails.plugins.GrailsPluginManager
+import grails.plugins.PluginManagerAware
+import grails.util.GrailsWebUtil
 
 /**
  * Extended because the handy methods we want in DefaultGroovyPageLocator are protected.
@@ -42,7 +50,6 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * @author Joshua Burnett
  */
 
-@SuppressWarnings(['PublicInstanceField', 'NonFinalPublicField', 'UnnecessarySubstring'])
 @Slf4j
 @CompileStatic
 class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
@@ -81,7 +88,7 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
 
     ResourceLoader devResourceLoader
 
-    public void addSearchPath(String path) {
+    void addSearchPath(String path) {
         if(searchPaths == null) searchPaths = []
         searchPaths.add(path)
     }
@@ -91,25 +98,25 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
      * @param resourceLoader
      */
     @Override //ResourceLoaderAware
-    public void setResourceLoader(ResourceLoader resourceLoader) {
+    void setResourceLoader(ResourceLoader resourceLoader) {
         addResourceLoader(resourceLoader)
     }
 
-    public void addResourceLoader(ResourceLoader resourceLoader) {
+    void addResourceLoader(ResourceLoader resourceLoader) {
         if (resourceLoader != null && !grailsResourceLoaders.contains(resourceLoader)) {
             grailsResourceLoaders.add(resourceLoader)
         }
     }
 
     @Override //ApplicationContextAware
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         addResourceLoader(applicationContext)
         ctx = applicationContext
 
     }
 
     @Override //PluginManagerAware
-    public void setPluginManager(GrailsPluginManager pluginManager) {
+    void setPluginManager(GrailsPluginManager pluginManager) {
         this.pluginManager = pluginManager
     }
 
@@ -445,11 +452,11 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
 
     @CompileStatic
     static class PluginViewPathInfo {
-        public String basePath  //without the "/plugins/ prefix
-        public String pluginName //the file system name "xxx-plugin-0.1"
-        public String path //path with out the "/plugins/xxx-plugin-0.1" such as foo/index.ftl
+        String basePath  //without the "/plugins/ prefix
+        String pluginName //the file system name "xxx-plugin-0.1"
+        String path //path with out the "/plugins/xxx-plugin-0.1" such as foo/index.ftl
 
-        public PluginViewPathInfo(String uri) {
+        PluginViewPathInfo(String uri) {
             basePath = uri.substring(PLUGINS_PATH.length(), uri.length())
             int i = basePath.indexOf("/")
             if (i > -1) {
@@ -463,10 +470,10 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
      * a simple resource that build from a URI and adds the base path the resource used to find it
      */
     @CompileStatic
-    public class ViewContextResource extends UrlResource implements ContextResource {
+    class ViewContextResource extends UrlResource implements ContextResource {
         private String pathWithinContext //the path given to a resourceLoader to find this Resource
 
-        public ViewContextResource(URI uri, String pathWithinContext) {
+        ViewContextResource(URI uri, String pathWithinContext) {
             super(uri)
             this.pathWithinContext = pathWithinContext
         }
@@ -483,11 +490,11 @@ class ViewResourceLocator implements ResourceLoader, ResourceLoaderAware,
     @CompileStatic
     static class FileSystemContextResource extends FileSystemResource implements ContextResource {
 
-        public FileSystemContextResource(String path) {
+        FileSystemContextResource(String path) {
             super(path)
         }
 
-        public String getPathWithinContext() {
+        String getPathWithinContext() {
             return getPath()
         }
     }

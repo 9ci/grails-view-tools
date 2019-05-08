@@ -1,4 +1,4 @@
-package grails.plugin.viewtools
+package grails.plugin.app
 
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration

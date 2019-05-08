@@ -1,15 +1,17 @@
 package foobar
 
-import grails.plugin.viewtools.ViewResourceLocator
+import javax.servlet.ServletOutputStream
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
+
 import org.springframework.core.io.Resource
 import org.springframework.util.StreamUtils
 import org.springframework.web.servlet.view.AbstractUrlBasedView
 
-import javax.servlet.ServletOutputStream
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import grails.plugin.viewtools.ViewResourceLocator
 
 @CompileStatic
 class SimpleFileView extends AbstractUrlBasedView {
@@ -49,8 +51,3 @@ class SimpleFileView extends AbstractUrlBasedView {
     }
 
 }
-
-
-
-
-

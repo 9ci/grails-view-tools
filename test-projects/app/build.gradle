@@ -1,17 +1,15 @@
-
 version "0.1"
 
-
-apply plugin:"org.grails.grails-web"
+apply plugin:"groovy"
 apply plugin:"war"
+apply plugin:"org.grails.grails-web"
 apply plugin:"org.grails.grails-gsp"
-
 
 dependencies {
 
-    profile "org.grails.profiles:web"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    provided "org.springframework.boot:spring-boot-starter-tomcat"
+  compile "org.grails.profiles:web"
+  compile "org.springframework.boot:spring-boot-starter-actuator"
+  compile "org.springframework.boot:spring-boot-starter-tomcat"
 
     provided "org.codehaus.groovy:groovy-ant"
 
@@ -28,7 +26,8 @@ dependencies {
         "org.seleniumhq.selenium:selenium-support:${webdriverVersion}",
         "org.seleniumhq.selenium:selenium-chrome-driver:${webdriverVersion}",
         "org.seleniumhq.selenium:selenium-firefox-driver:${webdriverVersion}",
-        "org.seleniumhq.selenium:selenium-ie-driver:${webdriverVersion}")
+        "org.seleniumhq.selenium:selenium-ie-driver:${webdriverVersion}"
+    )
 
     // see https://github.com/codeborne/ghostdriver
     testCompile("com.codeborne:phantomjsdriver:1.3.0") {
@@ -70,7 +69,7 @@ grails {
     exploded = true
     plugins {
         println "Inside grails: $rootProject.name"
-        compile project(':foobar-plugin')
+        compile project(':test-projects/foobar-plugin')
         compile project(':view-tools')
     }
 }
