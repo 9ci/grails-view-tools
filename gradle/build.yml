@@ -1,14 +1,17 @@
 # see defaults options https://github.com/yakworks/gradle-plugins/tree/master/src/main/resources/configs/defaults.yml
-title: Gorm Tools Grails Plugin
-description: Plugin tools Grails/Gorm - repository data services, json query language, fast data binder
+title: Grails View Tools
+description: |
+  ViewResourceLocator for locating views in grails-app/views, plugins, and custom external paths.
+  Also GrailsWebEnvironment for binding a mock request is one doesnt exist so that services can operate without a controller
+  Used in freemarker and new jasper plugin.
 author: Yak.Works
 group: org.grails.plugins
 
 github:
-  fullName: yakworks/gorm-tools
+  fullName: yakworks/view-tools
 
 team:
-  developers: ['basejump: Joshua Burnett', 'snimavat: Sudhir Nimavat', 'alexeyzvegintcev: Alexey']
+  developers: ['basejump: Joshua Burnett']
 
 bintray:
   enabled: true
