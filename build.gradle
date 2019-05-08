@@ -1,26 +1,19 @@
+//It all starts here
 buildscript {
   repositories {
     mavenLocal()
-    maven { url "https://repo.grails.org/grails/core" }
     maven { url "https://plugins.gradle.org/m2/" }
+    maven { url "https://repo.grails.org/grails/core" }
   }
   dependencies {
     classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-    classpath "org.yakworks:gradle-plugins:0.1.45"
-    classpath "org.ajoberstar:grgit:2.2.1"
+    classpath "org.yakworks:gradle-plugins:1.1.1"
   }
 }
 
-repositories {
-  mavenLocal()
-  maven { url "https://repo.grails.org/grails/core" }
-  maven { url "http://repo.9ci.com/oss-snapshots" }
-}
-
-apply plugin: 'yakworks.shipkit'
+apply plugin: 'yakworks.shipyak' //our opinionated defaults for gradle groovy & grails projects
 
 subprojects {
-
   plugins.withId('java') {
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
@@ -33,13 +26,42 @@ subprojects {
       compile "org.grails:grails-web-boot"
       compile "org.grails.plugins:cache"
 
-      runtime "com.h2database:h2"
+      testRuntime "com.h2database:h2"
+      testRuntime "org.apache.tomcat:tomcat-jdbc"
 
       testCompile "org.grails:grails-gorm-testing-support"
-      testCompile "org.grails:grails-plugin-testing"
       testCompile "org.grails:grails-web-testing-support"
-
+      testCompile "org.grails.plugins:build-test-data:$versionBuildTestData"
+      testCompile "org.grails:views-json-testing-support:$versionViews"
+    }
+    test {
+      //This way Spock/Groovy power asserts will be  visiblein the build log
+      //Very useful - you don't have to look at the test results to debug a test failure
+      testLogging.exceptionFormat = 'full'
     }
   }
-
 }
+
+//subprojects {
+//  plugins.withId('java') {
+//    sourceCompatibility = '1.8'
+//    targetCompatibility = '1.8'
+//
+//    dependencies {
+//      compile "org.springframework.boot:spring-boot-starter-logging"
+//      compile "org.springframework.boot:spring-boot-autoconfigure"
+//      compile "org.grails:grails-core"
+//      compile "org.grails:grails-dependencies"
+//      compile "org.grails:grails-web-boot"
+//      compile "org.grails.plugins:cache"
+//
+//      runtime "com.h2database:h2"
+//
+//      testCompile "org.grails:grails-gorm-testing-support"
+//      testCompile "org.grails:grails-plugin-testing"
+//      testCompile "org.grails:grails-web-testing-support"
+//
+//    }
+//  }
+//
+//}
