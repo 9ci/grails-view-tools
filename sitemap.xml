@@ -3,16 +3,24 @@
 
     
     <url>
-     <loc>http://yakworks.github.io/view-tools/</loc>
-     <lastmod>2018-02-23</lastmod>
+     <loc>https://yakworks.github.io/view-tools/</loc>
+     <lastmod>2019-05-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>http://yakworks.github.io/view-tools/app-resources/</loc>
-     <lastmod>2018-02-23</lastmod>
+     <loc>https://yakworks.github.io/view-tools/release-notes/</loc>
+     <lastmod>2019-05-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>https://yakworks.github.io/view-tools/app-resources/</loc>
+     <lastmod>2019-05-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
