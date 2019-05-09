@@ -59,6 +59,12 @@ compile org.grails.plugins:view-tools:1.2.0
 compile :view-tools:0.3-grails2
 ```
 
+## Configuration
+To make plugin look into grails3 folders add next line as a first line for you `BuildConfig.groovy`
+```
+grails.useGrails3FolderLayout = true
+```
+
 ### ViewResourceLocator 
 **Example Bean**
 ```groovy

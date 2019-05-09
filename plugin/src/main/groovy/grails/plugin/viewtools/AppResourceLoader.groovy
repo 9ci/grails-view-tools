@@ -127,8 +127,9 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
      *        file: the File instace that we put in that directory
      */
     @SuppressWarnings("ReturnsNullInsteadOfEmptyCollection")
-    Map createAttachmentFile(Long attachmentId, String name, String extension, Object data) {
+    Map createAttachmentFile(Long attachmentId, String name, String extension, Object data, String location = null) {
         if (!data) return null
+        if(!location) location = ATTACHMENT_LOCATION_KEY
         String prefix = ""
         if (name) {
             prefix = "${name}_"
@@ -139,7 +140,7 @@ class AppResourceLoader implements ResourceLoader, GrailsConfigurationAware {
         String destFileName = extension ? "${prefix}${attachmentId}.${extension}" : "${prefix}${attachmentId}"
 
         //setup the monthly dir for attachments
-        File monthDir = getMonthDirectory(ATTACHMENT_LOCATION_KEY)
+        File monthDir = getMonthDirectory(location)
         File file = new File(monthDir, destFileName)
         if (data) {
             if (data instanceof File) FileUtils.moveFile(data, file)
