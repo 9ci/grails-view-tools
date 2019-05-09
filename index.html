@@ -267,6 +267,13 @@
     Install
   </a>
   
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" title="Configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
     <nav class="md-nav">
       <ul class="md-nav__list">
         
@@ -359,6 +366,13 @@
     Install
   </a>
   
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" title="Configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
     <nav class="md-nav">
       <ul class="md-nav__list">
         
@@ -408,7 +422,7 @@
                   <h1>Overview</h1>
                 
                 
-                  <code>Version: 1.2.0</code>
+                  <code>Version: 1.2.1</code>
                 
                 <p><a href="https://circleci.com/gh/yakworks/view-tools"><img alt="CircleCI" src="https://img.shields.io/circleci/project/github/yakworks/view-tools/master.svg?longCache=true&amp;style=for-the-badge&amp;logo=circleci" /></a>
 <a href="http://9ci.com"><img alt="9ci" src="https://img.shields.io/badge/BUILT%20BY-9ci%20Inc-blue.svg?longCache=true&amp;style=for-the-badge" /></a>
@@ -430,7 +444,7 @@ ____   ____.__                                           _.-````'-,_
     |    |(  <_> |  <_> )  |__\___ \               `!!! !!!! !!  )!!!!!!!!!!!!!
     |____| \____/ \____/|____/____  >               !!  ! ! \( \(  !!!|/!  |/!
                                   \/               /_(      /_(/_(    /_(  /_(   
-         Version: 1.2.0
+         Version: 1.2.1
 
 </pre>
 
@@ -453,7 +467,7 @@ ____   ____.__                                           _.-````'-,_
 </tr>
 </tbody>
 </table>
-<div class="codehilite"><pre><span></span>compile &quot;org.grails.plugins:view-tools:1.2.0&quot;
+<div class="codehilite"><pre><span></span>compile &quot;org.grails.plugins:view-tools:1.2.1&quot;
 </pre></div>
 
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
@@ -467,10 +481,14 @@ Loads from a local grails-app folder for dev and from WEB-INF in
 development mode.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p><strong>Grails 3</strong>
-<div class="codehilite"><pre><span></span>compile org.grails.plugins:view-tools:1.2.0
+<div class="codehilite"><pre><span></span>compile org.grails.plugins:view-tools:1.2.1
 </pre></div></p>
 <p><strong>Grails 2</strong>
-<div class="codehilite"><pre><span></span>compile :view-tools:1.2.0
+<div class="codehilite"><pre><span></span>compile :view-tools:1.2.1
+</pre></div></p>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<p>To make plugin look into grails3 folders add next line as a first line for you <code>BuildConfig.groovy</code>
+<div class="codehilite"><pre><span></span>grails.useGrails3FolderLayout = true
 </pre></div></p>
 <h3 id="viewresourcelocator">ViewResourceLocator<a class="headerlink" href="#viewresourcelocator" title="Permanent link">&para;</a></h3>
 <p><strong>Example Bean</strong>
