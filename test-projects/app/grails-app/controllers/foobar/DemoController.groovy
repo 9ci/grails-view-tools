@@ -6,28 +6,28 @@ class DemoController {
 
     ViewResourceLocator viewResourceLocator
 
-    def demoView() { 
-    	render viewResourceLocator.locate("/foo/index.md").file.text
+    def demoView() {
+        render viewResourceLocator.locate("/foo/index.md").file.text
     }
 
-    def inplugin() { 
-    	render viewResourceLocator.locate("demo/inplugin.xyz")
+    def inplugin() {
+        render viewResourceLocator.locate("demo/inplugin.xyz")
     }
 
-    def fooGsp() { 
-    	render view:"fooGsp.gsp"
+    def fooGsp() {
+        render view:"fooGsp.gsp"
     }
 
-    def fooGspPlugin() { 
-    	render(view:"fooGsp.gsp", plugin:"foobar-plugin")
+    def fooGspPlugin() {
+        render(view:"fooGsp.gsp", plugin:"foobar-plugin")
     }
 
-    def fooFtl() { 
+    def fooFtl() {
         render view:"foo.ftl"
     }
 
-    def fooFtlPlugin() { 
+    def fooFtlPlugin() {
         render(view:"foo.ftl", plugin:"foobar-plugin")
     }
-    
+
 }

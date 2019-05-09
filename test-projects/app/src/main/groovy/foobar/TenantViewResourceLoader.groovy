@@ -1,6 +1,6 @@
 package foobar
 
-import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
+import org.grails.io.support.GrailsResourceUtils
 import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware

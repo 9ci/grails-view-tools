@@ -1,6 +1,44 @@
-Note: Grails 2 sources are master and Grails 3 is in grails3 branch
+[![CircleCI](https://img.shields.io/circleci/project/github/yakworks/view-tools/master.svg?longCache=true&style=for-the-badge&logo=circleci)](https://circleci.com/gh/yakworks/view-tools)
+[![9ci](https://img.shields.io/badge/BUILT%20BY-9ci%20Inc-blue.svg?longCache=true&style=for-the-badge)](http://9ci.com)
+<img src="https://forthebadge.com/images/badges/built-with-love.svg" height="28">
+[![forthebadge](https://forthebadge.com/images/badges/made-with-groovy.svg)](https://forthebadge.com)
+<img src="https://forthebadge.com/images/badges/gluten-free.svg" height="28">
+[![forthebadge](https://forthebadge.com/images/badges/approved-by-george-costanza.svg)](https://forthebadge.com)
 
+<pre style="line-height: normal; background-color:#2b2929; color:#76ff00; font-family: monospace; white-space: pre;">
+
+____   ____.__                                           _.-````'-,_
+\   \ /   /|__|  ____  __  _  __                     ,-'`           `'-.,_
+ \   Y   / |  |_/ __ \ \ \/ \/ /             /)     (\       9ci's       '``-.
+  \     /  |  |\  ___/  \     /             ( ( .,-') )    Yak Works         ```
+   \___/   |__| \___  >  \/\_/               \ '   (_/                         !!
+                    \/                        |       /)           '           !!!
+  ___________           .__                   ^\    ~'            '     !    !!!!
+  \__    ___/___   ____ |  |   ______           !      _/! , !   !  ! !  !   !!!
+    |    | /  _ \ /  _ \|  |  /  ___/            \Y,   |!!!  !  ! !!  !! !!!!!!!
+    |    |(  <_> |  <_> )  |__\___ \               `!!! !!!! !!  )!!!!!!!!!!!!!
+    |____| \____/ \____/|____/____  >               !!  ! ! \( \(  !!!|/!  |/!
+                                  \/               /_(      /_(/_(    /_(  /_(   
+         Version: 1.2.0
+         
+</pre>
+
+[RELEASE NOTES](docs/release-notes.md)
+
+| Guide | API | 
+|------|--------|
+|[Released Docs](https://yakworks.github.io/view-tools/) | [Released Api](https://yakworks.github.io/view-tools/api)
+|[snapshot](https://yakworks.github.io/view-tools/snapshot) | [snapshot](https://yakworks.github.io/view-tools/snapshot/api)
+
+
+```
+compile "org.grails.plugins:view-tools:1.2.0"
+
+``` 
 ## Description
+
+API Documentation can be found here [https://yakworks.github.io/view-tools/api](https://yakworks.github.io/view-tools/api)
+
 utility helpers to locate views in the spring mvc context
 - **ViewResourceLocator** for locating views in grails-app/views, plugins, and custom external paths.
 - **GrailsWebEnvironment** for binding a mock request if one doesn't exist so that services can operate without a controller.
@@ -13,7 +51,7 @@ development mode.
 ## Install
 **Grails 3**
 ```
-compile org.grails.plugins:view-tools:0.3
+compile org.grails.plugins:view-tools:1.2.0
 ```
 
 **Grails 2**
@@ -57,16 +95,16 @@ viewResourceLocator(grails.plugin.viewtools.ViewResourceLocator) { bean ->
 
 GrailsWebEnvironment.bindRequestIfNull() methods are the ones of interest.
 based on the RenderEnvironment in grails-rendering and private class in grails-mail
-All this does is bind a mock request and mock response is one doesn't exist
+All this does is bind a mock request and mock response if one doesn't exist
 deals with setting the WrappedResponseHolder.wrappedResponse as well
-You will need the spring test lib on your main compile
+You will need the spring test lib on your main compile.
+
 ```compile "org.springframework:spring-test"```
 
 ### Example App
 
-see https://github.com/9ci/grails-view-tools/tree/master/test-projects/app
+see https://github.com/yakworks/view-tools/tree/master/test-projects/app
 It contains a number of examples as well as a simple spring based viewResolver that uses ViewResourceLocator to find the template files it needs.
 
-### _Events.groovy and putting a project in grails 3 structure
 
-see Grails3-README.md
+

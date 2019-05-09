@@ -1,0 +1,10 @@
+rootProject.name = 'view-tools-root'
+
+include 'plugin'
+findProject(':plugin').name = 'view-tools'
+
+include 'test-projects/app'
+//findProject(':test-projects/app').name = 'test-app'
+
+include 'test-projects/foobar-plugin'
+//findProject(':test-projects/foobar-plugin').name = 'foobar-plugin'

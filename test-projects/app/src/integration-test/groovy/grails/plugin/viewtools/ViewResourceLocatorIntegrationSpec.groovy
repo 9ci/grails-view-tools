@@ -1,25 +1,22 @@
 package grails.plugin.viewtools
 
-import foobar.TenantViewResourceLoader
-import grails.test.mixin.integration.Integration
-import grails.transaction.*
-import grails.util.Environment
-//import org.grails.web.servlet.mvc.GrailsWebRequest
-//import org.grails.web.util.GrailsApplicationAttributes
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-import org.springframework.util.StringUtils
-import spock.lang.*
-
-import org.springframework.core.io.Resource
 import foobar.DemoController
+import foobar.TenantViewResourceLoader
+import grails.testing.mixin.integration.Integration
+import org.grails.web.servlet.mvc.GrailsWebRequest
+import org.grails.web.util.GrailsApplicationAttributes
+import org.springframework.core.io.Resource
+import org.springframework.util.StringUtils
+import spock.lang.Specification
 
-//@Integration
-@Rollback
+//import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
+//import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+@Integration
+//@Rollback
 class ViewResourceLocatorIntegrationSpec extends Specification  {
 
-	ViewResourceLocator viewResourceLocator
-	DemoController controller
+    ViewResourceLocator viewResourceLocator
+    DemoController controller
     def grailsApplication
 
     StringWriter writer = new StringWriter()
@@ -104,6 +101,7 @@ class ViewResourceLocatorIntegrationSpec extends Specification  {
         Resource res = viewResourceLocator.locate('/plugins/foobar-plugin-0.1/fooPlugin/index.md')
 
         then:
+        res.exists()
         String uri = StringUtils.cleanPath(res.getURI().toString())
         String toCompare = "foobar-plugin/grails-app/views/fooPlugin/index.md"
         String toCompare2 = "foobar-plugin-0.1.jar!/fooPlugin/index.md"
@@ -117,11 +115,20 @@ class ViewResourceLocatorIntegrationSpec extends Specification  {
         Resource res = viewResourceLocator.locate('/foo/tenantA.ftl')
 
         then:
+        res.exists()
         res.getFile().text.contains('tenantA got it')
         TenantViewResourceLoader.currentTenant.set('tenantB')
         assert viewResourceLocator.locate('tenantB.hbs').exists()
+    }
 
+    void "view under ConfigKeyAppResourceLoader"() {
+        when:
+        Resource res = viewResourceLocator.locate('appResourceView.md')
 
+        then:
+        res.exists()
+        res.file.exists()
+        res.file.absolutePath.endsWith("root-location/views/appResourceView.md")
     }
 
 
