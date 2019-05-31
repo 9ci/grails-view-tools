@@ -13,6 +13,15 @@ dependencies {
 
     provided "org.codehaus.groovy:groovy-ant"
 
+    testRuntime "com.h2database:h2"
+    provided "org.grails.plugins:hibernate5"
+    provided "org.hibernate:hibernate-core:$versionHibernate"
+    provided "org.hibernate:hibernate-ehcache:$versionHibernate"
+
+    testCompile "org.grails:grails-gorm-testing-support"
+    testCompile "org.grails.plugins:geb"
+    testCompile "org.grails:grails-web-testing-support"
+
     // No longer needed. now part of selenium-support in 2.53, see https://github.com/SeleniumHQ/htmlunit-driver
     //testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     //testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"

@@ -47,4 +47,16 @@ class ViewToolsGrailsPlugin extends Plugin {
         }
     }
 
+    void doWithApplicationContext() {
+        AppSetupService appSetupService = (AppSetupService) applicationContext.getBean("appSetupService")
+        appSetupService.enhanceGrailsApplication()
+
+    }
+
+    void onConfigChange(Map<String, Object> event) {
+        //this will reload appsetup config
+        grailsApplication.getSetupConfig(true)
+
+    }
+
 }
