@@ -3,6 +3,7 @@ nine {
 
         currentTenant = { return [id: 1, num: "testTenant"] }
         views.location = "views"
+        setup.location = "setup"
 
         rootLocation = { args ->
             File file = new File("root-location")
@@ -34,3 +35,5 @@ nine {
         }
     }
 }
+
+nine.appsetup.config.files = [AdditionalAppSetupConfig]
